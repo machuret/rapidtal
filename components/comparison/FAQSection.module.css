@@ -1,0 +1,131 @@
+.faqSection {
+  background: var(--black);
+  padding: clamp(60px, 8vw, 100px) clamp(20px, 4vw, 60px);
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+.tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.tagLine {
+  width: 20px;
+  height: 2px;
+  background: var(--orange);
+  display: block;
+}
+
+.title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 0.95;
+  margin: 0;
+}
+
+.faqList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faqItem {
+  border: 1px solid #1a1a1a;
+  background: var(--black-2);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.faqItem:hover {
+  border-color: #2a2a2a;
+}
+
+.faqQuestion {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.2s;
+}
+
+.faqQuestion:hover {
+  color: var(--orange);
+}
+
+.faqQuestion.open {
+  color: var(--orange);
+}
+
+.icon {
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--orange);
+  flex-shrink: 0;
+  margin-left: 20px;
+}
+
+.faqAnswer {
+  padding: 0 28px 28px 28px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--grey-light);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .faqQuestion {
+    font-size: 16px;
+    padding: 20px 20px;
+  }
+
+  .faqAnswer {
+    padding: 0 20px 20px 20px;
+    font-size: 15px;
+  }
+
+  .icon {
+    font-size: 24px;
+  }
+}

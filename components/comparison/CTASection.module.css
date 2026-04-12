@@ -1,0 +1,62 @@
+.ctaSection {
+  background: var(--orange);
+  padding: 80px 60px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 60px;
+  align-items: center;
+}
+
+.ctaHeadline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(44px, 5vw, 72px);
+  color: var(--black);
+  line-height: 0.95;
+  margin-bottom: 16px;
+}
+
+.ctaSub {
+  font-size: 16px;
+  color: rgba(0,0,0,0.6);
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.btnDark {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 22px 48px;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+}
+
+.btnDark:hover {
+  background: #111;
+  transform: translateY(-2px);
+}
+
+.ctaNote {
+  font-size: 13px;
+  color: rgba(0,0,0,0.5);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .ctaSection {
+    padding-left: 24px;
+    padding-right: 24px;
+    grid-template-columns: 1fr;
+  }
+}

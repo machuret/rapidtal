@@ -1,0 +1,77 @@
+.bookCallCta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px;
+}
+
+.bookCallBtn {
+  background: var(--orange);
+  color: var(--black);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 10px 24px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s, transform 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.bookCallBtn:hover {
+  background: var(--orange-hot);
+  transform: scale(1.04);
+}
+
+.bookCallSubtitle {
+  font-size: 14px;
+  color: var(--grey);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* Variant: Primary (standalone section) */
+.primary {
+  background: var(--black-2);
+  border-top: 1px solid #1a1a1a;
+  border-bottom: 1px solid #1a1a1a;
+  padding: 60px 32px;
+}
+
+/* Variant: Secondary (within a section) */
+.secondary {
+  padding: 40px 32px;
+}
+
+.secondary .bookCallBtn {
+  font-size: 16px;
+  padding: 20px 48px;
+}
+
+/* Variant: Inline (minimal, within content) */
+.inline {
+  padding: 24px 0;
+  align-items: flex-start;
+}
+
+.inline .bookCallBtn {
+  font-size: 15px;
+  padding: 18px 40px;
+}
+
+.inline .bookCallSubtitle {
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .bookCallBtn {
+    font-size: 16px;
+    padding: 20px 40px;
+  }
+}

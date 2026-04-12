@@ -1,0 +1,66 @@
+.truthSection {
+  background: var(--black-3);
+  border-top: 1px solid #1a1a1a;
+  border-bottom: 1px solid #1a1a1a;
+  padding: 80px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.truthHeadline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 4.5vw, 64px);
+  line-height: 0.95;
+  margin-bottom: 24px;
+}
+
+.truthHeadline em {
+  font-style: normal;
+  color: var(--orange);
+}
+
+.truthBody p {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--grey);
+  margin-bottom: 20px;
+}
+
+.truthBody p:last-child {
+  margin-bottom: 0;
+}
+
+.truthBody p strong {
+  color: var(--white);
+}
+
+.truthQuote {
+  border-left: 4px solid var(--orange);
+  padding: 28px 32px;
+  background: rgba(255,85,0,0.05);
+}
+
+.truthQuoteText {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.3;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+
+.truthQuoteAttr {
+  font-size: 13px;
+  color: var(--grey);
+}
+
+@media (max-width: 900px) {
+  .truthSection {
+    padding-left: 24px;
+    padding-right: 24px;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}

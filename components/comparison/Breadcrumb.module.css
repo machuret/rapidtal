@@ -1,0 +1,34 @@
+.breadcrumb {
+  padding: 16px 60px;
+  background: var(--black-2);
+  border-bottom: 1px solid #1a1a1a;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--grey);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.breadcrumb a {
+  color: var(--grey);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--orange);
+}
+
+.breadcrumb span {
+  color: var(--orange);
+}
+
+@media (max-width: 900px) {
+  .breadcrumb {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}

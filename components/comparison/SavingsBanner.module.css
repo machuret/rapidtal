@@ -1,0 +1,63 @@
+.savingsBanner {
+  background: var(--orange);
+  padding: 40px 60px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 40px;
+}
+
+.savingsEyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.5);
+  margin-bottom: 8px;
+}
+
+.savingsHeadline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 5vw, 72px);
+  color: var(--black);
+  line-height: 0.95;
+}
+
+.savingsSub {
+  font-size: 16px;
+  color: rgba(0,0,0,0.6);
+  margin-top: 12px;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.savingsRight {
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.savingsNum {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 96px;
+  color: var(--black);
+  line-height: 1;
+  display: block;
+}
+
+.savingsPer {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.5);
+}
+
+@media (max-width: 900px) {
+  .savingsBanner {
+    padding-left: 24px;
+    padding-right: 24px;
+    grid-template-columns: 1fr;
+  }
+}

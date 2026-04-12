@@ -1,0 +1,179 @@
+.section {
+  padding: 80px 60px;
+  background: var(--black-2);
+  border-top: 1px solid #1a1a1a;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.sectionLabel {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sectionLabel::before {
+  content: '';
+  width: 20px;
+  height: 2px;
+  background: var(--orange);
+  display: block;
+}
+
+.sectionHeading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 0.95;
+  margin-bottom: 48px;
+}
+
+.sectionHeading em {
+  font-style: normal;
+  color: var(--orange);
+}
+
+.roleGrid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.roleContent p {
+  font-size: 17px;
+  line-height: 1.85;
+  color: var(--grey);
+  margin-bottom: 24px;
+}
+
+.roleContent p:last-child {
+  margin-bottom: 0;
+}
+
+.roleSidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.taskCard {
+  background: var(--black-3);
+  padding: 28px 32px;
+  border-left: 3px solid var(--orange);
+}
+
+.taskCardTitle {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 20px;
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.taskItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #1e1e1e;
+  font-size: 14px;
+  color: var(--grey);
+}
+
+.taskItem:last-child {
+  border-bottom: none;
+}
+
+.taskCheck {
+  width: 20px;
+  height: 20px;
+  background: var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--black);
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.toolsCard {
+  background: var(--black-3);
+  padding: 28px 32px;
+}
+
+.toolsTitle {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--grey);
+  margin-bottom: 16px;
+}
+
+.toolsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.toolTag {
+  background: var(--black);
+  border: 1px solid #333;
+  padding: 7px 14px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: var(--grey);
+}
+
+.bottomLineCard {
+  background: rgba(255,85,0,0.07);
+  border: 1px solid rgba(255,85,0,0.2);
+  padding: 24px 28px;
+}
+
+.bottomLineTitle {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 10px;
+}
+
+.bottomLineCard p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--grey);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .section {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .roleGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}

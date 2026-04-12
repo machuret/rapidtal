@@ -1,0 +1,36 @@
+.header {
+  margin-bottom: 48px;
+}
+
+.tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tagLine {
+  width: 20px;
+  height: 2px;
+  background: var(--orange);
+  display: block;
+}
+
+.title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 0.95;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .header {
+    margin-bottom: 32px;
+  }
+}

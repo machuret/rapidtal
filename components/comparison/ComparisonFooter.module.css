@@ -1,0 +1,25 @@
+.footer {
+  background: var(--black);
+  border-top: 1px solid #1a1a1a;
+  padding: 40px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--grey);
+}
+
+.footer a {
+  color: var(--orange);
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .footer {
+    padding-left: 24px;
+    padding-right: 24px;
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+}

@@ -1,0 +1,154 @@
+.hero {
+  padding: 80px 60px 60px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 90% 50%, rgba(255,85,0,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.heroGhost {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 280px;
+  color: rgba(255,85,0,0.04);
+  pointer-events: none;
+  line-height: 1;
+  letter-spacing: -5px;
+  user-select: none;
+}
+
+.heroIcons {
+  position: absolute;
+  right: 80px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  opacity: 0.15;
+  z-index: 1;
+}
+
+.iconCircle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255,85,0,0.1);
+  border: 2px solid rgba(255,85,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  color: var(--orange);
+}
+
+.iconVs {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  color: var(--orange);
+  font-weight: 700;
+}
+
+.heroInner {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+}
+
+.roleTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,85,0,0.15);
+  border: 1px solid rgba(255,85,0,0.3);
+  padding: 8px 18px;
+  margin-bottom: 24px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.roleTagDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--orange);
+}
+
+.heroHeadline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 7vw, 96px);
+  line-height: 0.92;
+  letter-spacing: -1px;
+  margin-bottom: 24px;
+}
+
+.heroHeadline em {
+  font-style: normal;
+  color: var(--orange);
+}
+
+.heroSub {
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--grey);
+  max-width: 620px;
+  margin-bottom: 40px;
+}
+
+.heroStats {
+  display: flex;
+  gap: 0;
+  border: 1px solid #1e1e1e;
+  width: fit-content;
+}
+
+.heroStat {
+  padding: 20px 36px;
+  border-right: 1px solid #1e1e1e;
+  text-align: center;
+}
+
+.heroStat:last-child {
+  border-right: none;
+}
+
+.heroStatNum {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  color: var(--orange);
+  line-height: 1;
+  display: block;
+}
+
+.heroStatLabel {
+  font-size: 11px;
+  color: var(--grey);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 4px;
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}

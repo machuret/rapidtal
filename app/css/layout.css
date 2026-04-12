@@ -1,0 +1,90 @@
+/* ─── BUTTONS ────────────────────────────────────────────────────────── */
+.btn-primary {
+  background: var(--orange);
+  color: var(--black);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 18px 40px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--orange-hot);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.btn-primary:hover::after { transform: scaleX(1); }
+.btn-primary span { position: relative; z-index: 1; }
+.btn-primary:hover { transform: translateY(-2px); }
+
+.btn-ghost {
+  color: var(--white);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid var(--grey);
+  padding-bottom: 3px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+
+.btn-dark {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 20px 48px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-dark:hover { background: #1a1a1a; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+
+/* ─── SECTION BASE ───────────────────────────────────────────────────── */
+section { padding: 140px 80px; }
+
+.section-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+.section-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+  display: block;
+}
+
+.section-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 6vw, 96px);
+  line-height: 0.95;
+  letter-spacing: -0.5px;
+  margin-bottom: 28px;
+}
+.section-heading em { font-style: normal; color: var(--orange); }
