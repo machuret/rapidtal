@@ -15,6 +15,8 @@ export const config: IndustryConfig = {
   industryName: industry,
 
   attentionBar: {
+    contactName: 'Gabriel',
+    contactPhone: '0428 208 022',
     badge: 'Free',
     message: 'Book a 1-on-1 coaching call',
     ctaLabel: 'Book now',

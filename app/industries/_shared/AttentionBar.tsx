@@ -12,7 +12,7 @@
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 import { useEffect, useState } from 'react';
-import { X } from 'lucide-react';
+import { Phone, X } from 'lucide-react';
 import styles from './landing.module.css';
 
 interface Props {
@@ -24,8 +24,16 @@ interface Props {
   ctaLabel: string;
   /** Element id to smooth-scroll to. Defaults to the CTA section. */
   target?: string;
+  /** Optional contact rendered as "Contact {name} {phone}" on the left. */
+  contactName?: string;
+  contactPhone?: string;
   /** Per-page dismissal key so each industry bar is closed independently. */
   storageKey: string;
+}
+
+/** Strip spaces/dashes for tel: href. Keeps leading + if present. */
+function telHref(raw: string) {
+  return raw.replace(/[\s-]/g, '');
 }
 
 export default function AttentionBar({
@@ -33,6 +41,8 @@ export default function AttentionBar({
   message,
   ctaLabel,
   target = 'cta-sec',
+  contactName,
+  contactPhone,
   storageKey,
 }: Props) {
   // Start hidden on SSR so we don't flash the bar for users who've dismissed.
@@ -67,6 +77,17 @@ export default function AttentionBar({
   return (
     <div className={styles.attnBar} role="region" aria-label="Announcement">
       <div className={styles.attnInner}>
+        {contactPhone && (
+          <a
+            href={`tel:${telHref(contactPhone)}`}
+            className={styles.attnContact}
+            aria-label={contactName ? `Call ${contactName} on ${contactPhone}` : `Call ${contactPhone}`}
+          >
+            <Phone size={14} strokeWidth={2.5} aria-hidden="true" />
+            {contactName && <span className={styles.attnContactName}>Contact {contactName}</span>}
+            <span className={styles.attnContactPhone}>{contactPhone}</span>
+          </a>
+        )}
         {badge && <span className={styles.attnBadge}>{badge}</span>}
         <span className={styles.attnMsg}>{message}</span>
         <a

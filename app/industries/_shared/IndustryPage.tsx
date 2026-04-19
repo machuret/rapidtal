@@ -29,6 +29,8 @@ export default function IndustryPage({ config }: { config: IndustryConfig }) {
           message={config.attentionBar.message}
           ctaLabel={config.attentionBar.ctaLabel}
           target={config.attentionBar.target ?? 'cta-sec'}
+          contactName={config.attentionBar.contactName}
+          contactPhone={config.attentionBar.contactPhone}
           storageKey={`attnbar:${config.slug}`}
         />
       )}

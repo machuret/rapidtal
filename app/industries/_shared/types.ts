@@ -181,6 +181,10 @@ export interface AttentionBarConfig {
   ctaLabel: string;
   /** Element id to scroll to on CTA click. Defaults to "cta-sec". */
   target?: string;
+  /** Optional "Contact {name} — {phone}" shown on the left of the bar.
+   *  `phone` is rendered as a tel: link. */
+  contactName?: string;
+  contactPhone?: string;
 }
 
 /* ── FAQ ─────────────────────────────────────────────────────────────────── */

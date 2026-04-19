@@ -1152,6 +1152,27 @@
   font-size: 14px;
   line-height: 1.35;
 }
+.attnContact {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.attnContact:hover { background: rgba(0, 0, 0, 0.35); }
+.attnContactName { opacity: 0.95; }
+.attnContactPhone { font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) {
+  .attnContactName { display: none; }  /* keep just the number on small screens */
+}
 .attnBadge {
   flex-shrink: 0;
   background: rgba(0, 0, 0, 0.28);
