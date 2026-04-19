@@ -14,6 +14,7 @@ import Calculator from './Calculator';
 import { Hero, Pain, Truth, Roles, HowItWorks, Proof, Faq, CTA } from './Sections';
 import StructuredData from './StructuredData';
 import StickyMobileCta from './StickyMobileCta';
+import AttentionBar from './AttentionBar';
 import type { IndustryConfig } from './types';
 
 export default function IndustryPage({ config }: { config: IndustryConfig }) {
@@ -22,6 +23,15 @@ export default function IndustryPage({ config }: { config: IndustryConfig }) {
       {/* JSON-LD: Service + FAQPage + BreadcrumbList. Rendered at the top of
           the tree so it ships in the initial HTML payload for crawlers. */}
       <StructuredData config={config} />
+      {config.attentionBar && (
+        <AttentionBar
+          badge={config.attentionBar.badge}
+          message={config.attentionBar.message}
+          ctaLabel={config.attentionBar.ctaLabel}
+          target={config.attentionBar.target ?? 'cta-sec'}
+          storageKey={`attnbar:${config.slug}`}
+        />
+      )}
       <Nav />
       <main className={styles.page}>
         <Hero       config={config.hero} />

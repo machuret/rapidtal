@@ -1127,6 +1127,100 @@
   .ctaBox        { padding: 1.5rem 1.25rem; }
 }
 
+/* ── ATTENTION BAR ───────────────────────────────────────────────────────── */
+/* Top-of-page announcement strip. Sticky so it follows the user as they
+ * scroll, keeping the CTA one click away at all times. Gradient + subtle
+ * animated shine to pull the eye without feeling spammy. */
+.attnBar {
+  position: sticky;
+  top: 0;
+  z-index: 70;  /* above Nav's z-index */
+  background: linear-gradient(
+    90deg,
+    var(--brand-dark) 0%,
+    var(--brand) 45%,
+    var(--brand-hover) 55%,
+    var(--brand) 100%
+  );
+  background-size: 200% 100%;
+  animation: attnShine 9s linear infinite;
+  color: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+@keyframes attnShine {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .attnBar { animation: none; }
+}
+.attnInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  line-height: 1.35;
+}
+.attnBadge {
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.28);
+  color: #fff;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 4px;
+}
+.attnMsg {
+  font-weight: 600;
+  color: #fff;
+}
+.attnCta {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 6px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: background 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+.attnCta:hover { background: rgba(0, 0, 0, 0.4); }
+.attnCta:active { transform: translateY(1px); }
+.attnClose {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+.attnClose:hover { background: rgba(0, 0, 0, 0.25); color: #fff; }
+.attnInner { position: relative; padding-right: 44px; }
+@media (max-width: 560px) {
+  .attnInner { gap: 8px; padding: 9px 38px 9px 1rem; font-size: 13px; }
+  .attnMsg { text-align: center; }
+  .attnBadge { font-size: 10px; padding: 3px 7px; }
+  .attnCta { font-size: 12px; padding: 5px 11px; }
+}
+
 /* ── STICKY MOBILE CTA ───────────────────────────────────────────────────── */
 /* Hidden on desktop — the main CTA section is always reachable there.
  * On mobile it docks to the bottom of the viewport after the user scrolls

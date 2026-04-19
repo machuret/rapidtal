@@ -14,6 +14,12 @@ export const config: IndustryConfig = {
   slug: 'commercial-real-estate',
   industryName: industry,
 
+  attentionBar: {
+    badge: 'Free',
+    message: `Complete AI Marketing Blueprint for ${industry}s — prompts, SOPs, tool stack.`,
+    ctaLabel: 'Get it now',
+  },
+
   meta: {
     title: `Offshore Marketing for ${industry}s — RapidTAL`,
     description:

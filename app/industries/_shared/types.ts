@@ -173,6 +173,16 @@ export interface ProofConfig {
   items: ProofItem[];
 }
 
+/* ── ATTENTION BAR ───────────────────────────────────────────────────────── */
+/** Top-of-page announcement strip. Optional — omit from config to hide. */
+export interface AttentionBarConfig {
+  badge?: string;
+  message: string;
+  ctaLabel: string;
+  /** Element id to scroll to on CTA click. Defaults to "cta-sec". */
+  target?: string;
+}
+
 /* ── FAQ ─────────────────────────────────────────────────────────────────── */
 export interface FaqItem {
   question: string;
@@ -224,6 +234,8 @@ export interface IndustryConfig {
   /** Human name used only if a component ever needs it (prefer baking into
    *  copy inside config fields, to keep components industry-agnostic). */
   industryName: string;
+  /** Optional top-of-page attention strip. */
+  attentionBar?: AttentionBarConfig;
   hero: HeroConfig;
   pain: PainConfig;
   truth: TruthConfig;
