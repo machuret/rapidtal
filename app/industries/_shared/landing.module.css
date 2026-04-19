@@ -1135,25 +1135,10 @@
   position: sticky;
   top: 0;
   z-index: 70;  /* above Nav's z-index */
-  background: linear-gradient(
-    90deg,
-    var(--brand-dark) 0%,
-    var(--brand) 45%,
-    var(--brand-hover) 55%,
-    var(--brand) 100%
-  );
-  background-size: 200% 100%;
-  animation: attnShine 9s linear infinite;
+  background: var(--brand);       /* solid orange, no gradient */
   color: #fff;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-@keyframes attnShine {
-  0%   { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .attnBar { animation: none; }
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 .attnInner {
   max-width: 1200px;

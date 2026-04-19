@@ -16,8 +16,8 @@ export const config: IndustryConfig = {
 
   attentionBar: {
     badge: 'Free',
-    message: `Complete AI Marketing Blueprint for ${industry}s — prompts, SOPs, tool stack.`,
-    ctaLabel: 'Get it now',
+    message: 'Book a 1-on-1 coaching call',
+    ctaLabel: 'Book now',
   },
 
   meta: {
