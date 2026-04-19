@@ -8,7 +8,6 @@
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 import styles from './landing.module.css';
-import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Calculator from './Calculator';
 import { Hero, Pain, Truth, Roles, HowItWorks, Proof, Faq, CTA } from './Sections';
@@ -34,7 +33,6 @@ export default function IndustryPage({ config }: { config: IndustryConfig }) {
           storageKey={`attnbar:${config.slug}`}
         />
       )}
-      <Nav />
       <main className={styles.page}>
         <Hero       config={config.hero} />
         <Pain       config={config.pain} />
