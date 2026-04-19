@@ -1158,16 +1158,12 @@
   gap: 6px;
   color: #fff;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 14px;
   text-decoration: none;
-  padding: 4px 10px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.25);
   white-space: nowrap;
-  transition: background 0.15s;
+  transition: opacity 0.15s;
 }
-.attnContact:hover { background: rgba(0, 0, 0, 0.35); }
+.attnContact:hover { opacity: 0.85; text-decoration: underline; }
 .attnContactName { opacity: 0.95; }
 .attnContactPhone { font-variant-numeric: tabular-nums; }
 @media (max-width: 560px) {
@@ -1175,14 +1171,14 @@
 }
 .attnBadge {
   flex-shrink: 0;
-  background: rgba(0, 0, 0, 0.28);
   color: #fff;
   font-weight: 800;
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: 12px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  padding: 4px 9px;
-  border-radius: 4px;
+  border: 1.5px solid #fff;
+  padding: 2px 8px;
+  border-radius: 3px;
 }
 .attnMsg {
   font-weight: 600;
@@ -1190,18 +1186,15 @@
 }
 .attnCta {
   color: #fff;
-  background: rgba(0, 0, 0, 0.22);
-  padding: 6px 14px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 13px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: background 0.15s, transform 0.1s;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 800;
+  font-size: 14px;
   white-space: nowrap;
+  transition: opacity 0.15s;
 }
-.attnCta:hover { background: rgba(0, 0, 0, 0.4); }
-.attnCta:active { transform: translateY(1px); }
+.attnCta:hover { opacity: 0.85; }
+.attnCta:active { opacity: 0.7; }
 .attnClose {
   position: absolute;
   right: 10px;
