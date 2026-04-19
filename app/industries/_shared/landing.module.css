@@ -776,10 +776,31 @@
   background: #fff;
   border-radius: 14px;
   padding: 2rem;
-  max-width: 540px;
+  /* Wider than the original 540px because we now embed a form
+     (calendar widget needs ~600-700px to render comfortably). */
+  max-width: 680px;
   margin: 0 auto 2rem;
   text-align: left;
   box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.6);
+}
+
+/* LeadConnector iframe wrapper — reserves vertical space pre-resize so the
+ * page doesn't jump as the form loads, then lets the LC script grow it. */
+.formEmbed {
+  width: 100%;
+  margin-top: 1.5rem;
+  border-top: 1.5px solid #f0f0f0;
+  padding-top: 1.5rem;
+}
+.formEmbed iframe {
+  width: 100%;
+  /* Inherit min-height from inline style on the wrapper. The LC script
+     overrides this once it knows the actual form height. */
+  min-height: inherit;
+  border: none;
+  border-radius: 8px;
+  display: block;
+  background: #fff;
 }
 .ctaBoxLbl {
   font-size: 12px;

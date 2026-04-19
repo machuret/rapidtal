@@ -168,9 +168,17 @@ export interface CtaConfig {
   microCopy: string;
   listHeading: string;
   bullets: string[];
-  buttonLabel: string;
-  /** Replace placeholder "#" with real Calendly / HubSpot link */
-  bookingHref: string;
+  /** LeadConnector / GoHighLevel form embed ID for this industry. Each
+   *  industry has its own form so submissions land in the right pipeline.
+   *  Find it in HighLevel → Sites → Forms → Embed code (the UUID after
+   *  /widget/form/). The form_embed.js script auto-resizes the iframe. */
+  embedFormId: string;
+  /** Human-readable name passed to the iframe title + data-form-name (a11y
+   *  + the LC backend uses it for tracking). */
+  embedFormName: string;
+  /** Min-height in px to reserve for the iframe before it resizes itself.
+   *  Prevents layout shift on load. Defaults to 737 (LC's standard). */
+  embedMinHeight?: number;
   trustItems: string[];
 }
 

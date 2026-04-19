@@ -11,12 +11,18 @@
  * them yourself in a custom page.tsx instead of using <IndustryPage>.
  * ═══════════════════════════════════════════════════════════════════════════ */
 
+import Script from 'next/script';
 import styles from './landing.module.css';
 import ScrollButton from './ScrollButton';
 import type {
   HeroConfig, PainConfig, TruthConfig, RolesConfig,
   HowConfig, ProofConfig, CtaConfig,
 } from './types';
+
+/* LeadConnector form-embed script. Loaded once per page (Next dedupes by src).
+ * `afterInteractive` keeps it off the critical path — the iframe still renders
+ * immediately; the script only resizes it once page is interactive. */
+const LC_EMBED_SRC = 'https://link.msgsndr.com/js/form_embed.js';
 
 /* ── HERO ────────────────────────────────────────────────────────────────── */
 export function Hero({ config }: { config: HeroConfig }) {
@@ -233,10 +239,32 @@ export function CTA({ config }: { config: CtaConfig }) {
               </div>
             ))}
           </div>
-          <a href={config.bookingHref} className={styles.btnBig}>
-            {config.buttonLabel}
-          </a>
+          {/* LeadConnector form embed. The iframe loads instantly; the
+              external script (loaded below, once per page) only handles
+              auto-resizing as the form's internal step-flow changes height. */}
+          <div
+            className={styles.formEmbed}
+            style={{ minHeight: config.embedMinHeight ?? 737 }}
+          >
+            <iframe
+              src={`https://api.leadconnectorhq.com/widget/form/${config.embedFormId}`}
+              id={`inline-${config.embedFormId}`}
+              title={config.embedFormName}
+              data-layout={"{'id':'INLINE'}"}
+              data-trigger-type="alwaysShow"
+              data-trigger-value=""
+              data-activation-type="alwaysActivated"
+              data-activation-value=""
+              data-deactivation-type="neverDeactivate"
+              data-deactivation-value=""
+              data-form-name={config.embedFormName}
+              data-height={String(config.embedMinHeight ?? 737)}
+              data-layout-iframe-id={`inline-${config.embedFormId}`}
+              data-form-id={config.embedFormId}
+            />
+          </div>
         </div>
+        <Script src={LC_EMBED_SRC} strategy="afterInteractive" />
 
         <div className={styles.trustRow}>
           {config.trustItems.map((t) => (
