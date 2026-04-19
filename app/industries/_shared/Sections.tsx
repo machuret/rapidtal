@@ -14,10 +14,26 @@
 import Script from 'next/script';
 import styles from './landing.module.css';
 import ScrollButton from './ScrollButton';
+import AnimatedHeroTitle from './AnimatedHeroTitle';
+import TypewriterHeading, { type TypewriterWord } from './TypewriterHeading';
 import type {
   HeroConfig, PainConfig, TruthConfig, RolesConfig,
   HowConfig, ProofConfig, CtaConfig,
 } from './types';
+
+/* Build the words-array for the CTA typewriter from the existing structured
+ * config fields. Highlight words (the orange phrase) get `highlight:true`. */
+function buildCtaTypewriterWords(cfg: CtaConfig): TypewriterWord[] {
+  const split = (s: string) => s.trim().split(/\s+/).filter(Boolean);
+  return [
+    ...split(cfg.headingLine1).map<TypewriterWord>((t) => ({ text: t })),
+    ...split(cfg.headingLine2Before).map<TypewriterWord>((t) => ({ text: t })),
+    ...split(cfg.headingLine2Highlight).map<TypewriterWord>((t) => ({ text: t, highlight: true })),
+    ...(cfg.headingLine2After
+      ? split(cfg.headingLine2After).map<TypewriterWord>((t) => ({ text: t }))
+      : []),
+  ];
+}
 
 /* LeadConnector form-embed script. Loaded once per page (Next dedupes by src).
  * `afterInteractive` keeps it off the critical path — the iframe still renders
@@ -31,12 +47,10 @@ export function Hero({ config }: { config: HeroConfig }) {
       <div className={styles.container}>
         {config.watermark && <div className={styles.wm}>{config.watermark}</div>}
         <div className={styles.eyebrow}>{config.eyebrow}</div>
-        <h1>
-          {config.titleBefore}
-          {config.titleBefore && ' '}
-          <em>{config.titleHighlight}</em>
-          {config.titleAfter && ` ${config.titleAfter}`}
-        </h1>
+        <AnimatedHeroTitle
+          lead={config.titleLead}
+          rotatingWords={config.rotatingWords}
+        />
         <p className={styles.heroSub}>{config.subhead}</p>
         <div className={styles.hstats}>
           {config.stats.map((s) => (
@@ -219,13 +233,10 @@ export function CTA({ config }: { config: CtaConfig }) {
     <section className={styles.ctaSec}>
       <div className={styles.container}>
         <div className={styles.secTag}>{config.tag}</div>
-        <div className={styles.ctaH}>
-          {config.headingLine1}<br />
-          {config.headingLine2Before}
-          {config.headingLine2Before && ' '}
-          <em>{config.headingLine2Highlight}</em>
-          {config.headingLine2After && config.headingLine2After}
-        </div>
+        {/* Typewriter replaces the static H2. Framer-motion reveals via width
+             animation on scroll-into-view (once per page load). The highlight
+             phrase (e.g. "Offshore Marketing Ninja") types in orange. */}
+        <TypewriterHeading words={buildCtaTypewriterWords(config)} />
         <p className={styles.ctaSub}>{config.subhead}</p>
         <p className={styles.ctaMicro}>{config.microCopy}</p>
 

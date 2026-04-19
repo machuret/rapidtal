@@ -31,11 +31,18 @@ export const config: IndustryConfig = {
   hero: {
     watermark: 'RapidTAL · Built for Australian Business',
     eyebrow: `For ${industry} Principals & Directors`,
-    titleBefore: `Your ${industry} is overpaying for marketing by`,
-    titleHighlight: '$150,000–$280,000',
-    titleAfter: 'a year',
+    titleLead: `Your ${industry} is`,
+    // All words share the "over-" prefix — creates thematic resonance
+    // and each one hits a distinct pain principals actually feel.
+    rotatingWords: [
+      'overpaying',
+      'overstaffed',
+      'overworked',
+      'overwhelmed',
+      'overspending',
+    ],
     subhead:
-      'Every local marketing hire comes loaded with super, leave, WorkCover, recruitment fees and HR overhead — before they have written a single listing description. There is a smarter model, and the numbers will shock you.',
+      `Every local marketing hire is quietly costing your agency $150,000–$280,000 a year once you stack super, leave, WorkCover, recruitment fees and HR overhead — before they have written a single listing description. There is a smarter model, and the numbers will shock you.`,
     stats: [
       { num: '3×',      label: 'more output than 3 local marketing staff' },
       { num: '$220K',   label: 'average saving for a mid-size agency' },

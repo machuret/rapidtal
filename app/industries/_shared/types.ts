@@ -25,10 +25,13 @@ export interface HeroConfig {
   watermark?: string;
   /** Orange pill text identifying the audience */
   eyebrow: string;
-  /** Large H1. `highlight` renders in orange; before/after are wrapping copy. */
-  titleBefore: string;
-  titleHighlight: string;
-  titleAfter?: string;
+  /** Static lead-in text rendered above the animated rotating word.
+   *  Example: "Your Commercial Real Estate Agency is" */
+  titleLead: string;
+  /** 3–6 words that cycle every ~2s under the titleLead, rendered in brand
+   *  orange with a spring slide-in/out animation. Pick words that all read
+   *  as a grammatical continuation of titleLead for maximum punch. */
+  rotatingWords: string[];
   subhead: string;
   /** Three stat tiles below the sub. Keep at exactly 3 for layout balance. */
   stats: [HeroStat, HeroStat, HeroStat];
