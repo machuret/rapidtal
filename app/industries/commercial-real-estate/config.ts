@@ -25,6 +25,22 @@ export const config: IndustryConfig = {
         `One Offshore Marketing Ninja + AI tools = the output of three local marketing hires. Purpose-built for Australian ${industry}s.`,
       url: 'https://rapidtal.com/industries/commercial-real-estate',
       type: 'website',
+      images: [
+        {
+          // TODO: replace with industry-specific social card (1200x630)
+          url: 'https://rapidtal.com/og-default.png',
+          width: 1200,
+          height: 630,
+          alt: `RapidTAL — Offshore Marketing for ${industry}s`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `Offshore Marketing for ${industry}s — RapidTAL`,
+      description:
+        `Replace 3 local marketing hires with 1 Offshore Marketing Ninja + AI tools. Save $150K–$280K/yr.`,
+      images: ['https://rapidtal.com/og-default.png'],
     },
   },
 
@@ -105,7 +121,7 @@ export const config: IndustryConfig = {
       `These are the exact roles ${industry}s hire locally most often — and what each one truly costs versus what an Offshore Marketing Ninja delivers with AI tools at a fraction of the price.`,
     cards: [
       {
-        icon: '📈',
+        icon: 'trending-up',
         name: 'Facebook & Instagram Ads Manager',
         subtitle: 'Paid social — listing campaigns, investor lead generation, brand awareness',
         costRange: '$115,000–$145,000',
@@ -121,7 +137,7 @@ export const config: IndustryConfig = {
         saving: 'Save $85,000–$115,000/yr',
       },
       {
-        icon: '🔍',
+        icon: 'search',
         name: 'SEO & Content Specialist',
         subtitle: 'Google rankings, suburb pages, market reports, blog content',
         costRange: '$105,000–$135,000',
@@ -137,7 +153,7 @@ export const config: IndustryConfig = {
         saving: 'Save $75,000–$105,000/yr',
       },
       {
-        icon: '📱',
+        icon: 'smartphone',
         name: 'Social Media Manager',
         subtitle: 'LinkedIn, Instagram, Facebook — daily content and community management',
         costRange: '$95,000–$120,000',
@@ -153,7 +169,7 @@ export const config: IndustryConfig = {
         saving: 'Save $65,000–$90,000/yr',
       },
       {
-        icon: '✍️',
+        icon: 'pen-line',
         name: 'Content & Email Marketing Coordinator',
         subtitle: 'EDMs, listing copy, newsletters, investor database management',
         costRange: '$90,000–$115,000',
@@ -271,6 +287,65 @@ export const config: IndustryConfig = {
     ],
   },
 
+  faq: {
+    tag: 'Frequently asked',
+    heading: `Everything Australian ${industry} principals ask us`,
+    subhead:
+      'The objections we hear most often — and the honest, specific answers we give every time. No spin, no marketing fluff.',
+    items: [
+      {
+        question: 'How do we handle the timezone difference?',
+        answer:
+          'Your Offshore Marketing Ninja works Australian business hours — typically 8am–4pm AEST, which is 6am–2pm Manila time. This is standard for Filipino remote professionals and there is zero lag on daily operations, standups or urgent requests. The Philippines is only 2–3 hours behind AEST, making it the closest offshore market to Australia.',
+      },
+      {
+        question: 'What happens if the Ninja leaves or underperforms?',
+        answer:
+          'We guarantee performance against the KPIs agreed at kickoff. If your Ninja is not hitting them, we replace them within 14 days at no extra cost. If they leave voluntarily, same replacement window. You are never stuck — and unlike a local hire, there is no recruitment fee, no exit interview, no HR paperwork.',
+      },
+      {
+        question: 'How is my data protected? What about listings, CRM access, investor databases?',
+        answer:
+          'Every Ninja signs a comprehensive NDA and IP-assignment agreement before onboarding. Access is granted via your password manager (1Password / LastPass) with role-based permissions — never via shared credentials. We can also enforce VPN-only access, IP allowlisting, and two-factor authentication on every tool. Your data stays in your systems.',
+      },
+      {
+        question: 'Do I have to manage the Ninja myself? I am already time-poor.',
+        answer:
+          'No. We provide weekly performance reports, a dedicated account manager for escalations, and the full AI Marketing Blueprint so workflows run themselves. Most principals spend under 30 minutes a week reviewing output. You approve strategy; the Ninja executes.',
+      },
+      {
+        question: 'What if my industry is specialised — will they understand commercial property?',
+        answer:
+          `Every Ninja is pre-vetted on ${industry} terminology, Australian property law basics, CoreLogic / REA / Domain workflows, and REIA compliance language before they are matched with you. We also onboard them on your specific stock types (industrial, office, retail) and suburb markets. They are not generalists trying to learn — they are trained specialists.`,
+      },
+      {
+        question: 'How is English proficiency? Can they write listing copy that sounds Australian?',
+        answer:
+          "The Philippines is the world's third-largest English-speaking country and English is an official language from kindergarten. Every Ninja is C1-level or higher (CEFR certified) and we specifically test for Australian tone — no Americanisms, no awkward phrasing. Listing copy is reviewed before go-live until we know the voice is locked in.",
+      },
+      {
+        question: 'What does the AI Marketing Blueprint actually include?',
+        answer:
+          'Full tool stack (Claude, Surfer SEO, Canva AI, Meta Ads Manager, Buffer, ActiveCampaign and 10+ more), prompt libraries for every role, standard operating procedures for listing campaigns / EDMs / social content / SEO, KPI dashboards, and the onboarding checklist we use with every Ninja. Whether or not you engage us, the blueprint is yours to keep.',
+      },
+      {
+        question: 'Is there a contract? Can I cancel?',
+        answer:
+          'No lock-in. Monthly rolling agreement, 14-day notice either side. We earn your business every month — that is the discipline that keeps our Ninjas performing.',
+      },
+      {
+        question: 'How fast can we start?',
+        answer:
+          'From the 20-minute discovery call to a fully operational Ninja is 14 days on average. 5 days for matching, 5 days for system access and onboarding, 4 days for first-campaign ramp-up. No 3-month hiring cycle, no notice periods.',
+      },
+      {
+        question: 'What if we already have a local marketing coordinator?',
+        answer:
+          'Many of our clients start by adding a Ninja alongside their existing team to take over execution-heavy work (ads, SEO, content production) while the local coordinator focuses on strategy and agent relationships. The Ninja is not a replacement threat — they are a force multiplier.',
+      },
+    ],
+  },
+
   cta: {
     tag: 'Get the AI Marketing Blueprint — free',
     headingLine1: 'Get the complete AI Marketing Blueprint',
@@ -290,6 +365,7 @@ export const config: IndustryConfig = {
     embedFormId: 'yhi2G6XWNF2CshO37PVD',
     embedFormName: 'Calendar Real Estate',
     embedMinHeight: 737,
+    stickyMobileLabel: 'Get the Free Blueprint',
     trustItems: [
       'No lock-in contracts',
       `Pre-vetted, ${industry} trained`,

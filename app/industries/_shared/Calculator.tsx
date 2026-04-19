@@ -20,6 +20,28 @@ import { useMemo, useState } from 'react';
 import styles from './landing.module.css';
 import type { CalcConfig } from './types';
 
+/* ─── CALCULATION CONSTANTS ──────────────────────────────────────────────────
+ * Australian employment cost loading — figures drawn from ATO / Fair Work /
+ * WorkCover AU. Update here once and every industry page recalculates.
+ * ────────────────────────────────────────────────────────────────────────── */
+export const CALC_CONSTANTS = {
+  /** Superannuation — 11.5% from July 2024, legislated to 12% July 2025. */
+  SUPER_RATE: 0.115,
+  /** Leave equivalent (annual + sick) = 6 weeks of the 52-week salary */
+  LEAVE_WEEKS: 6,
+  WEEKS_PER_YEAR: 52,
+  /** WorkCover + employer liability insurance (varies by state; 1.5% avg) */
+  WORKCOVER_RATE: 0.015,
+  /** Recruitment fee — average 15% of base salary per hire */
+  RECRUITMENT_RATE: 0.15,
+  /** Equipment + software licences + desk cost per role per year */
+  EQUIPMENT_PER_ROLE: 6000,
+  /** Onboarding + productivity loss over first 3-4 months = ~12.5% of salary */
+  ONBOARDING_RATE: 0.125,
+  /** One-off RapidTAL setup fee (blueprint delivery + matching + SOP install) */
+  OFFSHORE_SETUP_FEE: 2000,
+} as const;
+
 const fmt = (v: number) => '$' + Math.max(0, Math.round(v)).toLocaleString();
 const fmtSigned = (v: number) => '$' + Math.round(v).toLocaleString();
 
@@ -38,16 +60,17 @@ export default function Calculator({ config }: { config: CalcConfig }) {
   const [tools, setTools] = useState(s.tools.default);
 
   const calc = useMemo(() => {
+    const k = CALC_CONSTANTS;
     const totalSal = sal * roles;
-    const sup      = Math.round(totalSal * 0.115);
-    const lv       = Math.round((sal / 52 * 6) * roles);
-    const wc       = Math.round(totalSal * 0.015);
-    const rec      = Math.round(sal * 0.15 * roles);
-    const eq       = 6000 * roles;
-    const ob       = Math.round(sal * 0.125 * roles);
+    const sup      = Math.round(totalSal * k.SUPER_RATE);
+    const lv       = Math.round((sal / k.WEEKS_PER_YEAR * k.LEAVE_WEEKS) * roles);
+    const wc       = Math.round(totalSal * k.WORKCOVER_RATE);
+    const rec      = Math.round(sal * k.RECRUITMENT_RATE * roles);
+    const eq       = k.EQUIPMENT_PER_ROLE * roles;
+    const ob       = Math.round(sal * k.ONBOARDING_RATE * roles);
     const auTotal  = totalSal + sup + lv + wc + rec + eq + ob;
 
-    const vaTotal  = va + (tools * 12) + 2000; // includes $2K one-off setup
+    const vaTotal  = va + (tools * 12) + k.OFFSHORE_SETUP_FEE;
     const saving   = auTotal - vaTotal;
 
     return { totalSal, sup, lv, wc, rec, eq, ob, auTotal, vaTotal, saving };

@@ -8,21 +8,37 @@
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 import styles from './landing.module.css';
+import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
 import Calculator from './Calculator';
-import { Hero, Pain, Truth, Roles, HowItWorks, Proof, CTA } from './Sections';
+import { Hero, Pain, Truth, Roles, HowItWorks, Proof, Faq, CTA } from './Sections';
+import StructuredData from './StructuredData';
+import StickyMobileCta from './StickyMobileCta';
 import type { IndustryConfig } from './types';
 
 export default function IndustryPage({ config }: { config: IndustryConfig }) {
   return (
-    <div className={styles.page}>
-      <Hero       config={config.hero} />
-      <Pain       config={config.pain} />
-      <Truth      config={config.truth} />
-      <Roles      config={config.roles} />
-      <HowItWorks config={config.how} />
-      <Calculator config={config.calculator} />
-      <Proof      config={config.proof} />
-      <CTA        config={config.cta} />
-    </div>
+    <>
+      {/* JSON-LD: Service + FAQPage + BreadcrumbList. Rendered at the top of
+          the tree so it ships in the initial HTML payload for crawlers. */}
+      <StructuredData config={config} />
+      <Nav />
+      <main className={styles.page}>
+        <Hero       config={config.hero} />
+        <Pain       config={config.pain} />
+        <Truth      config={config.truth} />
+        <Roles      config={config.roles} />
+        <HowItWorks config={config.how} />
+        <Calculator config={config.calculator} />
+        <Proof      config={config.proof} />
+        <Faq        config={config.faq} />
+        <CTA        config={config.cta} />
+      </main>
+      <Footer />
+      <StickyMobileCta
+        label={config.cta.stickyMobileLabel ?? 'Book Your Free Strategy Call'}
+        target="cta-sec"
+      />
+    </>
   );
 }

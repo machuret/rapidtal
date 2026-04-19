@@ -81,9 +81,23 @@ export interface TruthConfig {
 }
 
 /* ── ROLES ───────────────────────────────────────────────────────────────── */
+/** Supported lucide-react icon keys for role cards. Add new keys here as
+ *  new industries need them — keep the set small so cards stay coherent. */
+export type RoleIcon =
+  | 'trending-up'   // Paid ads / growth
+  | 'search'        // SEO
+  | 'smartphone'    // Social media
+  | 'pen-line'      // Content / copy
+  | 'mail'          // Email / EDM
+  | 'megaphone'     // PR / outreach
+  | 'chart-bar'     // Analytics / reporting
+  | 'video'         // Video / creative
+  | 'users';        // Community / CS
+
 export interface RoleCard {
-  /** Emoji or single character displayed in the orange icon tile */
-  icon: string;
+  /** Icon key — rendered as a lucide-react SVG in the orange icon tile.
+   *  See RoleIcon for the supported set. */
+  icon: RoleIcon;
   name: string;
   /** One-line role description under the name */
   subtitle: string;
@@ -159,6 +173,20 @@ export interface ProofConfig {
   items: ProofItem[];
 }
 
+/* ── FAQ ─────────────────────────────────────────────────────────────────── */
+export interface FaqItem {
+  question: string;
+  /** Can contain basic inline text. For rich markup, expand in a future rev. */
+  answer: string;
+}
+export interface FaqConfig {
+  tag: string;
+  heading: string;
+  subhead: string;
+  /** 5–10 questions is the sweet spot — answers principal-level objections. */
+  items: FaqItem[];
+}
+
 /* ── CTA ─────────────────────────────────────────────────────────────────── */
 export interface CtaConfig {
   tag: string;
@@ -183,6 +211,10 @@ export interface CtaConfig {
    *  Prevents layout shift on load. Defaults to 737 (LC's standard). */
   embedMinHeight?: number;
   trustItems: string[];
+  /** Short label (≤ 32 chars) shown in the mobile sticky CTA bar.
+   *  Tapping it smooth-scrolls to the CTA section. Optional — if omitted,
+   *  the sticky bar falls back to a generic label. */
+  stickyMobileLabel?: string;
 }
 
 /* ── ROOT ────────────────────────────────────────────────────────────────── */
@@ -199,6 +231,7 @@ export interface IndustryConfig {
   how: HowConfig;
   calculator: CalcConfig;
   proof: ProofConfig;
+  faq: FaqConfig;
   cta: CtaConfig;
   /** Passed straight to Next.js via `export const metadata` on page.tsx */
   meta: Metadata;

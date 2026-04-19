@@ -50,10 +50,28 @@ export default function AnimatedHeroTitle({
     return () => clearTimeout(t);
   }, [idx, rotatingWords.length, intervalMs]);
 
+  // Visually-hidden canonical sentence for screen readers + crawlers.
+  // e.g. "Your Commercial Real Estate Agency is overpaying, overstaffed,
+  // overworked, overwhelmed or overspending." Joined with "or" before the
+  // last word so it reads naturally.
+  const srSentence = (() => {
+    if (rotatingWords.length === 0) return lead;
+    if (rotatingWords.length === 1) return `${lead} ${rotatingWords[0]}.`;
+    const all = rotatingWords.slice(0, -1).join(', ');
+    const last = rotatingWords[rotatingWords.length - 1];
+    return `${lead} ${all} or ${last}.`;
+  })();
+
   return (
     <h1 className={styles.heroTitle}>
-      <span className={styles.heroTitleLead}>{lead}</span>
-      <span className={styles.rotatingWrap}>
+      {/* SR-only line — gives assistive tech + crawlers the full meaning,
+           without any motion. Visually hidden, but kept in the DOM. */}
+      <span className={styles.srOnly}>{srSentence}</span>
+
+      {/* The visual animated block is marked aria-hidden so SRs don't read
+           every word transition. */}
+      <span className={styles.heroTitleLead} aria-hidden="true">{lead}</span>
+      <span className={styles.rotatingWrap} aria-hidden="true">
         {/* Non-breaking space reserves the line height while words slide */}
         &nbsp;
         {rotatingWords.map((word, i) => (

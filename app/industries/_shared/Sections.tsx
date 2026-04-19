@@ -15,10 +15,12 @@ import Script from 'next/script';
 import styles from './landing.module.css';
 import ScrollButton from './ScrollButton';
 import AnimatedHeroTitle from './AnimatedHeroTitle';
+import AnimatedStat from './AnimatedStat';
+import RoleIcon from './RoleIcon';
 import TypewriterHeading, { type TypewriterWord } from './TypewriterHeading';
 import type {
   HeroConfig, PainConfig, TruthConfig, RolesConfig,
-  HowConfig, ProofConfig, CtaConfig,
+  HowConfig, ProofConfig, FaqConfig, CtaConfig,
 } from './types';
 
 /* Build the words-array for the CTA typewriter from the existing structured
@@ -55,7 +57,9 @@ export function Hero({ config }: { config: HeroConfig }) {
         <div className={styles.hstats}>
           {config.stats.map((s) => (
             <div key={s.label} className={styles.hstat}>
-              <div className={styles.hstatNum}>{s.num}</div>
+              <div className={styles.hstatNum}>
+                <AnimatedStat value={s.num} />
+              </div>
               <div className={styles.hstatLbl}>{s.label}</div>
             </div>
           ))}
@@ -75,7 +79,7 @@ export function Pain({ config }: { config: PainConfig }) {
     <section className={styles.painSec}>
       <div className={styles.container}>
         <div className={styles.secTag}>{config.tag}</div>
-        <div className={styles.secH}>{config.heading}</div>
+        <h2 className={styles.secH}>{config.heading}</h2>
         <p className={styles.secSub}>{config.subhead}</p>
         <div className={styles.painGrid}>
           {config.cards.map((p) => (
@@ -135,13 +139,13 @@ export function Roles({ config }: { config: RolesConfig }) {
     <section className={styles.rolesSec}>
       <div className={styles.container}>
         <div className={styles.secTag}>{config.tag}</div>
-        <div className={styles.secH}>{config.heading}</div>
+        <h2 className={styles.secH}>{config.heading}</h2>
         <p className={styles.secSub}>{config.subhead}</p>
         {config.cards.map((r) => (
           <div key={r.name} className={styles.rcard}>
             <div className={styles.rcardHead}>
               <div className={styles.rcardLeft}>
-                <div className={styles.rico}>{r.icon}</div>
+                <div className={styles.rico}><RoleIcon name={r.icon} /></div>
                 <div>
                   <div className={styles.rcardName}>{r.name}</div>
                   <div className={styles.rcardType}>{r.subtitle}</div>
@@ -183,7 +187,7 @@ export function HowItWorks({ config }: { config: HowConfig }) {
     <section className={styles.howitSec}>
       <div className={styles.container}>
         <div className={styles.secTag}>{config.tag}</div>
-        <div className={styles.secH}>{config.heading}</div>
+        <h2 className={styles.secH}>{config.heading}</h2>
         <p className={styles.secSub}>{config.subhead}</p>
         <div className={styles.steps}>
           {config.steps.map((s, i) => (
@@ -208,7 +212,7 @@ export function Proof({ config }: { config: ProofConfig }) {
     <section className={styles.proofSec}>
       <div className={styles.container}>
         <div className={styles.secTag}>{config.tag}</div>
-        <div className={styles.secH}>{config.heading}</div>
+        <h2 className={styles.secH}>{config.heading}</h2>
         <p className={styles.secSub}>{config.subhead}</p>
         <div className={styles.proofGrid}>
           {config.items.map((p) => (
@@ -227,10 +231,36 @@ export function Proof({ config }: { config: ProofConfig }) {
   );
 }
 
+/* ── FAQ ─────────────────────────────────────────────────────────────────── */
+/* Uses native <details>/<summary> — zero JS, fully accessible, works without
+ * hydration. The +/- toggle comes from CSS (see .faqItem[open] selector). */
+export function Faq({ config }: { config: FaqConfig }) {
+  return (
+    <section className={styles.faqSec} aria-labelledby="faq-heading">
+      <div className={styles.container}>
+        <div className={styles.secTag}>{config.tag}</div>
+        <h2 id="faq-heading" className={styles.secH}>{config.heading}</h2>
+        <p className={styles.secSub}>{config.subhead}</p>
+        <div className={styles.faqList}>
+          {config.items.map((q) => (
+            <details key={q.question} className={styles.faqItem}>
+              <summary className={styles.faqQ}>
+                <span>{q.question}</span>
+                <span className={styles.faqIcon} aria-hidden="true">+</span>
+              </summary>
+              <div className={styles.faqA}>{q.answer}</div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ── CTA ─────────────────────────────────────────────────────────────────── */
 export function CTA({ config }: { config: CtaConfig }) {
   return (
-    <section className={styles.ctaSec}>
+    <section id="cta-sec" className={styles.ctaSec}>
       <div className={styles.container}>
         <div className={styles.secTag}>{config.tag}</div>
         {/* Typewriter replaces the static H2. Framer-motion reveals via width
