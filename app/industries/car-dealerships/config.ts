@@ -35,8 +35,8 @@ export const config: IndustryConfig = {
       type: 'website',
       images: [
         {
-          // TODO: replace with industry-specific social card (1200x630)
-          url: 'https://rapidtal.com/og-default.png',
+          // Drop the 1200x630 social card file at public/og-car-dealerships.png
+          url: 'https://rapidtal.com/og-car-dealerships.png',
           width: 1200,
           height: 630,
           alt: `RapidTAL — Offshore Marketing for ${industry}s`,
@@ -48,7 +48,7 @@ export const config: IndustryConfig = {
       title: `Offshore Marketing for ${industry}s — RapidTAL`,
       description:
         `Replace 3 local marketing hires with 1 Offshore Marketing Ninja + AI tools. Save $150K–$280K/yr.`,
-      images: ['https://rapidtal.com/og-default.png'],
+      images: ['https://rapidtal.com/og-car-dealerships.png'],
     },
   },
 
@@ -368,9 +368,7 @@ export const config: IndustryConfig = {
       'KPI frameworks pre-built for new & used stock, service retention and EDMs',
       'A shortlist of matched, pre-vetted Offshore Marketing Ninjas ready in 14 days',
     ],
-    // TODO: replace with a car-dealership-specific LeadConnector form so
-    // submissions land in the right pipeline. Using CRE form ID as a
-    // placeholder until the dedicated form is created in HighLevel.
+    // Shared across industries — all submissions land in the same pipeline.
     embedFormId: 'yhi2G6XWNF2CshO37PVD',
     embedFormName: 'Calendar Car Dealership',
     embedMinHeight: 737,
