@@ -10,7 +10,7 @@ export default function Hero() {
       <div className="hero-content">
         <p className="hero-eyebrow">— Direct Hire. Zero Middlemen. Elite Talent.</p>
         <h1 className="hero-headline hero-headline--tight">
-          YOUR BEST<br />
+          <span className="hero-headline-line">YOUR BEST</span>
           <em>MARKETER</em>
           <span className="outline">ISN&#39;T LOCAL.</span>
         </h1>
