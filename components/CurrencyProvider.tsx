@@ -38,12 +38,8 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const toggleCurrency = useCallback(() => {
-    setCurrency((prev: Currency) => {
-      const next = prev === 'AUD' ? 'USD' : 'AUD';
-      localStorage.setItem('rapidtal-currency', next);
-      return next;
-    });
-  }, []);
+    setCurrency(currency === 'AUD' ? 'USD' : 'AUD');
+  }, [currency, setCurrency]);
 
   const phone = PHONE;
 
