@@ -9,10 +9,10 @@ export default function Hero() {
       </div>
       <div className="hero-content">
         <p className="hero-eyebrow">— Direct Hire. Zero Middlemen. Elite Talent.</p>
-        <h1 className="hero-headline hero-headline--tight">
-          <span className="hero-headline-line">YOUR BEST</span>
-          <em>MARKETER</em>
-          <span className="outline">ISN&#39;T LOCAL.</span>
+        <h1 className="hero-headline">
+          <span className="hl-line">YOUR BEST</span>
+          <span className="hl-line hl-orange">MARKETER</span>
+          <span className="hl-line hl-outline">ISN&#39;T LOCAL.</span>
         </h1>
         <div className="hero-social-proof">
           <span className="hero-stars">★★★★★</span>
