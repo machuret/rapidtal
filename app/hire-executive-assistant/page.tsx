@@ -87,7 +87,7 @@ export default function HireExecutiveAssistantPage() {
         roleTitle={role.title}
         roleDescription={role.roleDescription}
       />
-      <section style={{ padding: 'clamp(60px, 8vw, 80px) clamp(20px, 4vw, 60px)', background: 'var(--black)' }}>
+      <section style={{ padding: 'clamp(60px, 8vw, 80px) clamp(20px, 4vw, 60px)', background: 'var(--black)', maxWidth: 'var(--max-w)', margin: '0 auto' }}>
         <SectionHeader 
           tag="The Real Numbers"
           title={<>WHAT IT <em style={{ fontStyle: 'normal', color: 'var(--orange)' }}>ACTUALLY COSTS</em><br />MONTH BY MONTH.</>}

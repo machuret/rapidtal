@@ -78,7 +78,8 @@ export default function HireMarketingSalesPhilippinesPage() {
               textTransform: 'uppercase',
               color: 'var(--orange)',
               marginBottom: '24px',
-              fontFamily: 'var(--font-barlow)'
+              fontFamily: 'var(--font-barlow)',
+              textAlign: 'center'
             }}>
               Complete Cost Comparison Hub
             </p>
@@ -91,7 +92,8 @@ export default function HireMarketingSalesPhilippinesPage() {
               fontFamily: 'var(--font-barlow)',
               textTransform: 'uppercase',
               color: 'var(--white)',
-              letterSpacing: '-0.02em'
+              letterSpacing: '-0.02em',
+              textAlign: 'center'
             }}>
               HIRE MARKETING<br />
               & SALES TALENT<br />
@@ -103,8 +105,10 @@ export default function HireMarketingSalesPhilippinesPage() {
               lineHeight: '1.5',
               color: 'rgba(255, 255, 255, 0.8)',
               maxWidth: '900px',
+              margin: '0 auto',
               marginBottom: 'clamp(50px, 6vw, 80px)',
-              fontFamily: 'var(--font-dm-sans)'
+              fontFamily: 'var(--font-dm-sans)',
+              textAlign: 'center'
             }}>
               Compare the real cost of hiring marketing, sales and operations staff in Australia versus hiring directly from the Philippines. <strong style={{ color: 'var(--white)' }}>51 role comparisons. Save up to 82%.</strong>
             </p>
@@ -112,7 +116,8 @@ export default function HireMarketingSalesPhilippinesPage() {
             <div style={{
               display: 'flex',
               gap: 'clamp(40px, 5vw, 80px)',
-              flexWrap: 'wrap'
+              flexWrap: 'wrap',
+              justifyContent: 'center'
             }}>
               <div>
                 <div style={{
@@ -279,7 +284,8 @@ export default function HireMarketingSalesPhilippinesPage() {
             marginBottom: 'clamp(32px, 4vw, 48px)',
             fontFamily: 'var(--font-barlow)',
             textTransform: 'uppercase',
-            color: 'var(--white)'
+            color: 'var(--white)',
+            textAlign: 'center'
           }}>
             WHAT IS <span style={{ color: 'var(--orange)' }}>DIRECT HIRE?</span>
           </h2>
