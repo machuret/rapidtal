@@ -10,7 +10,6 @@ import {
 } from '@/components/comparison';
 import { ROLES } from '@/data/roles';
 import CursorTracker from '@/components/CursorTracker';
-import CalendlyEmbed from '@/components/CalendlyEmbed';
 
 // Dynamic imports for below-the-fold components
 const RoleDescription = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.RoleDescription })), { ssr: true });
@@ -24,6 +23,7 @@ const AnimatedCTA = dynamic(() => import('@/components/comparison').then(mod => 
 const SectionHeader = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.SectionHeader })), { ssr: true });
 const FAQSection = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.FAQSection })), { ssr: true });
 const RelatedRoles = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.RelatedRoles })), { ssr: true });
+const CalendlyEmbed = dynamic(() => import('@/components/CalendlyEmbed'), { ssr: true });
 
 const ROLE_SLUG = 'marketing-assistant';
 
