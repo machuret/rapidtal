@@ -5,6 +5,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  text-align: center;
   position: relative;
   overflow: hidden;
 }
@@ -15,7 +17,7 @@
   position: absolute;
   inset: 0;
 }
-.heroContent { position: relative; z-index: 2; }
+.heroContent { position: relative; z-index: 2; max-width: var(--max-w); }
 
 /* ─── STATS STRIP ─────────────────────────────────────────────── */
 .statsStrip {
@@ -31,6 +33,7 @@
   padding: 100px 80px;
   max-width: var(--max-w);
   margin: 0 auto;
+  text-align: center;
 }
 
 /* ─── CASE STUDY GRID ─────────────────────────────────────────── */

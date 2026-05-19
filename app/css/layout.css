@@ -78,6 +78,7 @@ section { padding: 140px 80px; }
   color: var(--orange);
   margin-bottom: 24px;
   display: block;
+  text-align: center;
 }
 
 .section-heading {
@@ -86,5 +87,6 @@ section { padding: 140px 80px; }
   line-height: 0.95;
   letter-spacing: -0.5px;
   margin-bottom: 28px;
+  text-align: center;
 }
 .section-heading em { font-style: normal; color: var(--orange); }

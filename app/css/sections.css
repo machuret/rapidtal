@@ -183,10 +183,10 @@
 
 /* ─── FINAL CTA ──────────────────────────────────────────────────────── */
 .final-cta { background: var(--orange); padding: 120px 80px; }
-.final-cta-inner { max-width: var(--max-w); margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 80px; align-items: center; }
+.final-cta-inner { max-width: var(--max-w); margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 32px; }
 .final-cta-heading { font-family: var(--font-display); font-size: clamp(52px, 5.5vw, 88px); line-height: 0.95; color: var(--black); }
 .final-cta-heading em { font-style: normal; -webkit-text-stroke: 2px var(--black); color: transparent; }
-.final-cta-sub { font-size: 17px; color: rgba(0,0,0,0.7); margin-top: 24px; max-width: 520px; line-height: 1.65; }
+.final-cta-sub { font-size: 17px; color: rgba(0,0,0,0.7); margin-top: 0; max-width: 520px; line-height: 1.65; }
 .final-cta-actions { display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .final-cta-phone { font-family: var(--font-ui); font-weight: 700; font-size: 18px; letter-spacing: 2px; color: rgba(0,0,0,0.55); text-decoration: none; text-transform: uppercase; transition: color var(--ease-normal); }
 .final-cta-phone:hover { color: var(--black); }
