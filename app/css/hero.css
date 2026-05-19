@@ -19,10 +19,10 @@
   width: 100%;
   max-width: var(--max-w);
 }
-.hero-content { 
-  flex: 1 1 auto; 
-  min-width: 0; 
-  text-align: center; 
+.hero-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: center;
 }
 .hero-calendly {
   flex: 0 0 480px;
