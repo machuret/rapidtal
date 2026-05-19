@@ -1,9 +1,18 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import styles from './ComparisonHero.module.css';
 import { useCurrency } from '@/components/CurrencyProvider';
 import { formatPrice } from '@/lib/currency';
 import type { Currency } from '@/lib/currency';
+
+declare global {
+  interface Window {
+    Calendly?: {
+      initInlineWidget: (opts: { url: string; parentElement: HTMLElement }) => void;
+    };
+  }
+}
 
 function formatSavedPerYear(value: string, currency: Currency): string {
   const match = value.match(/\$(\d+)K\+/);
@@ -31,6 +40,26 @@ interface ComparisonHeroProps {
 
 export default function ComparisonHero({ roleTag, headline, heroSub, heroGhost, stats }: ComparisonHeroProps) {
   const { currency } = useCurrency();
+  const calRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const url = 'https://calendly.com/machuret/rapid-tal?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=ff7100';
+    function initWidget() {
+      if (window.Calendly && calRef.current) {
+        calRef.current.innerHTML = '';
+        window.Calendly.initInlineWidget({ url, parentElement: calRef.current });
+      }
+    }
+    const existing = document.querySelector('script[src="https://assets.calendly.com/assets/external/widget.js"]');
+    if (existing) { initWidget(); } else {
+      const script = document.createElement('script');
+      script.src = 'https://assets.calendly.com/assets/external/widget.js';
+      script.async = true;
+      script.onload = initWidget;
+      document.head.appendChild(script);
+    }
+  }, []);
+
   return (
     <section className={styles.hero}>
       <div className={styles.heroBg}></div>
@@ -48,39 +77,45 @@ export default function ComparisonHero({ roleTag, headline, heroSub, heroGhost, 
           </svg>
         </div>
       </div>
-      <div className={styles.heroInner}>
-        <div className={styles.roleTag}>
-          <div className={styles.roleTagDot}></div>
-          {roleTag}
+      <div className={styles.heroColumns}>
+        <div className={styles.heroInner}>
+          <div className={styles.roleTag}>
+            <div className={styles.roleTagDot}></div>
+            {roleTag}
+          </div>
+          <h1 className={styles.heroHeadline}>
+            {headline.split('\n').map((line, i) => (
+              <span key={i}>
+                {line.includes('PHILIPPINES') || line.includes('DIRECT') ? (
+                  <em>{line}</em>
+                ) : line}
+                {i < headline.split('\n').length - 1 && <br />}
+              </span>
+            ))}
+          </h1>
+          <p className={styles.heroSub}>{heroSub}</p>
+          <div className={styles.heroStats}>
+            <div className={styles.heroStat}>
+              <span className={styles.heroStatNum}>{stats.saving}</span>
+              <span className={styles.heroStatLabel}>Average saving</span>
+            </div>
+            <div className={styles.heroStat}>
+              <span className={styles.heroStatNum}>{formatSavedPerYear(stats.savedPerYear, currency)}</span>
+              <span className={styles.heroStatLabel}>Saved per year</span>
+            </div>
+            <div className={styles.heroStat}>
+              <span className={styles.heroStatNum}>{stats.daysToHire}</span>
+              <span className={styles.heroStatLabel}>Days to hire</span>
+            </div>
+            <div className={styles.heroStat}>
+              <span className={styles.heroStatNum}>{formatPrice(3990, currency)}</span>
+              <span className={styles.heroStatLabel}>One-time fee</span>
+            </div>
+          </div>
         </div>
-        <h1 className={styles.heroHeadline}>
-          {headline.split('\n').map((line, i) => (
-            <span key={i}>
-              {line.includes('PHILIPPINES') || line.includes('DIRECT') ? (
-                <em>{line}</em>
-              ) : line}
-              {i < headline.split('\n').length - 1 && <br />}
-            </span>
-          ))}
-        </h1>
-        <p className={styles.heroSub}>{heroSub}</p>
-        <div className={styles.heroStats}>
-          <div className={styles.heroStat}>
-            <span className={styles.heroStatNum}>{stats.saving}</span>
-            <span className={styles.heroStatLabel}>Average saving</span>
-          </div>
-          <div className={styles.heroStat}>
-            <span className={styles.heroStatNum}>{formatSavedPerYear(stats.savedPerYear, currency)}</span>
-            <span className={styles.heroStatLabel}>Saved per year</span>
-          </div>
-          <div className={styles.heroStat}>
-            <span className={styles.heroStatNum}>{stats.daysToHire}</span>
-            <span className={styles.heroStatLabel}>Days to hire</span>
-          </div>
-          <div className={styles.heroStat}>
-            <span className={styles.heroStatNum}>{formatPrice(3990, currency)}</span>
-            <span className={styles.heroStatLabel}>One-time fee</span>
-          </div>
+        <div className={styles.heroCalendly}>
+          <div className={styles.heroCalendlyLabel}>Book a Free Discovery Call</div>
+          <div ref={calRef} className={styles.heroCalendlyWidget} />
         </div>
       </div>
     </section>
