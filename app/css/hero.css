@@ -1,11 +1,10 @@
 /* ─── HERO ───────────────────────────────────────────────────────────── */
 .hero {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 140px 80px 100px;
+  padding: 140px 80px 80px;
   position: relative;
   overflow: hidden;
 }
