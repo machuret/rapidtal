@@ -35,7 +35,8 @@ export default function RelatedRoles({ roles, category }: RelatedRolesProps) {
             textTransform: 'uppercase',
             color: 'var(--orange)',
             marginBottom: '20px',
-            fontFamily: 'var(--font-barlow)'
+            fontFamily: 'var(--font-barlow)',
+            textAlign: 'center'
           }}>
             More {category} Cost Comparisons
           </p>
@@ -47,7 +48,8 @@ export default function RelatedRoles({ roles, category }: RelatedRolesProps) {
             marginBottom: 'clamp(40px, 5vw, 60px)',
             fontFamily: 'var(--font-barlow)',
             textTransform: 'uppercase',
-            color: 'var(--white)'
+            color: 'var(--white)',
+            textAlign: 'center'
           }}>
             COMPARE MORE <span style={{ color: 'var(--orange)' }}>ROLES</span>
           </h2>

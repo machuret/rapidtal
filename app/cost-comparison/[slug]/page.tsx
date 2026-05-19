@@ -72,12 +72,12 @@ export default function CostComparisonPage({ params }: { params: { slug: string 
         roleTitle={role.title}
         roleDescription={role.roleDescription}
       />
-      <section style={{ padding: '80px 60px' }}>
-        <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '4px', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <section style={{ padding: '80px 60px', maxWidth: 'var(--max-w)', margin: '0 auto' }}>
+        <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '4px', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
           <span style={{ width: '20px', height: '2px', background: 'var(--orange)', display: 'block' }}></span>
           The Real Numbers
         </div>
-        <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(40px, 5vw, 64px)', lineHeight: 0.95, marginBottom: '48px' }}>
+        <h2 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(40px, 5vw, 64px)', lineHeight: 0.95, marginBottom: '48px', textAlign: 'center' as const }}>
           WHAT IT <em style={{ fontStyle: 'normal', color: 'var(--orange)' }}>ACTUALLY COSTS</em><br />MONTH BY MONTH.
         </h2>
         <ComparisonTable costs={role.costs} />

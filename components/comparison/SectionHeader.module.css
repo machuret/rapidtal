@@ -1,5 +1,6 @@
 .header {
   margin-bottom: 48px;
+  text-align: center;
 }
 
 .tag {
@@ -12,6 +13,7 @@
   margin-bottom: 16px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
 }
 

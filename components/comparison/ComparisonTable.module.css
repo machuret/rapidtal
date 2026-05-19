@@ -2,6 +2,8 @@
   background: var(--black-2);
   border: 1px solid var(--border);
   overflow: hidden;
+  max-width: var(--max-w);
+  margin: 0 auto;
 }
 
 .comparisonHeader {

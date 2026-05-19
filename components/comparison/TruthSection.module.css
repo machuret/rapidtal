@@ -7,6 +7,8 @@
   grid-template-columns: 1fr 1fr;
   gap: 80px;
   align-items: center;
+  max-width: var(--max-w);
+  margin: 0 auto;
 }
 
 .truthHeadline {
@@ -14,6 +16,7 @@
   font-size: clamp(40px, 4.5vw, 64px);
   line-height: 0.95;
   margin-bottom: 24px;
+  text-align: center;
 }
 
 .truthHeadline em {
