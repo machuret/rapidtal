@@ -1,14 +1,39 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+
+declare global {
+  interface Window {
+    Calendly?: {
+      initInlineWidget: (opts: { url: string; parentElement: HTMLElement }) => void;
+    };
+  }
+}
 
 export default function CalendlyEmbed() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    // Load Calendly widget script if not already loaded
-    if (!document.querySelector('script[src="https://assets.calendly.com/assets/external/widget.js"]')) {
+    const url = 'https://calendly.com/machuret/rapid-tal?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=ff7100';
+
+    function initWidget() {
+      if (window.Calendly && containerRef.current) {
+        containerRef.current.innerHTML = '';
+        window.Calendly.initInlineWidget({
+          url,
+          parentElement: containerRef.current,
+        });
+      }
+    }
+
+    const existing = document.querySelector('script[src="https://assets.calendly.com/assets/external/widget.js"]');
+    if (existing) {
+      initWidget();
+    } else {
       const script = document.createElement('script');
       script.src = 'https://assets.calendly.com/assets/external/widget.js';
       script.async = true;
+      script.onload = initWidget;
       document.head.appendChild(script);
     }
   }, []);
@@ -36,8 +61,7 @@ export default function CalendlyEmbed() {
         Book a free discovery call — no pitch, no pressure.
       </p>
       <div
-        className="calendly-inline-widget"
-        data-url="https://calendly.com/machuret?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=ff7100"
+        ref={containerRef}
         style={{ minWidth: '320px', height: '700px', maxWidth: '900px', margin: '0 auto' }}
       />
     </section>
