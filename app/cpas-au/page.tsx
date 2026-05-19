@@ -15,7 +15,7 @@ export default function CPAsAUPage() {
   return (
     <div className={s.wrapper}>
       <Nav />
-      <ScrollReveal>
+      <ScrollReveal />
         <div className={s.cover}>
           <div className={s.coverBrand}>RapidTal</div>
           <h1>Your CPAs Are Doing <em className={s.highlight}>$10-an-Hour Work.</em> And It&apos;s Killing Your Firm.</h1>
@@ -25,7 +25,6 @@ export default function CPAsAUPage() {
           <div className={s.coverByline}>By Gabriel Machuret — RapidTal.com</div>
           <div className={s.coverAud}>All prices in Australian Dollars (AUD)</div>
         </div>
-      </ScrollReveal>
 
       <nav className={s.toc}>
         <div className={s.tocTitle}>What&apos;s Inside</div>
