@@ -214,7 +214,7 @@ export default function CaseStudiesPage() {
           </p>
           <div className={s.ctaActions}>
             <a href="/calculator" className="btn-primary"><span>Take the Calculator →</span></a>
-            <a href="/#contact" className="btn-ghost">Book a Call</a>
+            <a href="https://calendly.com/machuret/rapid-tal" className="btn-ghost">Book a Call</a>
           </div>
         </section>
 

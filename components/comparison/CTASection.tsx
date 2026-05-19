@@ -16,8 +16,8 @@ export default function CTASection({ roleTitle }: CTASectionProps) {
         </p>
       </div>
       <div style={{display:'flex', flexDirection:'column', gap:'14px', alignItems:'center'}}>
-        <a href="/calculator" className={styles.btnDark}>Start Saving$ Calculator →</a>
-        <span className={styles.ctaNote}>Or call 0440 137 834</span>
+        <a href="https://calendly.com/machuret/rapid-tal" className={styles.btnDark}>Book a Call →</a>
+        <a href="/calculator" className={styles.ctaNote} style={{textDecoration:'none'}}>Or try the Savings Calculator</a>
       </div>
     </div>
   );

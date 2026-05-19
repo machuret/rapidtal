@@ -214,7 +214,7 @@ export default function SalesRolesPage() {
           </p>
 
           <a 
-            href="https://rapidtal.com/#contact"
+            href="https://calendly.com/machuret/rapid-tal"
             style={{
               display: 'inline-block',
               padding: '16px 32px',

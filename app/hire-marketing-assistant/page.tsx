@@ -10,6 +10,7 @@ import {
 } from '@/components/comparison';
 import { ROLES } from '@/data/roles';
 import CursorTracker from '@/components/CursorTracker';
+import CalendlyEmbed from '@/components/CalendlyEmbed';
 
 // Dynamic imports for below-the-fold components
 const RoleDescription = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.RoleDescription })), { ssr: true });
@@ -114,6 +115,7 @@ export default function HireMarketingAssistantPage() {
         />
       )}
       <FAQSection />
+      <CalendlyEmbed />
       <CTASection roleTitle={role.title} />
       <ComparisonFooter />
     </div>

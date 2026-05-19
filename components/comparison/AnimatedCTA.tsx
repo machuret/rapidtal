@@ -80,7 +80,7 @@ export default function AnimatedCTA({ variant = 'primary' }: AnimatedCTAProps) {
         </svg>
       </motion.div>
 
-      <a href="/quiz" className={styles.ctaButton}>
+      <a href="https://calendly.com/machuret/rapid-tal" className={styles.ctaButton}>
         <span className={styles.buttonGlow}></span>
         <span className={styles.buttonContent}>
           Book a Call

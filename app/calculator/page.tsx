@@ -426,7 +426,7 @@ function CalculatorContent() {
                   </div>
                 </div>
                 <div className={styles.resultCtaWrap}>
-                  <a href={`tel:${phone}`} className={`${styles.btnPrimary} ${styles.btnFull}`}>Book Your Discovery Call →</a>
+                  <a href="https://calendly.com/machuret/rapid-tal" className={`${styles.btnPrimary} ${styles.btnFull}`}>Book Your Discovery Call →</a>
                   <a href={`tel:${phone}`} className={styles.resultCall}>Or call us directly: {phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}</a>
                 </div>
               </div>
