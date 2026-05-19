@@ -1,18 +1,9 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import styles from './ComparisonHero.module.css';
 import { useCurrency } from '@/components/CurrencyProvider';
 import { formatPrice } from '@/lib/currency';
 import type { Currency } from '@/lib/currency';
-
-declare global {
-  interface Window {
-    Calendly?: {
-      initInlineWidget: (opts: { url: string; parentElement: HTMLElement }) => void;
-    };
-  }
-}
 
 function formatSavedPerYear(value: string, currency: Currency): string {
   const match = value.match(/\$(\d+)K\+/);
@@ -40,25 +31,6 @@ interface ComparisonHeroProps {
 
 export default function ComparisonHero({ roleTag, headline, heroSub, heroGhost, stats }: ComparisonHeroProps) {
   const { currency } = useCurrency();
-  const calRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const url = 'https://calendly.com/machuret/rapid-tal?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=ff7100';
-    function initWidget() {
-      if (window.Calendly && calRef.current) {
-        calRef.current.innerHTML = '';
-        window.Calendly.initInlineWidget({ url, parentElement: calRef.current });
-      }
-    }
-    const existing = document.querySelector('script[src="https://assets.calendly.com/assets/external/widget.js"]');
-    if (existing) { initWidget(); } else {
-      const script = document.createElement('script');
-      script.src = 'https://assets.calendly.com/assets/external/widget.js';
-      script.async = true;
-      script.onload = initWidget;
-      document.head.appendChild(script);
-    }
-  }, []);
 
   return (
     <section className={styles.hero}>
@@ -115,7 +87,12 @@ export default function ComparisonHero({ roleTag, headline, heroSub, heroGhost, 
         </div>
         <div className={styles.heroCalendly}>
           <div className={styles.heroCalendlyLabel}>Book a Free Discovery Call</div>
-          <div ref={calRef} className={styles.heroCalendlyWidget} />
+          <iframe
+            src="https://calendly.com/machuret/rapid-tal?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=ff7100"
+            className={styles.heroCalendlyWidget}
+            frameBorder="0"
+            title="Schedule a call"
+          />
         </div>
       </div>
     </section>
