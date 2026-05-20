@@ -1,0 +1,51 @@
+import { redirect } from "next/navigation";
+import { getCurrentUserAndClient } from "@/lib/auth";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { SopsLibrary } from "@/components/sops/SopsLibrary";
+
+export const dynamic = "force-dynamic";
+export const metadata = { title: "SOPs — RapidTal" };
+
+export default async function SopsPage() {
+  const ctx = await getCurrentUserAndClient();
+  if (!ctx) redirect("/login");
+
+  const { user, client } = ctx;
+  if (!user.client_id) redirect("/dashboard");
+
+  const admin = createAdminClient();
+  const { data: sops } = await admin
+    .from("sops")
+    .select("*")
+    .eq("client_id", user.client_id)
+    .order("category")
+    .order("order_index");
+
+  const canEdit = user.role === "client_admin" || user.role === "super_admin";
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-1">Standard Operating Procedures</h1>
+      <p className="text-zinc-400 text-sm mb-8">
+        Step-by-step processes for {client?.name ?? "your team"}.
+      </p>
+      <SopsLibrary
+        sops={(sops ?? []) as Sop[]}
+        clientId={user.client_id}
+        userId={user.id}
+        canEdit={canEdit}
+      />
+    </div>
+  );
+}
+
+export interface Sop {
+  id: string;
+  client_id: string;
+  title: string;
+  category: string;
+  body: string;
+  order_index: number;
+  created_at: string;
+  updated_at: string;
+}

@@ -1,0 +1,367 @@
+"use client";
+
+import { useState, useRef, useMemo, useCallback } from "react";
+import { format, subDays, parseISO, isFuture } from "date-fns";
+import { ChevronLeft, ChevronRight, Plus, Trash2, BarChart2, Loader2, Check } from "lucide-react";
+import { DailyLogHistory } from "./DailyLogHistory";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import Link from "next/link";
+import { toast } from "sonner";
+import type { Mood, DailyLog, DailyLogNote } from "@/types/daily-log";
+
+export type { Mood, DailyLog, DailyLogNote } from "@/types/daily-log";
+
+interface HistoryEntry { log_date: string; mood: Mood | null; }
+
+interface Props {
+  initialLog:     DailyLog | null;
+  initialNotes:   DailyLogNote[];
+  initialHistory: HistoryEntry[];
+  readOnly?:      boolean;
+  viewingUserId?: string; // When set (admin viewing a VA), date nav fetches this user's log
+}
+
+const MOODS: { value: Mood; label: string; emoji: string; color: string; dot: string }[] = [
+  { value: "great",       label: "Great",       emoji: "🟢", color: "bg-green-500/20 text-green-400 border-green-500/40",   dot: "bg-green-400"  },
+  { value: "good",        label: "Good",        emoji: "🔵", color: "bg-blue-500/20 text-blue-400 border-blue-500/40",      dot: "bg-blue-400"   },
+  { value: "neutral",     label: "Neutral",     emoji: "🟡", color: "bg-yellow-500/20 text-yellow-400 border-yellow-500/40", dot: "bg-yellow-400" },
+  { value: "difficult",   label: "Difficult",   emoji: "🟠", color: "bg-orange-500/20 text-orange-400 border-orange-500/40", dot: "bg-orange-400" },
+  { value: "overwhelmed", label: "Overwhelmed", emoji: "🔴", color: "bg-red-500/20 text-red-400 border-red-500/40",          dot: "bg-red-400"    },
+];
+
+const SECTIONS = [
+  { key: "tasks_done",     label: "✅ Tasks Done",         placeholder: "List what you completed today…" },
+  { key: "positives",      label: "🌟 Positives / Wins",   placeholder: "What went well? Any wins?" },
+  { key: "challenges",     label: "🚧 Challenges",         placeholder: "What got in the way? Any blockers?" },
+  { key: "goals_achieved", label: "🎯 Goals Achieved",     placeholder: "Which goals did you hit today?" },
+  { key: "goals_tomorrow", label: "📅 Goals for Tomorrow", placeholder: "What are your top priorities tomorrow?" },
+] as const;
+
+export function DailyLogStudio({ initialLog, initialNotes, initialHistory, readOnly = false, viewingUserId }: Props) {
+  const today = format(new Date(), "yyyy-MM-dd");
+  const [activeDate, setActiveDate] = useState(today);
+  const isActiveToday = activeDate === today;
+  const isReadOnly = readOnly || !isActiveToday;
+
+  const [log, setLog] = useState<DailyLog | null>(initialLog);
+  const [history, setHistory] = useState<HistoryEntry[]>(initialHistory);
+  const [notes, setNotes] = useState<DailyLogNote[]>(initialNotes);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [noteText, setNoteText] = useState("");
+  const [addingNote, setAddingNote] = useState(false);
+  const [loadingDate, setLoadingDate] = useState(false);
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const savedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // useRef holds latest form values to avoid stale closure in debounced save
+  const logRef = useRef<DailyLog | null>(initialLog);
+  const navInFlight = useRef(false);
+  // Track which fields changed since last save — only send dirty fields
+  const dirtyFields = useRef<Set<string>>(new Set());
+  // In-flight delete guard — prevents double-delete on rapid click
+  const deletingNotes = useRef<Set<string>>(new Set());
+
+  function debouncedSave() {
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => flushSave(), 800);
+  }
+
+  async function flushSave() {
+    const dirty = Array.from(dirtyFields.current);
+    if (!dirty.length) return;
+    const current = logRef.current;
+    // Build payload: only log_date (required) + dirty fields
+    const payload: Record<string, string | Mood | null> = { log_date: today };
+    for (const key of dirty) {
+      payload[key] = (current as Record<string, string | Mood | null> | null)?.[key] ?? (key === "mood" ? null : "");
+    }
+    dirtyFields.current.clear();
+    setSaving(true);
+    const res = await fetch("/api/daily-log/upsert", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    setSaving(false);
+    if (res.ok) {
+      const updated = await res.json();
+      setLog(updated);
+      logRef.current = updated;
+      setSaved(true);
+      if (savedTimer.current) clearTimeout(savedTimer.current);
+      savedTimer.current = setTimeout(() => setSaved(false), 2000);
+      setHistory(prev => {
+        const exists = prev.find(h => h.log_date === today);
+        if (exists) return prev.map(h => h.log_date === today ? { ...h, mood: updated.mood } : h);
+        return [...prev, { log_date: today, mood: updated.mood }];
+      });
+    } else {
+      toast.error("Failed to save. Try again.");
+    }
+  }
+
+  const handleChange = useCallback((key: string, value: string) => {
+    setLog(prev => {
+      const next = prev
+        ? { ...prev, [key]: value }
+        : { id: "", log_date: today, tasks_done: "", positives: "", challenges: "", goals_achieved: "", goals_tomorrow: "", mood: null, admin_feedback: null, reviewed_at: null, [key]: value } as DailyLog;
+      logRef.current = next;
+      return next;
+    });
+    dirtyFields.current.add(key);
+    debouncedSave();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [today]);
+
+  const handleMood = useCallback((mood: Mood) => {
+    if (isReadOnly) return;
+    setLog(prev => {
+      const next = prev ? { ...prev, mood } : null;
+      logRef.current = next;
+      return next;
+    });
+    dirtyFields.current.add("mood");
+    debouncedSave();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isReadOnly]);
+
+  async function addNote() {
+    if (!noteText.trim() || !log?.id) return;
+    setAddingNote(true);
+    const res = await fetch("/api/daily-log/notes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ log_id: log.id, body: noteText.trim() }),
+    });
+    setAddingNote(false);
+    if (res.ok) {
+      const note = await res.json();
+      setNotes(prev => [note, ...prev]);
+      setNoteText("");
+    } else {
+      toast.error("Failed to add note.");
+    }
+  }
+
+  async function deleteNote(id: string) {
+    if (deletingNotes.current.has(id)) return;
+    deletingNotes.current.add(id);
+    const res = await fetch(`/api/daily-log/notes?id=${id}`, { method: "DELETE" });
+    deletingNotes.current.delete(id);
+    if (res.ok) setNotes(prev => prev.filter(n => n.id !== id));
+    else toast.error("Failed to delete note.");
+  }
+
+  async function loadDate(date: string) {
+    if (date === activeDate || navInFlight.current) return;
+    if (isFuture(parseISO(date))) return;
+    navInFlight.current = true;
+    setLoadingDate(true);
+    setActiveDate(date);
+    try {
+      // When an admin is viewing a VA's log, pass the VA's user_id so the API
+      // returns the correct log instead of defaulting to the admin's own.
+      const url = viewingUserId
+        ? `/api/daily-log/${date}?user_id=${viewingUserId}`
+        : `/api/daily-log/${date}`;
+      const res = await fetch(url);
+      if (res.ok) {
+        const { log: l, notes: n } = await res.json();
+        logRef.current = l;
+        setLog(l);
+        setNotes(n ?? []);
+      } else {
+        toast.error("Could not load that date.");
+      }
+    } finally {
+      setLoadingDate(false);
+      navInFlight.current = false;
+    }
+  }
+
+  const historyMap = useMemo(
+    () => new Map(history.map(h => [h.log_date, h])),
+    [history]
+  );
+
+  const last30 = useMemo(() =>
+    Array.from({ length: 30 }, (_, i) => {
+      const d = format(subDays(new Date(), 29 - i), "yyyy-MM-dd");
+      const h = historyMap.get(d);
+      return { date: d, mood: h?.mood ?? null, hasEntry: !!h };
+    }),
+    [historyMap]
+  );
+
+  const activeMood = useMemo(
+    () => MOODS.find(m => m.value === log?.mood),
+    [log?.mood]
+  );
+
+  return (
+    <div className="flex flex-col gap-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Daily Log</h1>
+          <p className="text-zinc-400 text-sm mt-0.5">
+            {isActiveToday ? "Today — " : ""}{format(parseISO(activeDate), "EEEE, MMMM d, yyyy")}
+            {isReadOnly && <span className="ml-2 text-xs text-zinc-600">(read-only)</span>}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {saving && <Loader2 className="w-4 h-4 animate-spin text-zinc-500" />}
+          {saved && <span className="text-xs text-green-400 flex items-center gap-1"><Check className="w-3 h-3" />Saved</span>}
+          <Link href="/daily-log/analytics">
+            <Button variant="outline" size="sm" className="border-zinc-700 text-xs">
+              <BarChart2 className="w-3.5 h-3.5 mr-1.5" />Analytics
+            </Button>
+          </Link>
+          <Button
+            variant="outline" size="sm"
+            className="border-zinc-700 text-xs"
+            onClick={() => loadDate(format(subDays(parseISO(activeDate), 1), "yyyy-MM-dd"))}
+          >
+            <ChevronLeft className="w-3.5 h-3.5" />
+          </Button>
+          <Button
+            variant="outline" size="sm"
+            className="border-zinc-700 text-xs"
+            onClick={() => loadDate(format(new Date(), "yyyy-MM-dd"))}
+            disabled={isActiveToday}
+          >
+            Today
+          </Button>
+          <Button
+            variant="outline" size="sm"
+            className="border-zinc-700 text-xs"
+            onClick={() => loadDate(format(subDays(parseISO(activeDate), -1), "yyyy-MM-dd"))}
+            disabled={isActiveToday}
+          >
+            <ChevronRight className="w-3.5 h-3.5" />
+          </Button>
+        </div>
+      </div>
+
+      {loadingDate && (
+        <div className="flex items-center gap-2 text-zinc-500 text-sm">
+          <Loader2 className="w-4 h-4 animate-spin" /> Loading…
+        </div>
+      )}
+
+      {/* Mood selector */}
+      <div className="flex gap-2 flex-wrap">
+        {MOODS.map(m => (
+          <button
+            key={m.value}
+            onClick={() => handleMood(m.value)}
+            disabled={isReadOnly}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium transition-all ${
+              log?.mood === m.value ? m.color + " ring-1 ring-offset-1 ring-offset-zinc-950" : "border-zinc-800 bg-zinc-900 text-zinc-500 hover:border-zinc-600"
+            } ${isReadOnly ? "cursor-default opacity-60" : "cursor-pointer"}`}
+          >
+            {m.emoji} {m.label}
+          </button>
+        ))}
+        {activeMood && (
+          <span className={`ml-auto text-xs px-2 py-1 rounded-full border ${activeMood.color}`}>
+            Feeling {activeMood.label}
+          </span>
+        )}
+      </div>
+
+      {/* Admin feedback (read-only display) */}
+      {log?.admin_feedback && (
+        <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 px-5 py-4">
+          <p className="text-xs font-semibold text-amber-400 mb-1.5">💬 Admin Feedback</p>
+          <p className="text-sm text-zinc-300 whitespace-pre-wrap">{log.admin_feedback}</p>
+          {log.reviewed_at && (
+            <p className="text-xs text-zinc-600 mt-2">
+              Reviewed {format(parseISO(log.reviewed_at), "MMM d, yyyy 'at' h:mm a")}
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Main 2-col layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        {/* Left — structured form */}
+        <div className="flex flex-col gap-4">
+          {SECTIONS.map(s => (
+            <div key={s.key} className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-zinc-300">{s.label}</label>
+              <Textarea
+                value={(log as Record<string, string> | null)?.[s.key] ?? ""}
+                onChange={e => handleChange(s.key, e.target.value)}
+                placeholder={s.placeholder}
+                disabled={isReadOnly}
+                rows={3}
+                className="bg-zinc-900 border-zinc-800 text-sm resize-none focus:border-zinc-600 disabled:opacity-50"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Right — quick notes */}
+        <div className="flex flex-col gap-3">
+          <p className="text-sm font-medium text-zinc-300">⚡ Quick Notes</p>
+
+          {!isReadOnly && (
+            <div className="flex gap-2">
+              <Textarea
+                value={noteText}
+                onChange={e => setNoteText(e.target.value)}
+                onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); addNote(); } }}
+                placeholder="Quick note… (Enter to add)"
+                rows={2}
+                className="flex-1 bg-zinc-900 border-zinc-800 text-sm resize-none"
+              />
+              <Button
+                onClick={addNote}
+                disabled={!noteText.trim() || !log?.id || addingNote}
+                size="sm"
+                className="self-end h-8"
+              >
+                {addingNote ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
+              </Button>
+            </div>
+          )}
+
+          {!log?.id && !isReadOnly && (
+            <p className="text-xs text-zinc-500">Save your summary first to enable quick notes.</p>
+          )}
+
+          <div className="flex flex-col gap-2 max-h-[420px] overflow-y-auto">
+            {notes.length === 0 ? (
+              <p className="text-zinc-500 text-sm py-4 text-center">No notes yet{isReadOnly ? " for this day." : " — add one above."}</p>
+            ) : notes.map(n => (
+              <div key={n.id} className="rounded-lg bg-zinc-900 border border-zinc-800 px-3 py-2.5 flex gap-2 items-start group">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-zinc-200 whitespace-pre-wrap leading-snug">{n.body}</p>
+                  <p className="text-xs text-zinc-500 mt-1">{format(parseISO(n.created_at), "h:mm a")}</p>
+                </div>
+                {!isReadOnly && (
+                  <button
+                    onClick={() => deleteNote(n.id)}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity text-zinc-600 hover:text-red-400 shrink-0 mt-0.5"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 30-day history strip */}
+      <DailyLogHistory
+        days={last30}
+        activeDate={activeDate}
+        onDateClick={loadDate}
+      />
+    </div>
+  );
+}

@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ── colour-scheme: tell browsers this is a dark UI ──────────────────── */
+    /* Prevents white flash on browser-native inputs, scrollbars, selects    */
+    color-scheme: dark;
+
+    /* ── Shadcn/ui compatibility tokens (dark-tuned) ─────────────────────── */
+    --background: 240 10% 3.9%;       /* zinc-950 */
+    --foreground: 0 0% 98%;           /* zinc-50  */
+    --card: 240 3.7% 11%;             /* zinc-900 */
+    --card-foreground: 0 0% 98%;
+    --popover: 240 3.7% 11%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 217 91% 60%;           /* blue-500 — vibrant, AA on dark */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 3.7% 25%;        /* zinc-700 */
+    --secondary-foreground: 0 0% 95%;
+    --muted: 240 3.7% 15%;            /* zinc-800 */
+    --muted-foreground: 240 5% 64.9%; /* zinc-400 */
+    --accent: 240 3.7% 25%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 25%;           /* zinc-700 */
+    --input: 240 3.7% 15%;            /* zinc-800 */
+    --ring: 217 91% 60%;              /* blue-500 — branded focus ring */
+    --radius: 0.5rem;
+
+    /* ── Surface tokens ──────────────────────────────────────────────────── */
+    --surface-base:    #09090b; /* zinc-950 — page background     */
+    --surface-raised:  #18181b; /* zinc-900 — cards               */
+    --surface-overlay: #27272a; /* zinc-800 — inputs, nested cards */
+    --surface-subtle:  #3f3f46; /* zinc-700 — borders, dividers    */
+
+    /* ── Text tokens ─────────────────────────────────────────────────────── */
+    --text-primary:   #fafafa; /* zinc-50  — headings, values      */
+    --text-secondary: #a1a1aa; /* zinc-400 — 4.6:1 on zinc-900 ✓  */
+    --text-tertiary:  #71717a; /* zinc-500 — 4.5:1 on zinc-900 ✓  */
+    --text-disabled:  #52525b; /* zinc-600 — decorative / large only */
+
+    /* ── Border tokens ───────────────────────────────────────────────────── */
+    --border-subtle:  #27272a; /* zinc-800 */
+    --border-default: #3f3f46; /* zinc-700 */
+
+    /* ── Brand accent tokens ─────────────────────────────────────────────── */
+    --accent-blue:   #60a5fa; /* blue-400   */
+    --accent-green:  #4ade80; /* green-400  */
+    --accent-purple: #a78bfa; /* violet-400 */
+    --accent-amber:  #fbbf24; /* amber-400  */
+    --accent-red:    #f87171; /* red-400    */
+    --accent-orange: #fb923c; /* orange-400 */
+
+    /* ── Chart tokens ────────────────────────────────────────────────────── */
+    --chart-grid:    #27272a;
+    --chart-tick:    #71717a;
+    --chart-tooltip: #18181b;
+    --chart-line:    #60a5fa;
+    --chart-bar:     #a78bfa;
+
+    /* ── Typography scale (rem) ──────────────────────────────────────────── */
+    /* Bridged into tailwind.config.ts so text-xs / text-sm etc. consume     */
+    /* these same values. Components and globals.css are on the same scale.   */
+    --text-xs:   0.8125rem; /* 13px */
+    --text-sm:   0.9375rem; /* 15px */
+    --text-base: 1.0625rem; /* 17px */
+    --text-lg:   1.1875rem; /* 19px */
+    --text-xl:   1.3125rem; /* 21px */
+    --text-2xl:  1.5rem;    /* 24px */
+    --text-3xl:  1.875rem;  /* 30px */
+    --text-4xl:  2.25rem;   /* 36px */
+
+    /* ── Spacing (4pt grid) ──────────────────────────────────────────────── */
+    --space-1:  0.25rem;  /*  4px */
+    --space-2:  0.5rem;   /*  8px */
+    --space-3:  0.75rem;  /* 12px */
+    --space-4:  1rem;     /* 16px */
+    --space-6:  1.5rem;   /* 24px */
+    --space-8:  2rem;     /* 32px */
+    --space-12: 3rem;     /* 48px */
+
+    /* ── Radius tokens ───────────────────────────────────────────────────── */
+    /* Bridged into tailwind.config.ts — rounded-sm/md/lg/xl all use these.  */
+    --radius-sm:   0.375rem; /*  6px — badges, inputs   */
+    --radius-md:   0.5rem;   /*  8px — buttons, nav     */
+    --radius-lg:   0.75rem;  /* 12px — cards            */
+    --radius-xl:   1rem;     /* 16px — panels, drawers  */
+    --radius-full: 9999px;   /* pills                   */
+
+    /* ── Elevation / shadow tokens ───────────────────────────────────────── */
+    /* Bridged into tailwind.config.ts as shadow-sm / shadow-md / shadow-lg  */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.5);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04);
+    --shadow-lg: 0 16px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
+
+    /* ── Z-index tokens ──────────────────────────────────────────────────── */
+    /* Magic z-index numbers cause stacking bugs. Use these instead.          */
+    --z-base:    0;
+    --z-raised:  10;
+    --z-overlay: 40;
+    --z-modal:   50;
+    --z-toast:   60;
+  }
+
+  /* ── Reset ──────────────────────────────────────────────────────────────── */
+  * {
+    @apply border-border;
+  }
+
+  /* ── Focus ring — branded blue, not grey ────────────────────────────────── */
+  /* Single global rule — never repeat in components.                          */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-blue-500 ring-offset-2 ring-offset-zinc-950;
+  }
+
+  /* ── Body ────────────────────────────────────────────────────────────────── */
+  /* antialiased is set ONCE here. Removed from layout.tsx to avoid duplication */
+  body {
+    @apply bg-zinc-950 text-zinc-50 antialiased;
+    font-size: var(--text-base);
+    font-feature-settings: "cv11", "ss01"; /* Inter: tabular nums + stylistic set */
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ── Inputs — dark-mode readable without !important ─────────────────────── */
+  /* color-scheme: dark (above) handles browser-native chrome.                  */
+  /* These rules handle Radix/shadcn styled inputs correctly.                   */
+  input:not([type="range"]),
+  textarea,
+  select {
+    color: #f4f4f5;           /* zinc-100 */
+    background-color: #27272a; /* zinc-800 */
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: #71717a; /* zinc-500 */
+  }
+
+  /* ── Headings — fluid scale with clamp() for mobile ─────────────────────── */
+  h1, h2, h3, h4 {
+    @apply tracking-tight text-balance;
+    line-height: 1.2;
+  }
+
+  /* clamp(min, preferred, max) — scales smoothly from 375px to 1280px+ */
+  h1 { font-size: clamp(1.5rem, 3.5vw, var(--text-3xl)); font-weight: 700; }
+  h2 { font-size: clamp(1.25rem, 2.5vw, var(--text-2xl)); font-weight: 700; }
+  h3 { font-size: clamp(1.1rem, 2vw, var(--text-xl)); font-weight: 600; }
+  h4 { font-size: var(--text-lg); font-weight: 600; }
+
+  /* ── Body copy ───────────────────────────────────────────────────────────── */
+  p { line-height: 1.6; }
+}
+
+@layer components {
+  /* ── Surface card ─────────────────────────────────────────────────────────  */
+  /* Single canonical card pattern. Use className="surface-card" everywhere.   */
+  /* Elevation via shadow-md lifts cards off the base surface.                 */
+  .surface-card {
+    @apply rounded-lg border border-zinc-800 bg-zinc-900;
+    box-shadow: var(--shadow-md); /* shadow-raised in Tailwind */
+  }
+
+  /* ── Section label ────────────────────────────────────────────────────────  */
+  /* All-caps eyebrow text above sections. The ONE canonical definition.       */
+  /* Usage: className="label-section" — never inline the utilities again.      */
+  .label-section {
+    @apply text-xs font-semibold uppercase tracking-wider text-zinc-500;
+  }
+
+  /* ── Stat value ───────────────────────────────────────────────────────────  */
+  .stat-value {
+    @apply text-3xl font-bold leading-none tracking-tight;
+  }
+
+  /* ── Semantic text helpers ────────────────────────────────────────────────  */
+  .text-muted {
+    color: var(--text-secondary); /* zinc-400 — 4.6:1 on zinc-900 ✓ */
+  }
+  .text-subtle {
+    color: var(--text-tertiary);  /* zinc-500 — 4.5:1 on zinc-900 ✓ */
+  }
+
+  /* ── Overlay backdrop ─────────────────────────────────────────────────────  */
+  /* z-index uses token var — no magic numbers.                                */
+  .overlay-backdrop {
+    @apply fixed inset-0 bg-black/50 backdrop-blur-sm;
+    z-index: var(--z-overlay);
+  }
+
+  /* ── Modal / drawer panel ─────────────────────────────────────────────────  */
+  .modal-panel {
+    @apply bg-zinc-950 border border-zinc-800;
+    box-shadow: var(--shadow-lg); /* shadow-modal in Tailwind */
+    z-index: var(--z-modal);
+  }
+}

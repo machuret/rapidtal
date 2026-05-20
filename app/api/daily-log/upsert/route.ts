@@ -1,0 +1,61 @@
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import { format } from "date-fns";
+import { requireApiAuth } from "@/lib/api-auth";
+import { createAdminClient } from "@/lib/supabase/admin";
+
+const schema = z.object({
+  log_date:       z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  tasks_done:     z.string().max(5000).optional().default(""),
+  positives:      z.string().max(5000).optional().default(""),
+  challenges:     z.string().max(5000).optional().default(""),
+  goals_achieved: z.string().max(5000).optional().default(""),
+  goals_tomorrow: z.string().max(5000).optional().default(""),
+  mood:           z.enum(["great","good","neutral","difficult","overwhelmed"]).nullable().optional(),
+});
+
+export async function POST(req: NextRequest) {
+  const auth = await requireApiAuth();
+  if ("error" in auth) return auth.error;
+  const { user } = auth;
+  if (!user.client_id) return NextResponse.json({ error: "No client." }, { status: 403 });
+
+  let body: unknown;
+  try { body = await req.json(); } catch { return NextResponse.json({ error: "Invalid JSON." }, { status: 400 }); }
+  const parsed = schema.safeParse(body);
+  if (!parsed.success) return NextResponse.json({ error: "Invalid input.", issues: parsed.error.flatten() }, { status: 400 });
+
+  // VAs may only write today's log — prevents backdating / future-dating entries.
+  // Admins (client_admin, super_admin) are exempt so they can backfill if needed.
+  const isAdmin = user.role === "client_admin" || user.role === "super_admin";
+  if (!isAdmin) {
+    const today = format(new Date(), "yyyy-MM-dd");
+    if (parsed.data.log_date !== today) {
+      return NextResponse.json(
+        { error: `Logs can only be submitted for today (${today}).` },
+        { status: 403 }
+      );
+    }
+  }
+
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("daily_logs")
+    .upsert({
+      client_id:      user.client_id,
+      user_id:        user.id,
+      log_date:       parsed.data.log_date,
+      tasks_done:     parsed.data.tasks_done,
+      positives:      parsed.data.positives,
+      challenges:     parsed.data.challenges,
+      goals_achieved: parsed.data.goals_achieved,
+      goals_tomorrow: parsed.data.goals_tomorrow,
+      mood:           parsed.data.mood ?? null,
+      updated_at:     new Date().toISOString(),
+    }, { onConflict: "user_id,log_date" })
+    .select()
+    .single();
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json(data);
+}
