@@ -1,0 +1,64 @@
+.ctaSection {
+  background: var(--orange);
+  padding: 80px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 24px;
+}
+
+.ctaHeadline {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 5vw, 72px);
+  color: var(--black);
+  line-height: 0.95;
+  margin-bottom: 16px;
+}
+
+.ctaSub {
+  font-size: 16px;
+  color: rgba(0,0,0,0.6);
+  max-width: 600px;
+  line-height: 1.6;
+  margin: 0 auto;
+}
+
+.btnDark {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-ui);
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 22px 48px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background var(--ease-normal), transform var(--ease-normal);
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+}
+
+.btnDark:hover {
+  background: #111;
+  transform: translateY(-2px);
+}
+
+.ctaNote {
+  font-size: 13px;
+  color: rgba(0,0,0,0.5);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .ctaSection {
+    padding-left: 24px;
+    padding-right: 24px;
+    grid-template-columns: 1fr;
+  }
+}
