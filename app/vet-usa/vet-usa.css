@@ -1,0 +1,358 @@
+/* ── Vet USA Page Styles ── */
+.vet-usa-page {
+  --vet-accent: #E8650A;
+  --vet-accent-light: #FFF5EC;
+  --vet-black: #121212;
+  --vet-dark: #1E1E1E;
+  --vet-body: #444;
+  --vet-mid: #777;
+  --vet-light: #F8F6F3;
+  --vet-line: #E8E5E0;
+  --vet-green: #1A7A42;
+  --vet-green-light: #EEFBF3;
+  --vet-white: #FEFDFB;
+}
+
+.vet-usa-page .cover {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: var(--vet-black);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.vet-usa-page .cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 35% 85%, rgba(232,101,10,.18) 0%, transparent 55%),
+              radial-gradient(ellipse at 75% 15%, rgba(232,101,10,.06) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+.vet-usa-page .cover-brand {
+  font-family: 'DM Sans', sans-serif;
+  font-size: .68rem;
+  letter-spacing: .55em;
+  color: var(--vet-accent);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.vet-usa-page .cover h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  line-height: 1.1;
+  font-weight: 800;
+  max-width: 720px;
+  margin-bottom: 1.5rem;
+  position: relative;
+  color: #fff;
+}
+
+.vet-usa-page .cover h1 em {
+  color: var(--vet-accent);
+  font-style: normal;
+}
+
+.vet-usa-page .cover .sub {
+  font-size: 1rem;
+  color: rgba(255,255,255,.55);
+  max-width: 590px;
+  line-height: 1.65;
+  margin-bottom: .8rem;
+  position: relative;
+}
+
+.vet-usa-page .cover .sub2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .92rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.8);
+  max-width: 520px;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.vet-usa-page .cover .tagline {
+  font-weight: 700;
+  font-size: .88rem;
+  color: #fff;
+  letter-spacing: .05em;
+  margin-top: 1rem;
+  position: relative;
+}
+
+.vet-usa-page .cover .by {
+  font-size: .8rem;
+  color: var(--vet-accent);
+  margin-top: 2.5rem;
+  position: relative;
+  font-weight: 600;
+}
+
+.vet-usa-page .cover .note {
+  font-size: .72rem;
+  color: rgba(255,255,255,.3);
+  margin-top: .5rem;
+  position: relative;
+}
+
+.vet-content {
+  max-width: 730px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--vet-body);
+  line-height: 1.78;
+  background: var(--vet-white);
+}
+
+.vet-content section {
+  padding: 4.5rem 0;
+}
+
+.vet-content section + section {
+  border-top: 1px solid var(--vet-line);
+}
+
+.vet-content h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(1.55rem, 3.5vw, 2.1rem);
+  color: var(--vet-black);
+  line-height: 1.18;
+  margin-bottom: 1.4rem;
+  font-weight: 700;
+}
+
+.vet-content h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--vet-accent);
+  margin-top: 2.3rem;
+  margin-bottom: .9rem;
+}
+
+.vet-content h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--vet-black);
+  margin-top: 1.5rem;
+  margin-bottom: .7rem;
+}
+
+.vet-content p {
+  margin-bottom: .95rem;
+}
+
+.vet-content strong {
+  color: var(--vet-dark);
+  font-weight: 700;
+}
+
+.vet-div {
+  width: 50px;
+  height: 3px;
+  background: var(--vet-accent);
+  margin-bottom: 1.8rem;
+  border-radius: 2px;
+}
+
+ul.vet-ck {
+  list-style: none;
+  padding: 0;
+  margin: 1.3rem 0;
+}
+
+ul.vet-ck li {
+  position: relative;
+  padding-left: 1.4rem;
+  margin-bottom: .8rem;
+  line-height: 1.65;
+}
+
+ul.vet-ck li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: .6rem;
+  width: 6px;
+  height: 6px;
+  background: var(--vet-accent);
+  border-radius: 50%;
+}
+
+.vet-co {
+  border-left: 3px solid var(--vet-accent);
+  background: var(--vet-accent-light);
+  padding: 1.1rem 1.3rem;
+  margin: 1.8rem 0;
+  border-radius: 0 6px 6px 0;
+  font-weight: 600;
+  color: var(--vet-dark);
+  line-height: 1.6;
+  font-size: .91rem;
+}
+
+.vet-co.vet-green {
+  border-left-color: var(--vet-green);
+  background: var(--vet-green-light);
+}
+
+.vet-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 1rem;
+  margin: 1.8rem 0;
+}
+
+.vet-stat {
+  text-align: center;
+  padding: 1.4rem .8rem;
+  background: var(--vet-light);
+  border-radius: 10px;
+  border: 1px solid var(--vet-line);
+}
+
+.vet-stat-n {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--vet-accent);
+  line-height: 1;
+  margin-bottom: .3rem;
+}
+
+.vet-stat-l {
+  font-size: .76rem;
+  color: var(--vet-mid);
+  line-height: 1.4;
+}
+
+.vet-tw {
+  overflow-x: auto;
+  margin: 1.3rem 0;
+  border-radius: 8px;
+  border: 1px solid var(--vet-line);
+}
+
+.vet-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .84rem;
+}
+
+.vet-content thead th {
+  background: var(--vet-black);
+  color: #fff;
+  text-align: left;
+  padding: .7rem .85rem;
+  font-weight: 700;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.vet-content tbody td {
+  padding: .6rem .85rem;
+  border-bottom: 1px solid var(--vet-line);
+  vertical-align: top;
+}
+
+.vet-content tbody tr:nth-child(even) {
+  background: var(--vet-light);
+}
+
+.vet-content tbody tr.vet-hi {
+  background: var(--vet-accent-light);
+  border-left: 3px solid var(--vet-accent);
+}
+
+.vet-content tbody tr.vet-hi td {
+  font-weight: 700;
+  color: var(--vet-accent);
+}
+
+.vet-content table.vet-oh thead th {
+  background: var(--vet-accent);
+}
+
+.vet-expose {
+  background: var(--vet-light);
+  border: 1px solid var(--vet-line);
+  border-radius: 8px;
+  padding: 1.1rem 1.2rem;
+  margin: .8rem 0;
+}
+
+.vet-expose p {
+  margin-bottom: .3rem;
+  font-size: .91rem;
+}
+
+.vet-timeline {
+  background: var(--vet-light);
+  border-radius: 8px;
+  padding: 1.1rem 1.3rem;
+  margin: .7rem 0;
+  border-left: 3px solid var(--vet-accent);
+}
+
+.vet-timeline strong {
+  color: var(--vet-accent);
+}
+
+.vet-step {
+  display: flex;
+  gap: .9rem;
+  margin-bottom: 1.4rem;
+  align-items: flex-start;
+}
+
+.vet-step-n {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  background: var(--vet-accent);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: .82rem;
+  margin-top: .1rem;
+}
+
+.vet-step-c {
+  flex: 1;
+}
+
+.vet-step-c strong {
+  font-size: .95rem;
+}
+
+@media (max-width: 600px) {
+  .vet-content section {
+    padding: 3rem 0;
+  }
+
+  .vet-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vet-step {
+    flex-direction: column;
+    gap: .3rem;
+  }
+}
