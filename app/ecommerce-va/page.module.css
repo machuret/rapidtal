@@ -1,0 +1,476 @@
+/* ─── GOOGLE FONTS ──────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,800;1,9..144,400&family=Albert+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ─── WRAPPER ───────────────────────────────────────────────────── */
+.wrapper {
+  --ec-orange: #E56A00;
+  --ec-orange-light: #FEF4EB;
+  --ec-black: #0F0F0F;
+  --ec-dark: #1C1C1C;
+  --ec-body: #404040;
+  --ec-mid: #777;
+  --ec-light: #F8F7F5;
+  --ec-line: #E6E4E0;
+  --ec-green: #1B7340;
+  --ec-green-light: #EDFBF2;
+  --ec-red: #B33A2B;
+  --ec-red-light: #FFF0EE;
+  --ec-white: #FEFEFE;
+  --ec-serif: 'Fraunces', Georgia, serif;
+  --ec-sans: 'Albert Sans', -apple-system, sans-serif;
+  --ec-mono: 'JetBrains Mono', monospace;
+
+  font-family: var(--ec-sans);
+  color: var(--ec-body);
+  line-height: 1.78;
+  background: var(--ec-white);
+  -webkit-font-smoothing: antialiased;
+  font-size: 17px;
+}
+
+.wrapper :global(*) {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ─── COVER ─────────────────────────────────────────────────────── */
+.cover {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: var(--ec-black);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 40% 90%, rgba(229,106,0,.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 10%, rgba(229,106,0,.06) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.coverBrand {
+  font-family: var(--ec-sans);
+  font-size: .7rem;
+  letter-spacing: .5em;
+  color: var(--ec-orange);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.cover :global(h1) {
+  font-family: var(--ec-serif);
+  font-size: clamp(2.2rem, 6.5vw, 3.8rem);
+  line-height: 1.12;
+  font-weight: 800;
+  max-width: 750px;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.highlight { font-style: italic; color: var(--ec-orange); font-weight: 400; }
+
+.coverSubtitle {
+  font-size: 1.02rem;
+  color: rgba(255,255,255,.55);
+  max-width: 600px;
+  line-height: 1.65;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.coverSub2 {
+  font-family: var(--ec-serif);
+  font-size: .95rem;
+  font-style: italic;
+  color: rgba(255,255,255,.35);
+  max-width: 500px;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.coverTagline {
+  font-weight: 700;
+  font-size: .9rem;
+  color: #fff;
+  letter-spacing: .05em;
+  margin-top: 1rem;
+  position: relative;
+}
+
+.coverByline {
+  font-size: .82rem;
+  color: var(--ec-orange);
+  margin-top: 2.5rem;
+  position: relative;
+  font-weight: 600;
+}
+
+/* ─── COVER STATS ────────────────────────────────────────────────── */
+.coverStats {
+  display: flex;
+  gap: 2rem;
+  margin-top: 3rem;
+  position: relative;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 680px;
+}
+
+.coverStat {
+  flex: 1;
+  min-width: 160px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  padding: 1.4rem 1rem;
+  text-align: center;
+}
+
+.coverStatNum {
+  font-family: var(--ec-serif);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--ec-orange);
+  line-height: 1;
+  margin-bottom: .5rem;
+}
+
+.coverStatLabel {
+  font-size: .75rem;
+  color: rgba(255,255,255,.45);
+  line-height: 1.45;
+}
+
+/* ─── TABLE OF CONTENTS ──────────────────────────────────────────── */
+.toc {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+.tocTitle {
+  font-family: var(--ec-sans);
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--ec-orange);
+  margin-bottom: 1.2rem;
+  font-weight: 700;
+}
+.tocList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: toc;
+}
+.tocList :global(li) {
+  counter-increment: toc;
+  margin-bottom: .6rem;
+}
+.tocList :global(a) {
+  text-decoration: none;
+  color: var(--ec-body);
+  font-size: .95rem;
+  font-weight: 500;
+  display: flex;
+  gap: .6rem;
+  align-items: baseline;
+  transition: color .15s;
+}
+.tocList :global(a:hover) {
+  color: var(--ec-orange);
+}
+.tocList :global(a::before) {
+  content: counter(toc, decimal-leading-zero);
+  font-family: var(--ec-mono);
+  font-size: .75rem;
+  color: var(--ec-orange);
+  min-width: 1.6rem;
+}
+
+/* ─── CONTENT ───────────────────────────────────────────────────── */
+.content {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.wrapper :global(section) {
+  padding: 5rem 0;
+}
+.wrapper :global(section + section) {
+  border-top: 1px solid var(--ec-line);
+}
+
+/* ─── TYPOGRAPHY ────────────────────────────────────────────────── */
+.wrapper :global(h2) {
+  font-family: var(--ec-serif);
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  color: var(--ec-black);
+  line-height: 1.18;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+.wrapper :global(h3) {
+  font-family: var(--ec-sans);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--ec-orange);
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+.wrapper :global(h4) {
+  font-family: var(--ec-sans);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ec-black);
+  margin-top: 1.8rem;
+  margin-bottom: .8rem;
+}
+.wrapper :global(p) {
+  margin-bottom: 1rem;
+  color: var(--ec-body);
+}
+.wrapper :global(strong) {
+  color: var(--ec-dark);
+  font-weight: 700;
+}
+
+.lead {
+  font-size: 1.1rem;
+  color: var(--ec-mid);
+  font-family: var(--ec-serif);
+  font-style: italic;
+}
+
+/* ─── DIVIDER ───────────────────────────────────────────────────── */
+.sectionDivider {
+  width: 50px;
+  height: 3px;
+  background: var(--ec-orange);
+  margin-bottom: 2rem;
+  border-radius: 2px;
+}
+
+/* ─── CHECKLIST ─────────────────────────────────────────────────── */
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+.checklist :global(li) {
+  position: relative;
+  padding-left: 1.4rem;
+  margin-bottom: .85rem;
+  line-height: 1.65;
+}
+.checklist :global(li::before) {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: .6rem;
+  width: 6px;
+  height: 6px;
+  background: var(--ec-orange);
+  border-radius: 50%;
+}
+
+/* ─── CALLOUT ───────────────────────────────────────────────────── */
+.callout {
+  border-left: 3px solid var(--ec-orange);
+  background: var(--ec-orange-light);
+  padding: 1.1rem 1.3rem;
+  margin: 2rem 0;
+  border-radius: 0 6px 6px 0;
+  font-weight: 600;
+  color: var(--ec-dark);
+  line-height: 1.6;
+  font-size: .93rem;
+}
+.calloutGreen {
+  border-left-color: var(--ec-green);
+  background: var(--ec-green-light);
+}
+
+/* ─── STATS ─────────────────────────────────────────────────────── */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+.statCard {
+  text-align: center;
+  padding: 1.5rem .8rem;
+  background: var(--ec-light);
+  border-radius: 10px;
+  border: 1px solid var(--ec-line);
+}
+.statNumber {
+  font-family: var(--ec-serif);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--ec-orange);
+  line-height: 1;
+  margin-bottom: .3rem;
+}
+.statLabel {
+  font-size: .78rem;
+  color: var(--ec-mid);
+  line-height: 1.4;
+}
+
+/* ─── TABLES ────────────────────────────────────────────────────── */
+.tableWrap {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  border: 1px solid var(--ec-line);
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .86rem;
+}
+.table :global(thead th) {
+  background: var(--ec-black);
+  color: #fff;
+  text-align: left;
+  padding: .75rem .9rem;
+  font-weight: 700;
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.table :global(tbody td) {
+  padding: .65rem .9rem;
+  border-bottom: 1px solid var(--ec-line);
+  vertical-align: top;
+}
+.table :global(tbody tr:nth-child(even)) {
+  background: var(--ec-light);
+}
+
+.tableRowHighlight {
+  background: var(--ec-orange-light) !important;
+  border-left: 3px solid var(--ec-orange);
+}
+.tableRowHighlight :global(td) {
+  font-weight: 700;
+  color: var(--ec-orange);
+}
+
+.orangeHeader :global(thead th) {
+  background: var(--ec-orange);
+}
+
+/* ─── GREEN CELL (comparison tables) ───────────────────────────── */
+.greenCell {
+  color: var(--ec-green) !important;
+  font-weight: 600 !important;
+}
+
+/* ─── STEPS ─────────────────────────────────────────────────────── */
+.stepsGrid {
+  margin: 2rem 0;
+}
+.step {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.6rem;
+  align-items: flex-start;
+}
+.stepNum {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: var(--ec-orange);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: .85rem;
+  margin-top: .1rem;
+}
+
+/* ─── CTA SECTION ─────────────────────────────────────────────── */
+.ctaSection {
+  background: var(--ec-black);
+  padding: 5rem 1.5rem;
+  text-align: center;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.ctaSection::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 100%, rgba(229,106,0,.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+.ctaSection :global(h2) {
+  color: #fff;
+  margin-bottom: 1rem;
+  position: relative;
+}
+.ctaSection :global(p) {
+  color: rgba(255,255,255,.55);
+  position: relative;
+}
+.ctaLinks {
+  margin-top: 2rem;
+  position: relative;
+}
+.ctaLinks :global(a) {
+  display: inline-block;
+  font-family: var(--ec-serif);
+  font-size: 1.25rem;
+  color: var(--ec-orange);
+  text-decoration: none;
+  margin: .3rem 0;
+  border-bottom: 1px solid transparent;
+  transition: .2s;
+}
+.ctaLinks :global(a:hover) {
+  border-bottom-color: var(--ec-orange);
+}
+.ctaClosing {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  margin-top: 2rem;
+  position: relative;
+}
+.ctaClosingSub {
+  font-family: var(--ec-serif);
+  font-style: italic;
+  color: rgba(255,255,255,.35);
+  margin-top: .5rem;
+  font-size: .9rem;
+  position: relative;
+}
+
+/* ─── RESPONSIVE ────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .wrapper { font-size: 15.5px; }
+  .wrapper :global(section) { padding: 3.5rem 0; }
+  .statsGrid { grid-template-columns: 1fr 1fr; }
+  .step { flex-direction: column; gap: .4rem; }
+  .cover { padding: 2rem 1.5rem; }
+  .coverStats { gap: 1rem; }
+  .coverStat { min-width: 130px; }
+}
