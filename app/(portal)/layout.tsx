@@ -1,4 +1,6 @@
 import { redirect } from "next/navigation";
+
+export const dynamic = 'force-dynamic';
 import { getCurrentUserAndClient } from "@/lib/auth";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { MobileSidebarTrigger } from "@/components/layout/MobileSidebarTrigger";

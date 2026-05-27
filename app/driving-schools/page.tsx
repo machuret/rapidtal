@@ -7,6 +7,7 @@ import StickyCtaBar from '@/components/StickyCtaBar';
 import ScrollProgressBar from '@/components/ScrollProgressBar';
 import CountUpStat from '@/components/CountUpStat';
 import MarketingLayout from '@/components/MarketingLayout';
+import EmailCaptureForm from '@/components/EmailCaptureForm';
 import s from './page.module.css';
 // Marketing CSS — loads Nav, Footer, currency toggle, sticky bar styles
 import '@/app/css/marketing-vars.css';
@@ -491,20 +492,7 @@ export default function DrivingSchoolsPage() {
         <div className={s.emailCaptureInner}>
           <div className={s.emailCaptureTitle}>Not ready to book? Leave your email.</div>
           <p className={s.emailCaptureSub}>We&apos;ll send you a tailored breakdown for your driving school — no obligation, no spam.</p>
-          <form
-            className={s.emailForm}
-            onSubmit={(e) => e.preventDefault()}
-            aria-label="Email lead capture"
-          >
-            <input
-              type="email"
-              placeholder="your@email.com"
-              required
-              className={s.emailInput}
-              aria-label="Your email address"
-            />
-            <button type="submit" className={s.emailBtn}>Send Me the Info →</button>
-          </form>
+          <EmailCaptureForm />
           <p className={s.emailOrDivider}>— or book directly below —</p>
         </div>
       </div>
