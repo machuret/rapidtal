@@ -11,20 +11,13 @@ interface SkillsGridProps {
 export default function SkillsGrid({ roleTitle, skills }: SkillsGridProps) {
   const [showAll, setShowAll] = useState(false);
   
-  // Group skills into categories
-  const categories = [
-    { name: 'Core Technical Skills', skills: skills.slice(0, 6) },
-    { name: 'Tools & Platforms', skills: skills.slice(6, 12) },
-    { name: 'Advanced Capabilities', skills: skills.slice(12) }
-  ];
-  
   const displayedSkills = showAll ? skills : skills.slice(0, 8);
   
   return (
     <section className={styles.section}>
       <div className={styles.sectionLabel}>What a Rapid Tal {roleTitle} Can Do</div>
       <h2 className={styles.sectionHeading}>
-        THE SKILLS<br /><em>YOU'RE HIRING.</em>
+        THE SKILLS<br /><em>YOU&apos;RE HIRING.</em>
       </h2>
       <div className={styles.skillsGrid}>
         {displayedSkills.map((skill, i) => (

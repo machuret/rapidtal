@@ -81,7 +81,7 @@ export default function SEOSpecialistsPage() {
                 color: 'rgba(255, 255, 255, 0.7)',
                 fontFamily: 'var(--font-dm-sans)'
               }}>
-                Filipino SEO specialists are highly trained in technical SEO, content optimization, and link building. They understand Australian search behavior and Google's latest algorithm updates.
+                Filipino SEO specialists are highly trained in technical SEO, content optimization, and link building. They understand Australian search behavior and Google&apos;s latest algorithm updates.
               </p>
             </div>
 

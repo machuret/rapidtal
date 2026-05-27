@@ -48,12 +48,12 @@ export default function Button({ variant = 'primary', size = 'md', ...props }: B
     .join(' ');
 
   if (props.as === 'a') {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { as: _as, ...rest } = props as LinkButtonProps;
+    void _as;
     return <a {...rest} className={className} />;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { as: _as, ...rest } = props as ButtonElementProps;
+  void _as;
   return <button {...rest} className={className} />;
 }

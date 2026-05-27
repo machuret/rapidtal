@@ -300,7 +300,7 @@ export default function HireMarketingSalesPhilippinesPage() {
               Direct hire means you employ the talent directly on your payroll. No middleman. No markup. No ongoing fees. You pay them directly, they work for you exclusively, and you build a real team.
             </p>
             <p style={{ marginBottom: '24px' }}>
-              We handle recruitment, vetting, and onboarding for a one-time fee of <strong style={{ color: 'var(--orange)' }}><FormattedPrice amount={3990} /></strong>. After that, you pay your team member's salary directly and they're yours forever.
+              We handle recruitment, vetting, and onboarding for a one-time fee of <strong style={{ color: 'var(--orange)' }}><FormattedPrice amount={3990} /></strong>. After that, you pay your team member&apos;s salary directly and they&apos;re yours forever.
             </p>
             <p>
               This is the opposite of outsourcing agencies that charge 2-3x markups forever. With direct hire, you save 70-82% compared to local hiring and build a loyal, dedicated team that grows with your business.

@@ -8,7 +8,7 @@ import { ROLES } from '@/data/roles';
 const ComparisonNav = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonNav })), { ssr: true });
 const ComparisonFooter = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonFooter })), { ssr: true });
 
-const metadata = {
+export const metadata = {
   title: 'Sales Roles | SDRs, Account Executives & Lead Gen Specialists | Rapid Tal',
   description: 'Hire experienced sales professionals from the Philippines. SDRs, account executives, closers, and lead generation specialists. Save up to 79%.',
   openGraph: {
@@ -201,7 +201,7 @@ export default function SalesRolesPage() {
             marginBottom: '20px',
             letterSpacing: '-0.01em'
           }}>
-            Don't See Your Role?
+            Don&apos;t See Your Role?
           </h2>
           
           <p style={{

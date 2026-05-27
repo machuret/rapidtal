@@ -21,7 +21,7 @@ export default function TruthSection({ testimonial }: TruthSectionProps) {
         </h2>
         <p>The Australian market charges a premium for WordPress SEO skills that are honestly not that rare. A mid-range {formatPrice(75000, currency)} WordPress SEO hire is still figuring out their Ahrefs workflow.</p>
         <p>Meanwhile, a senior Filipino WordPress SEO specialist — someone who has managed 20+ WordPress sites, built link profiles from scratch, and lived through multiple Google algorithm updates — is available right now for {formatPrice(1700, currency)}/month.</p>
-        <p><strong>They're not a cheaper version. They're usually more experienced.</strong> They stay longer. They go deeper into your site. They take ownership of your rankings like it's their own business.</p>
+        <p><strong>They&apos;re not a cheaper version. They&apos;re usually more experienced.</strong> They stay longer. They go deeper into your site. They take ownership of your rankings like it&apos;s their own business.</p>
       </div>
       <div>
         <div className={styles.truthQuote}>

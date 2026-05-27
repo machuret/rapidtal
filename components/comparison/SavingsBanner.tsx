@@ -18,13 +18,13 @@ export default function SavingsBanner({ annualSaving, savingPercent, auTotal, ph
       <div className={styles.savingsLeft}>
         <div className={styles.savingsEyebrow}>Your Annual Saving</div>
         <div className={styles.savingsHeadline}>
-          THAT'S {formatPrice(annualSaving, currency)}<br />
+          THAT&apos;S {formatPrice(annualSaving, currency)}<br />
           BACK IN YOUR POCKET.<br />
           EVERY YEAR.
         </div>
         <p className={styles.savingsSub}>
           {formatPrice(auTotal, currency)}/month vs {formatPrice(phTotal, currency)}/month. 
-          The work is the same. The skills are the same. The difference is you're no longer paying for a postcode.
+          The work is the same. The skills are the same. The difference is you&apos;re no longer paying for a postcode.
         </p>
       </div>
       <div className={styles.savingsRight}>

@@ -80,7 +80,7 @@ export default function SalesSpecialistsPage() {
                 color: 'rgba(255, 255, 255, 0.7)',
                 fontFamily: 'var(--font-dm-sans)'
               }}>
-                Filipino sales professionals excel at building genuine relationships with prospects. They're naturally warm, patient, and persistent without being pushy.
+                Filipino sales professionals excel at building genuine relationships with prospects. They&apos;re naturally warm, patient, and persistent without being pushy.
               </p>
             </div>
 
