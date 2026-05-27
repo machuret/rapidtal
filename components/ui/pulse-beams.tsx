@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface BeamPath {
@@ -123,16 +122,17 @@ const SVGs = ({ beams, width, height, baseColor, accentColor, gradientColors }: 
 
       <defs>
         {beams.map((beam: BeamPath, index: number) => (
-          <motion.linearGradient
+          <linearGradient
             key={index}
             id={`grad${index}`}
             gradientUnits="userSpaceOnUse"
-            initial={beam.gradientConfig.initial}
-            animate={beam.gradientConfig.animate}
-            transition={beam.gradientConfig.transition}
+            x1={beam.gradientConfig.initial.x1}
+            x2={beam.gradientConfig.initial.x2}
+            y1={beam.gradientConfig.initial.y1}
+            y2={beam.gradientConfig.initial.y2}
           >
             <GradientColors colors={gradientColors} />
-          </motion.linearGradient>
+          </linearGradient>
         ))}
       </defs>
     </svg>
