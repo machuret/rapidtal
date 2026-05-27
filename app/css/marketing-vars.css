@@ -28,10 +28,10 @@
   --surface-raised: #101010;
   --surface-hover:  #131313;
 
-  /* ── Font stacks ── */
-  --font-display:   'Bebas Neue', sans-serif;
-  --font-ui:        'Barlow Condensed', sans-serif;
-  --font-body:      'DM Sans', sans-serif;
+  /* ── Font stacks (loaded via next/font in app/layout.tsx) ──
+     next/font sets --font-display (Bebas) and --font-ui (Barlow) on <html>;
+     don't redefine them with raw names. Map --font-body to --ds-font (DM Sans). */
+  --font-body:      var(--ds-font, 'DM Sans', sans-serif);
 
   /* ── Transitions ── */
   --ease-fast:      0.15s ease;

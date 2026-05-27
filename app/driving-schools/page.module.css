@@ -17,11 +17,10 @@
   --ds-white: #fff;
   /* Widened from 780px → 860px for premium editorial breathing room */
   --ds-max-w: 860px;
-  /* Use CSS variables set by next/font; fall back to raw names */
-  --ds-font: var(--ds-font, 'DM Sans', -apple-system, sans-serif);
-  --ds-font-display: var(--ds-font-display, 'Space Grotesk', 'DM Sans', sans-serif);
+  /* --ds-font (DM Sans) and --ds-font-display (Space Grotesk) are set on <html>
+     by next/font and inherit down here. Do NOT redefine them self-referentially. */
 
-  font-family: var(--ds-font);
+  font-family: var(--ds-font, 'DM Sans', -apple-system, sans-serif);
   color: var(--ds-dark);
   line-height: 1.72;
   background: var(--ds-white);
@@ -66,7 +65,7 @@
   justify-content: center;
   text-align: center;
   padding: 160px 1.5rem 5rem;
-  background: linear-gradient(170deg, var(--ds-black) 0%, #111 55%, #1a1008 100%);
+  background: linear-gradient(180deg, #1c1c1c 0%, #141414 55%, #0d0d0d 100%);
   color: var(--ds-white);
   position: relative;
   overflow: hidden;
@@ -75,7 +74,7 @@
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(ellipse at 50% 60%, rgba(255,107,0,0.12) 0%, transparent 70%);
+  background: radial-gradient(ellipse 70% 55% at 50% 0%, rgba(255,107,0,0.13) 0%, transparent 62%);
   pointer-events: none;
 }
 
@@ -178,16 +177,22 @@
 /* ─── TABLE OF CONTENTS ──────────────────────────────────────────── */
 .toc {
   max-width: var(--ds-max-w);
-  margin: 0 auto;
-  padding: 3rem 1.5rem;
+  margin: 2.5rem auto;
+  padding: 1.75rem 1.75rem 1.5rem;
+  background: var(--ds-light-gray);
+  border: 1px solid #ececec;
+  border-radius: 14px;
 }
 .tocTitle {
   font-family: var(--ds-font-display);
-  font-size: 1rem;
+  font-size: .78rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .12em;
+  letter-spacing: .16em;
   color: var(--ds-orange);
-  margin-bottom: 1.2rem;
+  margin-bottom: 1rem;
+  padding-bottom: .9rem;
+  border-bottom: 1px solid #e3e3e3;
 }
 .tocList {
   list-style: none;
@@ -197,7 +202,7 @@
 }
 .tocList :global(li) {
   counter-increment: toc;
-  margin-bottom: .6rem;
+  margin-bottom: .1rem;
 }
 .tocList :global(a) {
   text-decoration: none;
@@ -205,19 +210,23 @@
   font-size: .95rem;
   font-weight: 500;
   display: flex;
-  gap: .6rem;
+  gap: .75rem;
   align-items: baseline;
-  transition: color .15s;
+  padding: .5rem .65rem;
+  border-radius: 8px;
+  transition: color .15s, background .15s;
 }
 .tocList :global(a:hover) {
   color: var(--ds-orange);
+  background: rgba(255,107,0,0.07);
 }
 .tocList :global(a::before) {
   content: counter(toc, decimal-leading-zero);
   font-family: var(--ds-font-display);
-  font-size: .8rem;
+  font-size: .78rem;
+  font-weight: 700;
   color: var(--ds-orange);
-  min-width: 1.6rem;
+  min-width: 1.5rem;
 }
 
 /* Sidebar ToC (hidden below 1200px) */
@@ -393,12 +402,12 @@
 /* Borders on <td> (not <tr>) because border-collapse:collapse ignores <tr> borders */
 .tableRowHighlight :global(td) {
   font-weight: 700;
-  color: var(--ds-orange);
-  /* Gradient background + subtle glow */
+  /* Dark text — orange-on-light-orange was unreadable (failed contrast) */
+  color: var(--ds-black);
   background: linear-gradient(
     90deg,
-    rgba(255,107,0,0.12) 0%,
-    rgba(255,107,0,0.06) 100%
+    rgba(255,107,0,0.16) 0%,
+    rgba(255,107,0,0.08) 100%
   );
   border-top: 2px solid var(--ds-orange) !important;
   border-bottom: 2px solid var(--ds-orange) !important;
@@ -594,12 +603,17 @@
     align-self: start;
     padding: 2rem 0;
   }
-  /* Sidebar ToC inherits .toc styles for the inner nav */
+  /* Sidebar ToC inherits .toc styles for the inner nav — keep the card, compact it */
   .tocSidebar .toc {
     display: block;
     max-width: none;
     margin: 0;
-    padding: 0;
+    padding: 1.25rem 1.25rem 1.1rem;
+  }
+  .tocSidebar .tocList :global(a) {
+    font-size: .85rem;
+    padding: .4rem .5rem;
+    gap: .55rem;
   }
 
   .content {
