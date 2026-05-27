@@ -53,7 +53,7 @@ export default function CountUpStat({ value, label, className, numberClassName, 
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [value]);
+  }, [value, parsed]);
 
   return (
     <div ref={ref} className={className}>

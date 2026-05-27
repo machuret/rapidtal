@@ -8,14 +8,6 @@ import { ROLES } from '@/data/roles';
 const ComparisonNav = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonNav })), { ssr: true });
 const ComparisonFooter = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonFooter })), { ssr: true });
 
-const metadata = {
-  title: 'Marketing Roles | Paid Ads, SEO, Email & Social Media Specialists | Rapid Tal',
-  description: 'Hire experienced marketing specialists from the Philippines. Paid ads, SEO, email marketing, social media managers, and growth marketers. Save up to 80%.',
-  openGraph: {
-    title: 'Marketing Roles | Paid Ads, SEO, Email & Social Media Specialists',
-    description: 'Hire experienced marketing specialists from the Philippines. Save up to 80% on costs.',
-  }
-};
 
 const marketingRoles = Object.values(ROLES).filter(role => 
   role.category === 'Marketing Specialists' || 
@@ -203,7 +195,7 @@ export default function MarketingRolesPage() {
             marginBottom: '20px',
             letterSpacing: '-0.01em'
           }}>
-            Don't See Your Role?
+            Don&apos;t See Your Role?
           </h2>
           
           <p style={{

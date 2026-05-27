@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import type { Metadata } from 'next';
 import styles from './calculator.module.css';
 import CursorTracker from '@/components/CursorTracker';
 import { useCurrency } from '@/components/CurrencyProvider';
@@ -173,12 +172,13 @@ function CalculatorContent() {
     }
     
     // Track ViewContent when calculator loads
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'ViewContent', {
+    if (typeof window !== 'undefined' && (window as { fbq?: (...args: unknown[]) => void }).fbq) {
+      (window as { fbq?: (...args: unknown[]) => void }).fbq!('track', 'ViewContent', {
         content_name: 'Savings Calculator',
         content_category: 'Calculator'
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /* update URL when screen or question changes */
@@ -201,8 +201,8 @@ function CalculatorContent() {
       document.body.appendChild(script);
       
       // Track Lead event when form is shown
-      if (typeof window !== 'undefined' && (window as any).fbq) {
-        (window as any).fbq('track', 'Lead', {
+      if (typeof window !== 'undefined' && (window as { fbq?: (...args: unknown[]) => void }).fbq) {
+        (window as { fbq?: (...args: unknown[]) => void }).fbq!('track', 'Lead', {
           content_name: 'Calculator Contact Form',
           content_category: 'Form'
         });

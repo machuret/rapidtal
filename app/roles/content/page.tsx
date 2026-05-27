@@ -8,14 +8,6 @@ import { ROLES } from '@/data/roles';
 const ComparisonNav = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonNav })), { ssr: true });
 const ComparisonFooter = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonFooter })), { ssr: true });
 
-const metadata = {
-  title: 'Content & Creative Roles | Copywriters, Designers & Video Editors | Rapid Tal',
-  description: 'Hire experienced content and creative professionals from the Philippines. Copywriters, designers, video editors, and content strategists. Save up to 80%.',
-  openGraph: {
-    title: 'Content & Creative Roles | Copywriters, Designers & Video Editors',
-    description: 'Hire experienced content and creative professionals from the Philippines. Save up to 80% on costs.',
-  }
-};
 
 const contentRoles = Object.values(ROLES).filter(role => 
   role.category === 'Content & Creative Specialists' ||
@@ -202,7 +194,7 @@ export default function ContentRolesPage() {
             marginBottom: '20px',
             letterSpacing: '-0.01em'
           }}>
-            Don't See Your Role?
+            Don&apos;t See Your Role?
           </h2>
           
           <p style={{

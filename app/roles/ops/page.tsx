@@ -8,14 +8,6 @@ import { ROLES } from '@/data/roles';
 const ComparisonNav = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonNav })), { ssr: true });
 const ComparisonFooter = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonFooter })), { ssr: true });
 
-const metadata = {
-  title: 'Revenue Ops Roles | Marketing Ops, CRM Admins & Data Analysts | Rapid Tal',
-  description: 'Hire experienced operations specialists from the Philippines. Marketing ops, HubSpot/Salesforce admins, data analysts, and automation specialists. Save up to 76%.',
-  openGraph: {
-    title: 'Revenue Ops Roles | Marketing Ops, CRM Admins & Data Analysts',
-    description: 'Hire experienced operations specialists from the Philippines. Save up to 76% on costs.',
-  }
-};
 
 const opsRoles = Object.values(ROLES).filter(role => 
   role.category === 'Operations & Admin Specialists' ||

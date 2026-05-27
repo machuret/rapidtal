@@ -7,14 +7,6 @@ import CursorTracker from '@/components/CursorTracker';
 const ComparisonNav = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonNav })), { ssr: true });
 const ComparisonFooter = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonFooter })), { ssr: true });
 
-const metadata = {
-  title: 'Roles We Fill | Marketing, Sales, Content & Operations | Rapid Tal',
-  description: 'Hire experienced marketing, sales, content, and operations specialists directly from the Philippines. Save up to 80% on costs while building your revenue team.',
-  openGraph: {
-    title: 'Roles We Fill | Marketing, Sales, Content & Operations',
-    description: 'Hire experienced marketing, sales, content, and operations specialists directly from the Philippines.',
-  }
-};
 
 const CATEGORIES = [
   {
