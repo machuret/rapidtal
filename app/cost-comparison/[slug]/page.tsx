@@ -54,7 +54,7 @@ export default function CostComparisonPage({ params }: { params: { slug: string 
   const savingPercent = Math.round((monthlySaving / auTotal) * 100);
 
   return (
-    <div style={{ background: 'var(--black)', minHeight: '100vh' }}>
+    <div className="marketing-theme" style={{ background: 'var(--black)', minHeight: '100vh' }}>
       <ComparisonNav />
       <Breadcrumb 
         category={role.category}

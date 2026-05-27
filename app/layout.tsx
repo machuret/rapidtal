@@ -8,6 +8,8 @@ import {
   JetBrains_Mono,
 } from "next/font/google";
 import "./globals.css";
+// Class-scoped marketing palette (.marketing-theme) — safe to load globally.
+import "./css/marketing-theme.css";
 import { Toaster } from "@/components/ui/sonner";
 import { CurrencyProvider } from "@/components/CurrencyProvider";
 

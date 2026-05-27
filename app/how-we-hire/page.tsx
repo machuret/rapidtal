@@ -104,7 +104,7 @@ const GUARANTEES = [
 
 export default function HowWeHirePage() {
   return (
-    <div style={{ background: 'var(--black)', minHeight: '100vh' }}>
+    <div className="marketing-theme" style={{ background: 'var(--black)', minHeight: '100vh' }}>
       <CursorTracker />
       <ComparisonNav />
       

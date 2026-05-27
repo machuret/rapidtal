@@ -24,7 +24,7 @@ export default function SalesSpecialistsPage() {
     .sort((a, b) => a.title.localeCompare(b.title));
 
   return (
-    <div style={{ background: 'var(--black)', minHeight: '100vh' }}>
+    <div className="marketing-theme" style={{ background: 'var(--black)', minHeight: '100vh' }}>
       <CursorTracker />
       <ComparisonNav />
       

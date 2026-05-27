@@ -1,10 +1,17 @@
-/* ─── MARKETING PAGE CSS VARIABLES ────────────────────────────────────
-   Provides the CSS custom properties needed by Nav, Footer, and the
-   global sticky-cta / currency-toggle classes defined in nav.css &
-   sections.css.  Does NOT set body styles, cursor, or noise overlay —
-   those belong only to the main homepage.
+/* ─── MARKETING THEME (SHARED TEMPLATE) ───────────────────────────────
+   Single source of truth for the marketing brand palette used by the
+   homepage and every comparison / hire / role / industry page.
+
+   Scoped to the `.marketing-theme` class — NOT :root — so it can be loaded
+   globally without colliding with the portal's shadcn tokens (--border,
+   --surface-raised, etc.). Any marketing page just adds className=
+   "marketing-theme" to its root element and every descendant component
+   inherits the correct colours and fonts.
+
+   --font-display (Bebas) and --font-ui (Barlow) are set globally on <html>
+   by next/font, so they are inherited here automatically.
    ──────────────────────────────────────────────────────────────────── */
-:root {
+.marketing-theme {
   /* ── Brand palette ── */
   --orange:         #FF5500;
   --orange-hot:     #FF7A00;
@@ -28,9 +35,7 @@
   --surface-raised: #101010;
   --surface-hover:  #131313;
 
-  /* ── Font stacks (loaded via next/font in app/layout.tsx) ──
-     next/font sets --font-display (Bebas) and --font-ui (Barlow) on <html>;
-     don't redefine them with raw names. Map --font-body to --ds-font (DM Sans). */
+  /* ── Fonts (display/ui from next/font on <html>; body = DM Sans) ── */
   --font-body:      var(--ds-font, 'DM Sans', sans-serif);
 
   /* ── Transitions ── */
@@ -45,4 +50,9 @@
 
   /* ── Layout ── */
   --max-w:          1400px;
+
+  /* Establish the dark canvas + default text colour for the subtree */
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
 }

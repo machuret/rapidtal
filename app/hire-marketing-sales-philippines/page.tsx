@@ -58,7 +58,7 @@ const categories = [
 
 export default function HireMarketingSalesPhilippinesPage() {
   return (
-    <div style={{ background: 'var(--black)', minHeight: '100vh' }}>
+    <div className="marketing-theme" style={{ background: 'var(--black)', minHeight: '100vh' }}>
       <CursorTracker />
       <ComparisonNav />
       

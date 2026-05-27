@@ -16,7 +16,7 @@ const opsRoles = Object.values(ROLES).filter(role =>
 
 export default function OpsRolesPage() {
   return (
-    <div style={{ background: 'var(--black)', minHeight: '100vh' }}>
+    <div className="marketing-theme" style={{ background: 'var(--black)', minHeight: '100vh' }}>
       <CursorTracker />
       <ComparisonNav />
       
