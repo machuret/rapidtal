@@ -3,14 +3,13 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 import CalendlyEmbed from '@/components/CalendlyEmbed';
-import StickyCtaBar from '@/components/StickyCtaBar';
 import ScrollProgressBar from '@/components/ScrollProgressBar';
 import CountUpStat from '@/components/CountUpStat';
-import MarketingLayout from '@/components/MarketingLayout';
 import EmailCaptureForm from '@/components/EmailCaptureForm';
 import s from './page.module.css';
-// Marketing CSS — loads Nav, Footer, currency toggle, sticky bar styles
-import '@/app/css/marketing-vars.css';
+// Global marketing styles (palette, nav, footer, sticky bar)
+import '@/app/css/base.css';
+import '@/app/css/layout.css';
 import '@/app/css/nav.css';
 import '@/app/css/sections.css';
 import '@/app/css/responsive.css';
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function DrivingSchoolsPage() {
   return (
-    <MarketingLayout>
+    <>
       {/* Skip to main content — keyboard / screen-reader accessibility */}
       <a href="#main-content" className="skip-link">Skip to content</a>
 
@@ -55,29 +54,8 @@ export default function DrivingSchoolsPage() {
           <div className={s.coverByline}>By Gabriel Machuret — RapidTal.com</div>
         </div>
 
-        {/* ── PAGE BODY (sidebar layout at 1200px+) ──────────────── */}
+        {/* ── MAIN CONTENT ──────────────────────────────────────── */}
         <div className={s.pageBody}>
-
-          {/* ── SIDEBAR TOC (desktop only) ──────────────────────── */}
-          <aside className={s.tocSidebar} aria-label="Page contents">
-            <nav className={s.toc}>
-              <div className={s.tocTitle}>On This Page</div>
-              <ol className={s.tocList}>
-                <li><a href="#hardest-business">Running a Driving School</a></li>
-                <li><a href="#three-problems">Three Problems Keeping You Stuck</a></li>
-                <li><a href="#ai-right-now">AI Is Right Now</a></li>
-                <li><a href="#secret-weapon">Claude Projects &amp; Skills</a></li>
-                <li><a href="#va-handles">What Your VA Handles</a></li>
-                <li><a href="#time-cost">The Time Cost</a></li>
-                <li><a href="#case-study">Grand Prix Case Study</a></li>
-                <li><a href="#cost-comparison">Cost Comparison</a></li>
-                <li><a href="#get-started">How to Get Started</a></li>
-              </ol>
-            </nav>
-          </aside>
-
-          {/* ── MAIN CONTENT ────────────────────────────────────── */}
-          <div>
 
             {/* ── TABLE OF CONTENTS (mobile/tablet) ───────────────── */}
             <nav className={s.toc}>
@@ -470,7 +448,6 @@ export default function DrivingSchoolsPage() {
               </section>
 
             </div>{/* end .content */}
-          </div>{/* end main column */}
         </div>{/* end .pageBody */}
 
         {/* ── CTA ───────────────────────────────────────────────── */}
@@ -504,13 +481,6 @@ export default function DrivingSchoolsPage() {
       />
 
       <Footer />
-
-      <StickyCtaBar
-        badge="Replace your $4,000/mo agency for $820/mo"
-        sub="One trained VA + Claude AI. No contract. You own everything."
-        btnLabel="Book a Free Call →"
-        btnHref="#book-call"
-      />
-    </MarketingLayout>
+    </>
   );
 }
