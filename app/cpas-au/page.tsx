@@ -26,22 +26,6 @@ export default function CPAsAUPage() {
           <div className={s.coverAud}>All prices in Australian Dollars (AUD)</div>
         </div>
 
-      <nav className={s.toc}>
-        <div className={s.tocTitle}>What&apos;s Inside</div>
-        <ol className={s.tocList}>
-          <li><a href="#the-maths">The Maths That Should Keep Every Practice Owner Awake</a></li>
-          <li><a href="#bpo-markup">What Your BPO Is Actually Charging You</a></li>
-          <li><a href="#advisory-shift">The Compliance-to-Advisory Shift</a></li>
-          <li><a href="#two-tracks">Two Tracks. One Solution.</a></li>
-          <li><a href="#accounting-va">Track 1 — The Accounting VA</a></li>
-          <li><a href="#marketing-va">Track 2 — The Marketing VA</a></li>
-          <li><a href="#cost-comparison">The Full Cost Comparison</a></li>
-          <li><a href="#tax-season">Tax Season: How Your VA Changes the Equation</a></li>
-          <li><a href="#two-futures">Two Futures: Your Firm in 12 Months</a></li>
-          <li><a href="#get-started">How to Get Started</a></li>
-        </ol>
-      </nav>
-
       <div className={s.content}>
 
         <section id="the-maths">

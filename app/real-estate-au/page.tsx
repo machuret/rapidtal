@@ -25,22 +25,6 @@ export default function RealEstateAuPage() {
           <div className={s.coverByline}>By Gabriel Machuret — RapidTal.com</div>
           <div className={s.coverAudNote}>All prices in Australian Dollars (AUD)</div>
         </div>
-        <nav className={s.toc}>
-          <div className={s.tocTitle}>Table of Contents</div>
-          <ol className={s.tocList}>
-            <li><a href="#australian-reality">The Australian Real Estate Market Is Brutal</a></li>
-            <li><a href="#agency-exposed">What Your Marketing Agency Is Actually Doing</a></li>
-            <li><a href="#three-problems">The Three Problems That Keep Australian Agents Stuck</a></li>
-            <li><a href="#ai-right-now">AI Is Not the Future. It&apos;s Right Now.</a></li>
-            <li><a href="#secret-weapon">The Secret Weapon: Claude Projects and Skills</a></li>
-            <li><a href="#va-handles">Everything Your VA Handles</a></li>
-            <li><a href="#time-cost">The Time Cost: What This Is Really Worth</a></li>
-            <li><a href="#case-study-loida">Case Study: Loida Velasquez</a></li>
-            <li><a href="#case-study-brandon">Case Study: Brandon Mulrenin</a></li>
-            <li><a href="#cost-comparison">The Full Cost Comparison</a></li>
-            <li><a href="#get-started">How to Get Started</a></li>
-          </ol>
-        </nav>
         <div className={s.content}>
           <section id="australian-reality">
             <div className={s.sectionDivider}></div>

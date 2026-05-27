@@ -57,22 +57,6 @@ export default function DrivingSchoolsPage() {
         {/* ── MAIN CONTENT ──────────────────────────────────────── */}
         <div className={s.pageBody}>
 
-            {/* ── TABLE OF CONTENTS (mobile/tablet) ───────────────── */}
-            <nav className={s.toc}>
-              <div className={s.tocTitle}>Table of Contents</div>
-              <ol className={s.tocList}>
-                <li><a href="#hardest-business">Running a Driving School Is One of the Hardest Small Businesses</a></li>
-                <li><a href="#three-problems">The Three Problems That Keep Driving Schools Stuck</a></li>
-                <li><a href="#ai-right-now">AI Is Not the Future. It&apos;s Right Now.</a></li>
-                <li><a href="#secret-weapon">The Secret Weapon: Claude Projects and Skills</a></li>
-                <li><a href="#va-handles">Everything Your VA Handles (and Why Each One Matters)</a></li>
-                <li><a href="#time-cost">The Time Cost: What This Is Really Worth to You</a></li>
-                <li><a href="#case-study">How This Worked for Grand Prix Driving School in New York</a></li>
-                <li><a href="#cost-comparison">The Full Cost Comparison</a></li>
-                <li><a href="#get-started">How to Get Started</a></li>
-              </ol>
-            </nav>
-
             <div className={s.content}>
 
               {/* ── SECTION: Running a Driving School ───────────────── */}
