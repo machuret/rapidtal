@@ -417,7 +417,7 @@ export default function DrivingSchoolsPage() {
         {/* ── CTA ───────────────────────────────────────────────── */}
         <div className={s.ctaSection}>
           <h2>Want to See If This Works for Your School?</h2>
-          <p>Reply to this email or book a free 15-minute call with Gab.<br />No pitch, no pressure. Just a conversation about whether this model makes sense for your driving school.</p>
+          <p>Book a free 15-minute discovery call with Gab using the calendar below — or reach out directly.<br />No pitch, no pressure. Just a conversation about whether this model makes sense for your driving school.</p>
           <div className={s.ctaLinks}>
             <a href="https://calendly.com/machuret/rapid-tal">Book a Call</a><br />
             <a href="mailto:hello@rapidtal.com">hello@rapidtal.com</a>
@@ -428,7 +428,11 @@ export default function DrivingSchoolsPage() {
 
       </div>{/* end .wrapper */}
 
-      <CalendlyEmbed />
+      <CalendlyEmbed
+        title="Book a Free 15-Minute Call —"
+        titleHighlight="No Pitch, No Pressure."
+        subtitle="Tell us about your driving school. We'll tell you honestly if this model is the right fit."
+      />
 
       <Footer />
     </>

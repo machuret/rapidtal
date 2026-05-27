@@ -10,7 +10,17 @@ declare global {
   }
 }
 
-export default function CalendlyEmbed() {
+interface CalendlyEmbedProps {
+  title?: string;
+  titleHighlight?: string;
+  subtitle?: string;
+}
+
+export default function CalendlyEmbed({
+  title = 'Let us Help you find your',
+  titleHighlight = 'Filipino Ninja',
+  subtitle = 'Book a free discovery call — no pitch, no pressure.',
+}: CalendlyEmbedProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -51,14 +61,14 @@ export default function CalendlyEmbed() {
         lineHeight: 1,
         marginBottom: '8px',
       }}>
-        Let us Help you find your <span style={{ color: '#FF7100' }}>Filipino Ninja</span>
+        {title} <span style={{ color: '#FF7100' }}>{titleHighlight}</span>
       </h2>
       <p style={{
         fontSize: '16px',
         color: 'rgba(255,255,255,0.55)',
         marginBottom: '32px',
       }}>
-        Book a free discovery call — no pitch, no pressure.
+        {subtitle}
       </p>
       <div
         ref={containerRef}
