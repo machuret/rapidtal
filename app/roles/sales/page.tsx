@@ -8,15 +8,6 @@ import { ROLES } from '@/data/roles';
 const ComparisonNav = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonNav })), { ssr: true });
 const ComparisonFooter = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonFooter })), { ssr: true });
 
-export const metadata = {
-  title: 'Sales Roles | SDRs, Account Executives & Lead Gen Specialists | Rapid Tal',
-  description: 'Hire experienced sales professionals from the Philippines. SDRs, account executives, closers, and lead generation specialists. Save up to 79%.',
-  openGraph: {
-    title: 'Sales Roles | SDRs, Account Executives & Lead Gen Specialists',
-    description: 'Hire experienced sales professionals from the Philippines. Save up to 79% on costs.',
-  }
-};
-
 const salesRoles = Object.values(ROLES).filter(role => 
   role.category === 'Sales Specialists' ||
   role.category === 'Sales Development & Lead Generation Specialists'
