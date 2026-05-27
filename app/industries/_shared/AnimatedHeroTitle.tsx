@@ -19,7 +19,6 @@
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import styles from './landing.module.css';
 
 export default function AnimatedHeroTitle({
@@ -75,19 +74,19 @@ export default function AnimatedHeroTitle({
         {/* Non-breaking space reserves the line height while words slide */}
         &nbsp;
         {rotatingWords.map((word, i) => (
-          <motion.span
+          <span
             key={word}
             className={styles.rotatingWord}
-            initial={{ opacity: 0, y: -120 }}
-            transition={{ type: 'spring', stiffness: 50, damping: 12 }}
-            animate={
-              idx === i
-                ? { y: 0, opacity: 1 }
-                : { y: idx > i ? -160 : 160, opacity: 0 }
-            }
+            style={{
+              opacity: idx === i ? 1 : 0,
+              transform: idx === i
+                ? 'translateY(0)'
+                : idx > i ? 'translateY(-120px)' : 'translateY(120px)',
+              transition: 'opacity 0.45s ease, transform 0.45s cubic-bezier(0.22,0.61,0.36,1)',
+            }}
           >
             {word}
-          </motion.span>
+          </span>
         ))}
       </span>
     </h1>

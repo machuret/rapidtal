@@ -16,7 +16,7 @@
  * scrolls back into view, which would be annoying on a landing page.
  * ═══════════════════════════════════════════════════════════════════════════ */
 
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import styles from './landing.module.css';
 
 export interface TypewriterWord {
@@ -40,14 +40,31 @@ export default function TypewriterHeading({
   duration?: number;
   delay?: number;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setRevealed(true); observer.disconnect(); } },
+      { threshold: 0.4 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className={className ? `${styles.typewriter} ${className}` : styles.typewriter}>
-      <motion.div
+    <div
+      ref={ref}
+      className={className ? `${styles.typewriter} ${className}` : styles.typewriter}
+    >
+      <div
         className={styles.typewriterReveal}
-        initial={{ width: '0%' }}
-        whileInView={{ width: 'fit-content' }}
-        viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration, ease: 'linear', delay }}
+        style={{
+          width: revealed ? 'fit-content' : '0%',
+          transition: revealed ? `width ${duration}s linear ${delay}s` : 'none',
+        }}
       >
         <div className={styles.typewriterInner}>
           {words.map((w, i) => (
@@ -56,22 +73,14 @@ export default function TypewriterHeading({
               className={w.highlight ? styles.typewriterWordHL : styles.typewriterWord}
             >
               {w.text}
-              {/* Trailing space — rendered as a normal char so width calc
-                   includes inter-word gaps. */}
               {i < words.length - 1 ? ' ' : ''}
             </span>
           ))}
         </div>
-      </motion.div>
-      <motion.span
+      </div>
+      <span
         className={styles.typewriterCursor}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{
-          duration: 0.8,
-          repeat: Infinity,
-          repeatType: 'reverse',
-        }}
+        style={{ animation: 'twCursorBlink 0.8s ease infinite alternate' }}
         aria-hidden="true"
       />
     </div>

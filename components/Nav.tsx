@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import CurrencyToggle from './CurrencyToggle';
+import s from './Nav.module.css';
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -16,23 +17,23 @@ export default function Nav() {
   const close = () => setOpen(false);
 
   return (
-    <nav className={scrolled ? 'nav-scrolled' : ''}>
-      <a href="/" className="logo">RAPID<span>TAL</span></a>
+    <nav className={`${s.nav}${scrolled ? ' ' + s.scrolled : ''}`}>
+      <a href="/" className={s.logo}>RAPID<span>TAL</span></a>
 
       <CurrencyToggle />
 
-      <ul className="nav-links">
+      <ul className={s.navLinks}>
         <li><a href="/#roles" onClick={close}>Roles</a></li>
         <li><a href="/#process" onClick={close}>How It Works</a></li>
         <li><a href="/#pricing" onClick={close}>Pricing</a></li>
         <li><a href="/#about" onClick={close}>About</a></li>
         <li><a href="/case-studies" onClick={close}>Case Studies</a></li>
-        <li><a href="/calculator" className="nav-cta" onClick={close}>Saving$ Calculator →</a></li>
+        <li><a href="/calculator" className={s.navCta} onClick={close}>Saving$ Calculator →</a></li>
       </ul>
 
       <button
         type="button"
-        className={`hamburger${open ? ' is-open' : ''}`}
+        className={`${s.hamburger}${open ? ' ' + s.open : ''}`}
         aria-label={open ? 'Close menu' : 'Open menu'}
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
@@ -41,14 +42,14 @@ export default function Nav() {
       </button>
 
       {open && (
-        <div className="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
+        <div className={s.mobileMenu} role="dialog" aria-modal="true" aria-label="Navigation menu">
           <ul>
             <li><a href="/#roles" onClick={close}>Roles</a></li>
             <li><a href="/#process" onClick={close}>How It Works</a></li>
             <li><a href="/#pricing" onClick={close}>Pricing</a></li>
             <li><a href="/#about" onClick={close}>About</a></li>
             <li><a href="/case-studies" onClick={close}>Case Studies</a></li>
-            <li><a href="/calculator" onClick={close} className="mobile-cta">Saving$ Calculator →</a></li>
+            <li><a href="/calculator" onClick={close} className={s.mobileCta}>Saving$ Calculator →</a></li>
           </ul>
         </div>
       )}

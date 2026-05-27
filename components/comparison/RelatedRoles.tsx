@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 
 interface RelatedRole {
   title: string;
@@ -22,12 +21,7 @@ export default function RelatedRoles({ roles, category }: RelatedRolesProps) {
       borderTop: '1px solid rgba(255, 255, 255, 0.1)'
     }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+        <div>
           <p style={{
             fontSize: 'clamp(12px, 1.5vw, 14px)',
             fontWeight: '600',
@@ -59,14 +53,8 @@ export default function RelatedRoles({ roles, category }: RelatedRolesProps) {
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: 'clamp(20px, 3vw, 30px)'
           }}>
-            {roles.map((role, index) => (
-              <motion.div
-                key={role.slug}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
+            {roles.map((role) => (
+              <div key={role.slug}>
                 <Link
                   href={`/hire-${role.slug}`}
                   style={{
@@ -143,10 +131,10 @@ export default function RelatedRoles({ roles, category }: RelatedRolesProps) {
                     Compare Australia vs Philippines costs →
                   </p>
                 </Link>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
