@@ -1,5 +1,6 @@
 /* ─── GOOGLE FONTS ──────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@500&display=swap');
+/* Bebas Neue & Barlow Condensed added for Nav/Footer compatibility  */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@500&display=swap');
 
 /* ─── WRAPPER ───────────────────────────────────────────────────── */
 .wrapper {
@@ -14,7 +15,8 @@
   --ds-green-light: #EFF8F2;
   --ds-red: #CC3333;
   --ds-white: #fff;
-  --ds-max-w: 780px;
+  /* ↑ Widened from 780px → 860px for premium editorial breathing room */
+  --ds-max-w: 860px;
   --ds-font: 'DM Sans', -apple-system, sans-serif;
   --ds-font-display: 'Space Grotesk', 'DM Sans', sans-serif;
 
@@ -24,12 +26,22 @@
   background: var(--ds-white);
   -webkit-font-smoothing: antialiased;
   font-size: 17px;
+  /* Leave room at bottom for sticky CTA bar */
+  padding-bottom: 72px;
 }
 
 .wrapper :global(*) {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+/* ─── FOCUS STATES (accessibility) ─────────────────────────────── */
+.wrapper :global(a:focus-visible),
+.wrapper :global(button:focus-visible) {
+  outline: 2px solid var(--ds-orange);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 /* ─── COVER ─────────────────────────────────────────────────────── */
@@ -40,7 +52,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 160px 1.5rem 3rem;
+  padding: 160px 1.5rem 5rem;
   background: linear-gradient(170deg, var(--ds-black) 0%, #111 55%, #1a1008 100%);
   color: var(--ds-white);
   position: relative;
@@ -93,10 +105,55 @@
   position: relative;
 }
 
+/* ─── COVER CTA BUTTONS ─────────────────────────────────────────── */
+.coverCtas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+  margin-top: 2.5rem;
+  position: relative;
+}
+
+.coverBtn {
+  display: inline-block;
+  background: var(--ds-orange);
+  color: #fff;
+  font-family: var(--ds-font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 16px 40px;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: background .2s, transform .15s, box-shadow .2s;
+  box-shadow: 0 4px 20px rgba(255,107,0,0.35);
+}
+.coverBtn:hover {
+  background: #e55800;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(255,107,0,0.45);
+}
+.coverBtn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.coverScrollHint {
+  font-size: .85rem;
+  color: rgba(255,255,255,0.45);
+  text-decoration: none;
+  transition: color .2s;
+  letter-spacing: .04em;
+  margin-top: .25rem;
+}
+.coverScrollHint:hover { color: rgba(255,255,255,0.75); }
+
 .coverByline {
   font-size: .9rem;
   color: var(--ds-orange);
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   position: relative;
 }
 
@@ -256,9 +313,16 @@
 .statCard {
   text-align: center;
   padding: 1.8rem 1rem;
-  background: var(--ds-light-gray);
+  background: var(--ds-white);
   border-radius: 12px;
-  border: 1px solid #eee;
+  border: 1px solid #e8e8e8;
+  /* Elevated card — lifts off the page */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+  transition: transform .2s, box-shadow .2s;
+}
+.statCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
 }
 .statNumber {
   font-family: var(--ds-font-display);
@@ -278,6 +342,7 @@
 .tableWrap {
   overflow-x: auto;
   margin: 1.5rem 0;
+  /* Negative margin on mobile so table can scroll edge-to-edge */
 }
 .table {
   width: 100%;
@@ -303,13 +368,21 @@
   background: var(--ds-light-gray);
 }
 
-.tableRowHighlight {
-  background: var(--ds-orange-light);
-  border: 2px solid var(--ds-orange);
-}
+/* ─── TABLE ROW HIGHLIGHT ───────────────────────────────────────── */
+/* FIX: border was on <tr> which is ignored in border-collapse:collapse.
+   Borders must live on <td> cells instead.                          */
 .tableRowHighlight :global(td) {
   font-weight: 700;
   color: var(--ds-orange);
+  background: var(--ds-orange-light);
+  border-top: 2px solid var(--ds-orange) !important;
+  border-bottom: 2px solid var(--ds-orange) !important;
+}
+.tableRowHighlight :global(td:first-child) {
+  border-left: 2px solid var(--ds-orange) !important;
+}
+.tableRowHighlight :global(td:last-child) {
+  border-right: 2px solid var(--ds-orange) !important;
 }
 
 .orangeHeader :global(thead th) {
@@ -317,6 +390,11 @@
 }
 
 /* ─── STEPS ─────────────────────────────────────────────────────── */
+.stepList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 .step {
   display: flex;
   gap: 1rem;
@@ -379,6 +457,10 @@
   color: var(--ds-orange);
   text-decoration: none;
   margin: .3rem 0;
+  transition: color .15s;
+}
+.ctaLinks :global(a:hover) {
+  color: #e55800;
 }
 .ctaClosing {
   font-weight: 700;
@@ -399,5 +481,7 @@
   .wrapper :global(section) { padding: 3rem 0; }
   .statsGrid { grid-template-columns: 1fr 1fr; }
   .step { flex-direction: column; gap: .5rem; }
-  .cover { padding: 140px 1.5rem 2rem; }
+  .cover { padding: 140px 1.2rem 3rem; }
+  .coverCtas { gap: .6rem; }
+  .coverBtn { padding: 14px 28px; font-size: .9rem; width: 100%; max-width: 320px; text-align: center; }
 }

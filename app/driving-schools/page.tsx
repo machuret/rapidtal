@@ -3,7 +3,13 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 import CalendlyEmbed from '@/components/CalendlyEmbed';
+import StickyCtaBar from '@/components/StickyCtaBar';
 import s from './page.module.css';
+// Marketing CSS — loads Nav, Footer, currency toggle, sticky bar styles
+import '@/app/css/marketing-vars.css';
+import '@/app/css/nav.css';
+import '@/app/css/sections.css';
+import '@/app/css/responsive.css';
 
 export const metadata: Metadata = {
   title: 'Stop Paying Marketing Agencies to Rip Off Your Driving School — RapidTal',
@@ -14,10 +20,13 @@ export const metadata: Metadata = {
 export default function DrivingSchoolsPage() {
   return (
     <>
+      {/* Skip to main content — keyboard / screen-reader accessibility */}
+      <a href="#main-content" className="skip-link">Skip to content</a>
+
       <Nav />
       <ScrollReveal />
 
-      <div className={s.wrapper}>
+      <div className={s.wrapper} id="main-content">
 
         {/* ── COVER ───────────────────────────────────────────────── */}
         <div className={s.cover}>
@@ -25,6 +34,17 @@ export default function DrivingSchoolsPage() {
           <h1>Stop Paying Marketing Agencies to Rip Off Your <span className={s.highlight}>Driving School.</span></h1>
           <p className={s.coverSubtitle}>How one VA (Virtual Assistant) from the Philippines, powered by Claude AI, can replace your marketing agency, handle your customer follow-up, reviews, social media, and admin — for under $900 USD a month.</p>
           <div className={s.coverTagline}>No contracts. No retainers. No middlemen.</div>
+
+          {/* ── Above-the-fold CTA ── */}
+          <div className={s.coverCtas}>
+            <a href="#book-call" className={s.coverBtn}>
+              Book a Free 15-Min Call →
+            </a>
+            <a href="#hardest-business" className={s.coverScrollHint}>
+              ↓ See how it works
+            </a>
+          </div>
+
           <div className={s.coverByline}>By Gabriel Machuret — RapidTal.com</div>
         </div>
 
@@ -135,8 +155,9 @@ export default function DrivingSchoolsPage() {
             <p>We pre-build about 10 of these Skills for every driving school client:</p>
 
             <div className={s.tableWrap}>
-              <table className={`${s.table} ${s.orangeHeader}`}>
-                <thead><tr><th>Skill</th><th>What It Produces</th><th>VA Time</th></tr></thead>
+              <table className={`${s.table} ${s.orangeHeader}`} aria-label="Claude AI Skills for driving schools">
+                <caption className="sr-only">The 10 Claude AI Skills built for driving school VAs</caption>
+                <thead><tr><th scope="col">Skill</th><th scope="col">What It Produces</th><th scope="col">VA Time</th></tr></thead>
                 <tbody>
                   <tr><td><strong>Weekly Social Pack</strong></td><td>5 branded posts with captions, hashtags, image briefs for Facebook + Instagram</td><td>15 min to review and schedule</td></tr>
                   <tr><td><strong>Review Responder</strong></td><td>Personalised replies to every Google and Facebook review</td><td>5 min per batch</td></tr>
@@ -403,11 +424,13 @@ export default function DrivingSchoolsPage() {
             <h2>How to Get Started</h2>
             <p className={s.lead}>No long proposals. No committees. No 6-month onboarding. Here&apos;s what happens:</p>
 
-            <div className={s.step}><div className={s.stepNum}>1</div><div className={s.stepContent}><strong>We find your VA.</strong> Skilled, English-fluent, tested on communication and marketing. We also assess YOUR business to make sure you&apos;re ready to onboard successfully.</div></div>
-            <div className={s.step}><div className={s.stepNum}>2</div><div className={s.stepContent}><strong>We train them on Claude AI.</strong> Your VA learns every Skill and Project we build for driving schools — ready to work from day one.</div></div>
-            <div className={s.step}><div className={s.stepNum}>3</div><div className={s.stepContent}><strong>We build your custom Claude Project.</strong> Loaded with your school name, suburb, instructors, courses, competitors — everything. Every piece of content is about YOUR school.</div></div>
-            <div className={s.step}><div className={s.stepNum}>4</div><div className={s.stepContent}><strong>You hire them directly.</strong> They work for YOU. Not us. Not an outsourcing company. No middleman takes a cut every month.</div></div>
-            <div className={s.step}><div className={s.stepNum}>5</div><div className={s.stepContent}><strong>6-month guarantee.</strong> If your VA leaves within 6 months, we find and train a replacement at no extra cost.</div></div>
+            <ol className={s.stepList} aria-label="How to get started">
+              <li className={s.step}><div className={s.stepNum} aria-hidden="true">1</div><div className={s.stepContent}><strong>We find your VA.</strong> Skilled, English-fluent, tested on communication and marketing. We also assess YOUR business to make sure you&apos;re ready to onboard successfully.</div></li>
+              <li className={s.step}><div className={s.stepNum} aria-hidden="true">2</div><div className={s.stepContent}><strong>We train them on Claude AI.</strong> Your VA learns every Skill and Project we build for driving schools — ready to work from day one.</div></li>
+              <li className={s.step}><div className={s.stepNum} aria-hidden="true">3</div><div className={s.stepContent}><strong>We build your custom Claude Project.</strong> Loaded with your school name, suburb, instructors, courses, competitors — everything. Every piece of content is about YOUR school.</div></li>
+              <li className={s.step}><div className={s.stepNum} aria-hidden="true">4</div><div className={s.stepContent}><strong>You hire them directly.</strong> They work for YOU. Not us. Not an outsourcing company. No middleman takes a cut every month.</div></li>
+              <li className={s.step}><div className={s.stepNum} aria-hidden="true">5</div><div className={s.stepContent}><strong>6-month guarantee.</strong> If your VA leaves within 6 months, we find and train a replacement at no extra cost.</div></li>
+            </ol>
 
             <div className={`${s.callout} ${s.calloutGreen}`}>Total investment: $2,800 USD one-time placement fee. Then approximately $820 USD/month ongoing (VA salary + Claude subscription). No retainer. No contract. No hidden fees. That&apos;s it.</div>
           </section>
@@ -435,6 +458,13 @@ export default function DrivingSchoolsPage() {
       />
 
       <Footer />
+
+      <StickyCtaBar
+        badge="Replace your $4,000/mo agency for $820/mo"
+        sub="One trained VA + Claude AI. No contract. You own everything."
+        btnLabel="Book a Free Call →"
+        btnHref="#book-call"
+      />
     </>
   );
 }

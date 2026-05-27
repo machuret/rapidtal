@@ -42,7 +42,7 @@ export default async function PortalLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-zinc-950 text-zinc-50">
+    <div className="dark flex min-h-screen bg-zinc-950 text-zinc-50">
       {/* Desktop sidebar */}
       <div className="hidden md:flex">
         <Sidebar user={ctx.user} client={ctx.client} />

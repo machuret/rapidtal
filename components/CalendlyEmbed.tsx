@@ -65,14 +65,14 @@ export default function CalendlyEmbed({
       </h2>
       <p style={{
         fontSize: '16px',
-        color: 'rgba(255,255,255,0.55)',
+        color: 'rgba(255,255,255,0.72)',
         marginBottom: '32px',
       }}>
         {subtitle}
       </p>
       <div
         ref={containerRef}
-        style={{ minWidth: '320px', height: '700px', maxWidth: '900px', margin: '0 auto' }}
+        style={{ minWidth: '320px', minHeight: '700px', height: 'auto', maxWidth: '900px', margin: '0 auto' }}
       />
     </section>
   );

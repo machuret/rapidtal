@@ -1,8 +1,10 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  // Always-dark app — use media strategy so no .dark class is needed
-  darkMode: "media",
+  // Portal is always dark — use class strategy so marketing pages stay light
+  // regardless of the user's OS dark mode preference.
+  // Portal layout adds className="dark"; marketing pages have no dark class.
+  darkMode: "class",
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",

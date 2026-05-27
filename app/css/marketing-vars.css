@@ -1,0 +1,48 @@
+/* ─── MARKETING PAGE CSS VARIABLES ────────────────────────────────────
+   Provides the CSS custom properties needed by Nav, Footer, and the
+   global sticky-cta / currency-toggle classes defined in nav.css &
+   sections.css.  Does NOT set body styles, cursor, or noise overlay —
+   those belong only to the main homepage.
+   ──────────────────────────────────────────────────────────────────── */
+:root {
+  /* ── Brand palette ── */
+  --orange:         #FF5500;
+  --orange-hot:     #FF7A00;
+  --black:          #060606;
+  --black-2:        #0e0e0e;
+  --black-3:        #161616;
+  --white:          #F5F0EB;
+  --grey:           #9a9490;
+  --grey-light:     #e0dbd4;
+  --grey-warm:      #b8b2aa;
+  --grey-muted:     #b0a99f;
+  --grey-pale:      #c8c0b8;
+
+  /* ── Borders ── */
+  --border:         #1e1e1e;
+  --border-light:   #252525;
+  --border-subtle:  #1a1a1a;
+  --border-card:    #242424;
+
+  /* ── Surfaces ── */
+  --surface-raised: #101010;
+  --surface-hover:  #131313;
+
+  /* ── Font stacks ── */
+  --font-display:   'Bebas Neue', sans-serif;
+  --font-ui:        'Barlow Condensed', sans-serif;
+  --font-body:      'DM Sans', sans-serif;
+
+  /* ── Transitions ── */
+  --ease-fast:      0.15s ease;
+  --ease-normal:    0.2s ease;
+  --ease-slow:      0.3s ease;
+  --ease-reveal:    0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Shadows ── */
+  --shadow-glow:    0 0 10px rgba(255, 85, 0, 0.6);
+  --shadow-btn:     0 8px 24px rgba(0, 0, 0, 0.4);
+
+  /* ── Layout ── */
+  --max-w:          1400px;
+}
