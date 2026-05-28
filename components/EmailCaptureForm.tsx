@@ -1,6 +1,6 @@
 'use client';
 
-import s from '@/app/driving-schools/page.module.css';
+import s from '@/app/(marketing)/driving-schools/page.module.css';
 
 export default function EmailCaptureForm() {
   return (
