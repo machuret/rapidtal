@@ -445,61 +445,6 @@
   line-height: 1.4;
 }
 
-/* ─── FORM ───────────────────────────────────────────────────────────── */
-.formGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.formGroupFull { grid-column: 1 / -1; }
-
-.formLabel {
-  font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--grey-faint);
-}
-.opt {
-  font-weight: 400;
-  color: #555;
-  text-transform: none;
-  letter-spacing: 0;
-}
-
-.formInput {
-  background: #111;
-  border: 1px solid #333;
-  color: var(--white);
-  font-family: var(--font-body);
-  font-size: 15px;
-  padding: 14px 16px;
-  outline: none;
-  transition: border-color var(--ease-normal), background var(--ease-normal);
-  appearance: none;
-  -webkit-appearance: none;
-  border-radius: 0;
-  width: 100%;
-}
-.formInput::placeholder { color: #555; }
-.formInput:focus { border-color: var(--orange); background: #141414; }
-
-.inputError { border-color: #ff5555; }
-
-.fieldError {
-  font-size: 12px;
-  color: #ff5555;
-  font-weight: 500;
-  margin-top: 2px;
-}
-
 /* ─── RESULT SCREENS ─────────────────────────────────────────────────── */
 .resultBadge {
   display: inline-flex;
@@ -663,6 +608,6 @@
 }
 
 
-.calendlyWrap { width: 100%; min-height: 541px; }
-.calendlyFrame { width: 100%; height: 541px; border: none; border-radius: 3px; }
+.calendlyWrap { width: 100%; min-height: 700px; }
+.calendlyFrame { width: 100%; height: 700px; border: none; border-radius: 3px; }
 .fallback { min-height: 100vh; background: var(--black); }

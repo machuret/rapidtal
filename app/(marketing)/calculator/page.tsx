@@ -8,6 +8,9 @@ import { useCurrency } from '@/components/CurrencyProvider';
 import { formatPrice } from '@/lib/currency';
 import type { Currency } from '@/lib/currency';
 
+const CALENDLY_URL =
+  'https://calendly.com/machuret/rapid-tal?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=ff7100';
+
 /* ─── TYPES ──────────────────────────────────────────────────────────── */
 interface Option {
   icon: string;
@@ -133,12 +136,12 @@ const TOTAL_STEPS = 7;
 function CalculatorContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { currency, phone } = useCurrency();
+  const { currency } = useCurrency();
 
   const QUESTIONS = getQuestions(currency);
   const DISQUALIFY_MAP = getDisqualifyMap(currency);
 
-  const [screen, setScreen]               = useState<'intro' | 'question' | 'form' | 'qualified' | 'disqualified'>('intro');
+  const [screen, setScreen]               = useState<'intro' | 'question' | 'form' | 'disqualified'>('intro');
   const [questionIdx, setQuestionIdx]     = useState(0);
   const [answers, setAnswers]             = useState<Record<number, Answer>>({});
   const [disqualify, setDisqualify]       = useState<DisqualifyEntry | null>(null);
@@ -149,13 +152,11 @@ function CalculatorContent() {
   const currentQ = QUESTIONS[questionIdx];
   const stepNum  = questionIdx + 1;
   const progressPct = screen === 'intro' ? 0
-    : screen === 'form' ? (6 / 7) * 100
-    : (screen === 'qualified' || screen === 'disqualified') ? 100
+    : (screen === 'form' || screen === 'disqualified') ? 100
     : (stepNum / TOTAL_STEPS) * 100;
 
   const progressLabel = screen === 'intro' ? 'Find Your Hire'
-    : (screen === 'qualified' || screen === 'disqualified') ? 'Done ✓'
-    : screen === 'form' ? '7 / 7'
+    : (screen === 'form' || screen === 'disqualified') ? 'Done ✓'
     : `${stepNum} / ${TOTAL_STEPS}`;
 
   /* sync URL with calculator state on mount */
@@ -164,18 +165,17 @@ function CalculatorContent() {
     if (step === 'contact') {
       setScreen('form');
     } else if (step) {
-      const stepNum = parseInt(step, 10);
-      if (stepNum >= 1 && stepNum <= 6) {
-        setQuestionIdx(stepNum - 1);
+      const n = parseInt(step, 10);
+      if (n >= 1 && n <= 6) {
+        setQuestionIdx(n - 1);
         setScreen('question');
       }
     }
-    
-    // Track ViewContent when calculator loads
+
     if (typeof window !== 'undefined' && (window as { fbq?: (...args: unknown[]) => void }).fbq) {
       (window as { fbq?: (...args: unknown[]) => void }).fbq!('track', 'ViewContent', {
         content_name: 'Savings Calculator',
-        content_category: 'Calculator'
+        content_category: 'Calculator',
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -192,27 +192,13 @@ function CalculatorContent() {
     }
   }, [screen, questionIdx, router]);
 
-  /* Load GHL form embed script when form screen appears */
+  /* Track Lead event when booking screen appears */
   useEffect(() => {
-    if (screen === 'form') {
-      const script = document.createElement('script');
-      script.src = 'https://link.msgsndr.com/js/form_embed.js';
-      script.async = true;
-      document.body.appendChild(script);
-      
-      // Track Lead event when form is shown
-      if (typeof window !== 'undefined' && (window as { fbq?: (...args: unknown[]) => void }).fbq) {
-        (window as { fbq?: (...args: unknown[]) => void }).fbq!('track', 'Lead', {
-          content_name: 'Calculator Contact Form',
-          content_category: 'Form'
-        });
-      }
-
-      return () => {
-        if (document.body.contains(script)) {
-          document.body.removeChild(script);
-        }
-      };
+    if (screen === 'form' && typeof window !== 'undefined' && (window as { fbq?: (...args: unknown[]) => void }).fbq) {
+      (window as { fbq?: (...args: unknown[]) => void }).fbq!('track', 'Lead', {
+        content_name: 'Calculator Booking',
+        content_category: 'Calendly',
+      });
     }
   }, [screen]);
 
@@ -228,21 +214,17 @@ function CalculatorContent() {
   }, [animating]);
 
   const selectOption = useCallback((opt: Option, qId: number) => {
-    const newAnswers = { ...answers, [qId]: { val: opt.label, qualify: opt.qualify } };
-    setAnswers(newAnswers);
+    setAnswers(prev => ({ ...prev, [qId]: { val: opt.label, qualify: opt.qualify } }));
 
-    let newDisqualify = disqualify;
     if (!opt.qualify) {
-      newDisqualify = DISQUALIFY_MAP[qId] ?? { reason: 'Outside our scope', rec: 'Visit rapidtal.com for more info.' };
-    } else if (disqualify && DISQUALIFY_MAP[qId]) {
-      newDisqualify = null;
+      const entry = DISQUALIFY_MAP[qId] ?? { reason: 'Outside our scope', rec: 'Visit rapidtal.com for more info.' };
+      setDisqualify(entry);
     }
-    setDisqualify(newDisqualify);
 
     setTimeout(() => {
       transition(() => {
         if (!opt.qualify) {
-          setScreen('form');
+          setScreen('disqualified');
         } else if (questionIdx < QUESTIONS.length - 1) {
           setQuestionIdx(questionIdx + 1);
           setScreen('question');
@@ -251,7 +233,7 @@ function CalculatorContent() {
         }
       });
     }, 300);
-  }, [answers, disqualify, questionIdx, transition]);
+  }, [DISQUALIFY_MAP, QUESTIONS.length, questionIdx, transition]);
 
 
   /* ─── RENDER ────────────────────────────────────────────────────── */
@@ -360,74 +342,23 @@ function CalculatorContent() {
               </div>
             )}
 
-            {/* ── FORM ──────────────────────────────────────────────── */}
+            {/* ── BOOKING (Calendly) ────────────────────────────────── */}
             {screen === 'form' && (
-              <div className={styles.screenInner}>
-                <div className={styles.screenWatermark}>7</div>
-                <div className={styles.stepLabel}>Step 7 of 7 — Almost There</div>
-                <div className={styles.qLayout}>
-                  <div className={styles.qRule} />
-                  <div className={styles.qContent}>
-                    <h2 className={styles.qHeadline}>
-                      One last thing —<br /><em>WHO ARE WE</em><br />TALKING TO?
-                    </h2>
-                    <p className={styles.qSub}>We&apos;ll use this to send your personalised results and reach out to book your discovery call.</p>
-                    <div className={styles.calendlyWrap}>
-                      <iframe
-                        src="https://api.leadconnectorhq.com/widget/form/ilC2jt59hjK129YJXOXR"
-                        className={styles.calendlyFrame}
-                        id="inline-ilC2jt59hjK129YJXOXR"
-                        data-layout="{'id':'INLINE'}"
-                        data-trigger-type="alwaysShow"
-                        data-trigger-value=""
-                        data-activation-type="alwaysActivated"
-                        data-activation-value=""
-                        data-deactivation-type="neverDeactivate"
-                        data-deactivation-value=""
-                        data-form-name="Calculator Form"
-                        data-height="541"
-                        data-layout-iframe-id="inline-ilC2jt59hjK129YJXOXR"
-                        data-form-id="ilC2jt59hjK129YJXOXR"
-                        title="Calculator Form"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* ── QUALIFIED ─────────────────────────────────────────── */}
-            {screen === 'qualified' && (
               <div className={styles.screenInner}>
                 <div className={`${styles.resultBadge} ${styles.qualified}`}>You&apos;re Qualified</div>
                 <h2 className={styles.resultHeadline}>
-                  YOU&apos;RE EXACTLY<br />
-                  WHO WE <em>BUILT<br />THIS FOR.</em>
+                  BOOK YOUR<br /><em>DISCOVERY CALL.</em>
                 </h2>
                 <p className={styles.resultBody}>
-                  Based on your answers, Rapid Tal is a strong match for what you need. Here&apos;s what happens next — we&apos;ll reach out within 1 business day to book your free 20-minute discovery call. No pressure, no pitch. Just a real conversation about your hire.
+                  Pick a time that works — 20 minutes, no pitch, no pressure. Just a real conversation about your hire.
                 </p>
-                <div className={styles.summaryCard}>
-                  <div className={styles.summaryCardTitle}>Your Summary</div>
-                  <div className={styles.summaryRows}>
-                    {[
-                      { key: 'Role Type',      val: answers[1]?.val },
-                      { key: 'Current Setup',  val: answers[2]?.val },
-                      { key: 'Main Goal',      val: answers[4]?.val },
-                      { key: 'Monthly Budget', val: answers[5]?.val },
-                      { key: 'Timeline',       val: answers[6]?.val },
-                      { key: 'Placement Fee',  val: formatPrice(3990, currency), green: true },
-                    ].map((r) => (
-                      <div key={r.key} className={styles.summaryRow}>
-                        <span className={styles.summaryKey}>{r.key}</span>
-                        <span className={`${styles.summaryVal} ${'green' in r && r.green ? styles.green : ''}`}>{r.val ?? '—'}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.resultCtaWrap}>
-                  <a href="https://calendly.com/machuret/rapid-tal" className={`${styles.btnPrimary} ${styles.btnFull}`}>Book Your Discovery Call →</a>
-                  <a href={`tel:${phone}`} className={styles.resultCall}>Or call us directly: {phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}</a>
+                <div className={styles.calendlyWrap}>
+                  <iframe
+                    src={CALENDLY_URL}
+                    className={styles.calendlyFrame}
+                    title="Book a discovery call"
+                    frameBorder="0"
+                  />
                 </div>
               </div>
             )}
