@@ -15,7 +15,7 @@
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: clamp(24px, 3vw, 32px);
-  font-family: var(--font-barlow);
+  font-family: var(--font-ui);
   text-transform: uppercase;
   color: var(--white);
 }
@@ -36,12 +36,12 @@
   font-weight: 700;
   color: var(--orange);
   margin-bottom: 12px;
-  font-family: var(--font-barlow);
+  font-family: var(--font-ui);
 }
 
 .featureText {
   font-size: 16px;
   line-height: 1.6;
   color: var(--white-70);
-  font-family: var(--font-dm-sans);
+  font-family: var(--ds-font);
 }

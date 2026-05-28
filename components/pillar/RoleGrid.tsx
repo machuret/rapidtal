@@ -25,7 +25,7 @@ export default function RoleGrid({ roles }: RoleGridProps) {
             fontWeight: '800',
             lineHeight: '1.1',
             marginBottom: 'clamp(40px, 5vw, 60px)',
-            fontFamily: 'var(--font-barlow)',
+            fontFamily: 'var(--font-ui)',
             textTransform: 'uppercase',
             color: 'var(--white)'
           }}>
@@ -76,7 +76,7 @@ export default function RoleGrid({ roles }: RoleGridProps) {
                       fontWeight: '700',
                       lineHeight: '1.3',
                       color: 'var(--white)',
-                      fontFamily: 'var(--font-barlow)',
+                      fontFamily: 'var(--font-ui)',
                       flex: 1
                     }}>
                       {role.title}
@@ -112,7 +112,7 @@ export default function RoleGrid({ roles }: RoleGridProps) {
                       fontSize: '14px',
                       fontWeight: '700',
                       color: 'var(--orange)',
-                      fontFamily: 'var(--font-barlow)',
+                      fontFamily: 'var(--font-ui)',
                       letterSpacing: '0.05em'
                     }}>
                       SAVE {role.saving}
@@ -123,7 +123,7 @@ export default function RoleGrid({ roles }: RoleGridProps) {
                     fontSize: '14px',
                     lineHeight: '1.6',
                     color: 'rgba(255, 255, 255, 0.6)',
-                    fontFamily: 'var(--font-dm-sans)',
+                    fontFamily: 'var(--ds-font)',
                     marginTop: '16px'
                   }}>
                     View full cost comparison →

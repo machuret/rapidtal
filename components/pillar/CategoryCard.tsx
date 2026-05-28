@@ -48,7 +48,7 @@ export default function CategoryCard({ title, slug, description, roles, savings 
             fontSize: '14px',
             fontWeight: '700',
             color: 'var(--orange)',
-            fontFamily: 'var(--font-barlow)',
+            fontFamily: 'var(--font-ui)',
             letterSpacing: '0.1em',
             textTransform: 'uppercase'
           }}>
@@ -76,7 +76,7 @@ export default function CategoryCard({ title, slug, description, roles, savings 
           fontWeight: '800',
           lineHeight: '1.2',
           color: 'var(--white)',
-          fontFamily: 'var(--font-barlow)',
+          fontFamily: 'var(--font-ui)',
           marginBottom: '16px',
           textTransform: 'uppercase'
         }}>
@@ -87,7 +87,7 @@ export default function CategoryCard({ title, slug, description, roles, savings 
           fontSize: '16px',
           lineHeight: '1.6',
           color: 'rgba(255, 255, 255, 0.6)',
-          fontFamily: 'var(--font-dm-sans)',
+          fontFamily: 'var(--ds-font)',
           marginBottom: '24px'
         }}>
           {description}
@@ -106,7 +106,7 @@ export default function CategoryCard({ title, slug, description, roles, savings 
             fontSize: '16px',
             fontWeight: '700',
             color: 'var(--orange)',
-            fontFamily: 'var(--font-barlow)',
+            fontFamily: 'var(--font-ui)',
             letterSpacing: '0.05em'
           }}>
             AVG SAVINGS: {savings}

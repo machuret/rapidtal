@@ -5,7 +5,7 @@
 }
 
 .sectionLabel {
-  font-family: var(--font-barlow);
+  font-family: var(--font-ui);
   font-weight: 700;
   font-size: 11px;
   letter-spacing: 4px;

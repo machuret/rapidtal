@@ -71,5 +71,7 @@ some, run `npm run lint:css:update` to lower the budget so it can't creep back.
       New alpha tokens added to marketing-theme.css (`--white-2` through
       `--white-70`, `--orange-10`, `--orange-30`).
 - [ ] Phase 4 — consolidate repeated page structures into shared sections.
-- [ ] Phase 5 — collapse duplicate font aliases (`--font-barlow`,
-      `--font-dm-sans`) into the canonical names, then remove them.
+- [x] **Phase 5** — collapsed duplicate font aliases. All 37 references to
+      `--font-barlow`/`--font-dm-sans` migrated to the canonical next/font
+      variables `--font-ui`/`--ds-font`; the aliases are removed from
+      marketing-theme.css.

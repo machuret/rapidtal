@@ -52,11 +52,6 @@
 
   /* ── Fonts (display/ui from next/font on <html>; body = DM Sans) ── */
   --font-body:      var(--ds-font, 'DM Sans', sans-serif);
-  /* Legacy aliases — some components reference these names. Keep them mapped
-     to the canonical next/font variables so they never resolve to nothing.
-     TODO(phase 5): migrate consumers to --font-ui / --font-body, then remove. */
-  --font-barlow:    var(--font-ui, 'Barlow Condensed', sans-serif);
-  --font-dm-sans:   var(--ds-font, 'DM Sans', sans-serif);
 
   /* ── Transitions ── */
   --ease-fast:      0.15s ease;

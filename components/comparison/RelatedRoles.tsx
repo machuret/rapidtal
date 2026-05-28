@@ -29,7 +29,7 @@ export default function RelatedRoles({ roles, category }: RelatedRolesProps) {
             textTransform: 'uppercase',
             color: 'var(--orange)',
             marginBottom: '20px',
-            fontFamily: 'var(--font-barlow)',
+            fontFamily: 'var(--font-ui)',
             textAlign: 'center'
           }}>
             More {category} Cost Comparisons
@@ -40,7 +40,7 @@ export default function RelatedRoles({ roles, category }: RelatedRolesProps) {
             fontWeight: '800',
             lineHeight: '1.1',
             marginBottom: 'clamp(40px, 5vw, 60px)',
-            fontFamily: 'var(--font-barlow)',
+            fontFamily: 'var(--font-ui)',
             textTransform: 'uppercase',
             color: 'var(--white)',
             textAlign: 'center'
@@ -90,7 +90,7 @@ export default function RelatedRoles({ roles, category }: RelatedRolesProps) {
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
                       color: 'var(--orange)',
-                      fontFamily: 'var(--font-barlow)'
+                      fontFamily: 'var(--font-ui)'
                     }}>
                       Save {role.saving}
                     </span>
@@ -116,7 +116,7 @@ export default function RelatedRoles({ roles, category }: RelatedRolesProps) {
                     fontWeight: '700',
                     lineHeight: '1.3',
                     color: 'var(--white)',
-                    fontFamily: 'var(--font-barlow)',
+                    fontFamily: 'var(--font-ui)',
                     marginBottom: '12px'
                   }}>
                     {role.title}
@@ -126,7 +126,7 @@ export default function RelatedRoles({ roles, category }: RelatedRolesProps) {
                     fontSize: '14px',
                     lineHeight: '1.6',
                     color: 'rgba(255, 255, 255, 0.6)',
-                    fontFamily: 'var(--font-dm-sans)'
+                    fontFamily: 'var(--ds-font)'
                   }}>
                     Compare Australia vs Philippines costs →
                   </p>

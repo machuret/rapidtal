@@ -24,7 +24,7 @@ export default function Breadcrumb({ category, categorySlug, roleTitle }: Breadc
           padding: 0,
           margin: 0,
           fontSize: '14px',
-          fontFamily: 'var(--font-dm-sans)',
+          fontFamily: 'var(--ds-font)',
           color: 'rgba(255, 255, 255, 0.6)'
         }}>
           <li>

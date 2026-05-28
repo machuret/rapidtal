@@ -27,7 +27,7 @@ export default function CategoryHero({ category, description, totalRoles, averag
             textTransform: 'uppercase',
             color: 'var(--orange)',
             marginBottom: '24px',
-            fontFamily: 'var(--font-barlow)'
+            fontFamily: 'var(--font-ui)'
           }}>
             Cost Comparison Hub
           </p>
@@ -37,7 +37,7 @@ export default function CategoryHero({ category, description, totalRoles, averag
             fontWeight: '800',
             lineHeight: '0.95',
             marginBottom: 'clamp(24px, 3vw, 32px)',
-            fontFamily: 'var(--font-barlow)',
+            fontFamily: 'var(--font-ui)',
             textTransform: 'uppercase',
             color: 'var(--white)',
             letterSpacing: '-0.02em'
@@ -56,7 +56,7 @@ export default function CategoryHero({ category, description, totalRoles, averag
             color: 'rgba(255, 255, 255, 0.8)',
             maxWidth: '800px',
             marginBottom: 'clamp(40px, 5vw, 60px)',
-            fontFamily: 'var(--font-dm-sans)'
+            fontFamily: 'var(--ds-font)'
           }}>
             {description}
           </p>
@@ -71,7 +71,7 @@ export default function CategoryHero({ category, description, totalRoles, averag
                 fontSize: 'clamp(36px, 5vw, 56px)',
                 fontWeight: '800',
                 color: 'var(--orange)',
-                fontFamily: 'var(--font-barlow)',
+                fontFamily: 'var(--font-ui)',
                 lineHeight: '1'
               }}>
                 {totalRoles}
@@ -80,7 +80,7 @@ export default function CategoryHero({ category, description, totalRoles, averag
                 fontSize: '14px',
                 color: 'rgba(255, 255, 255, 0.6)',
                 marginTop: '8px',
-                fontFamily: 'var(--font-dm-sans)',
+                fontFamily: 'var(--ds-font)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
                 fontWeight: '600'
@@ -94,7 +94,7 @@ export default function CategoryHero({ category, description, totalRoles, averag
                 fontSize: 'clamp(36px, 5vw, 56px)',
                 fontWeight: '800',
                 color: 'var(--orange)',
-                fontFamily: 'var(--font-barlow)',
+                fontFamily: 'var(--font-ui)',
                 lineHeight: '1'
               }}>
                 {averageSavings}
@@ -103,7 +103,7 @@ export default function CategoryHero({ category, description, totalRoles, averag
                 fontSize: '14px',
                 color: 'rgba(255, 255, 255, 0.6)',
                 marginTop: '8px',
-                fontFamily: 'var(--font-dm-sans)',
+                fontFamily: 'var(--ds-font)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
                 fontWeight: '600'
@@ -117,7 +117,7 @@ export default function CategoryHero({ category, description, totalRoles, averag
                 fontSize: 'clamp(36px, 5vw, 56px)',
                 fontWeight: '800',
                 color: 'var(--orange)',
-                fontFamily: 'var(--font-barlow)',
+                fontFamily: 'var(--font-ui)',
                 lineHeight: '1'
               }}>
                 18
@@ -126,7 +126,7 @@ export default function CategoryHero({ category, description, totalRoles, averag
                 fontSize: '14px',
                 color: 'rgba(255, 255, 255, 0.6)',
                 marginTop: '8px',
-                fontFamily: 'var(--font-dm-sans)',
+                fontFamily: 'var(--ds-font)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
                 fontWeight: '600'
@@ -140,7 +140,7 @@ export default function CategoryHero({ category, description, totalRoles, averag
                 fontSize: 'clamp(36px, 5vw, 56px)',
                 fontWeight: '800',
                 color: 'var(--orange)',
-                fontFamily: 'var(--font-barlow)',
+                fontFamily: 'var(--font-ui)',
                 lineHeight: '1'
               }}>
                 $3,990
@@ -149,7 +149,7 @@ export default function CategoryHero({ category, description, totalRoles, averag
                 fontSize: '14px',
                 color: 'rgba(255, 255, 255, 0.6)',
                 marginTop: '8px',
-                fontFamily: 'var(--font-dm-sans)',
+                fontFamily: 'var(--ds-font)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
                 fontWeight: '600'
