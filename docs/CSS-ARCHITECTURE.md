@@ -58,11 +58,12 @@ some, run `npm run lint:css:update` to lower the budget so it can't creep back.
 
 - [x] **Phase 0** — guardrails (undefined-var / inline-style / hardcoded-color
       checks) + token aliases for previously-undefined font variables.
-- [ ] Phase 1 — move marketing pages under an `app/(marketing)` route group so
-      the theme is owned by a layout, not a per-page class.
+- [x] **Phase 1** — move marketing pages under an `app/(marketing)` route group so
+      the theme is owned by a layout, not a per-page class. Inline-style
+      budget ratcheted from 424 → 360 (64 wrapper divs removed).
 - [ ] Phase 2 — single token source; retire `base.css`/`marketing-theme.css`
       duplication into one namespace.
-- [ ] Phase 3 — migrate the ~424 page-level inline styles into modules.
+- [ ] Phase 3 — migrate the ~360 page-level inline styles into modules.
 - [ ] Phase 4 — consolidate repeated page structures into shared sections.
 - [ ] Phase 5 — collapse duplicate font aliases (`--font-barlow`,
       `--font-dm-sans`) into the canonical names, then remove them.
