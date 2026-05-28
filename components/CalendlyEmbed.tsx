@@ -1,28 +1,19 @@
 'use client';
 
-import { useEffect } from 'react';
-
 interface CalendlyEmbedProps {
   title?: string;
   titleHighlight?: string;
   subtitle?: string;
 }
 
+const CALENDLY_URL =
+  'https://calendly.com/machuret/rapid-tal?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=ff7100';
+
 export default function CalendlyEmbed({
   title = 'Let us Help you find your',
   titleHighlight = 'Filipino Ninja',
   subtitle = 'Book a free discovery call — no pitch, no pressure.',
 }: CalendlyEmbedProps) {
-  useEffect(() => {
-    const existing = document.querySelector('script[src="https://assets.calendly.com/assets/external/widget.js"]');
-    if (!existing) {
-      const script = document.createElement('script');
-      script.src = 'https://assets.calendly.com/assets/external/widget.js';
-      script.async = true;
-      document.head.appendChild(script);
-    }
-  }, []);
-
   return (
     <section id="book-call" style={{
       background: '#0F0F0F',
@@ -45,11 +36,21 @@ export default function CalendlyEmbed({
       }}>
         {subtitle}
       </p>
-      {/* Standard Calendly inline widget — widget.js auto-detects this class */}
-      <div
-        className="calendly-inline-widget"
-        data-url="https://calendly.com/machuret/rapid-tal?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=ff7100"
-        style={{ minWidth: '320px', height: '700px', maxWidth: '900px', margin: '0 auto' }}
+      {/* Direct iframe — no external widget.js dependency, so it always
+          renders at the explicit height regardless of script/adblock state.
+          Matches the proven pattern in Hero.tsx and ComparisonHero.tsx. */}
+      <iframe
+        src={CALENDLY_URL}
+        title="Schedule a call"
+        frameBorder="0"
+        style={{
+          display: 'block',
+          width: '100%',
+          maxWidth: '900px',
+          height: '700px',
+          border: 'none',
+          margin: '0 auto',
+        }}
       />
     </section>
   );
