@@ -1,0 +1,26 @@
+name: CSS Guardrails
+
+# Phase 0 of the styling-architecture standardization.
+# Fails the PR if someone introduces an undefined CSS variable, a new inline
+# style in a page, or a new hardcoded color in component CSS.
+
+on:
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'scripts/check-css.mjs'
+      - 'scripts/css-baseline.json'
+  push:
+    branches: [main]
+
+jobs:
+  css-guardrails:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run CSS guardrails
+        run: node scripts/check-css.mjs

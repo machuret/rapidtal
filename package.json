@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/check-css.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:css": "node scripts/check-css.mjs",
+    "lint:css:update": "node scripts/check-css.mjs --update-baseline",
     "gen:types": "supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > types/database.ts"
   },
   "dependencies": {
