@@ -139,7 +139,7 @@ export default function CaseStudiesPage() {
         <div className={`${s.intro} reveal`}>
           <span className="section-label">Case Studies</span>
           <h2 className="section-heading">The Proof Is<br /><em>In the Numbers.</em></h2>
-          <p style={{ color: 'var(--grey-light)', maxWidth: 640, fontSize: 18, lineHeight: 1.75, marginTop: 8 }}>
+          <p className={s.introText}>
             With 85% of Australian businesses reporting skills shortages and local hires costing AU$110–120K+ annually in real terms, forward-thinking companies are finding a better way. These are three of them.
           </p>
         </div>

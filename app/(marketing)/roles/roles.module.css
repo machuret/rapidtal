@@ -1,0 +1,250 @@
+.heroSection {
+  padding: clamp(80px, 12vw, 140px) clamp(20px, 4vw, 60px) clamp(40px, 6vw, 60px);
+  background: var(--black);
+  border-bottom: 1px solid var(--white-10);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.breadcrumb {
+  margin-bottom: 24px;
+}
+
+.breadcrumbLink {
+  font-size: 14px;
+  color: var(--white-50);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumbLink:hover {
+  color: var(--white-70);
+}
+
+.categoryLabel {
+  display: inline-block;
+  font-size: clamp(11px, 1.2vw, 13px);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: clamp(16px, 2vw, 24px);
+  font-weight: 500;
+}
+
+.heroHeading {
+  font-size: clamp(42px, 6vw, 72px);
+  line-height: 1.1;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: clamp(24px, 3vw, 32px);
+  letter-spacing: -0.02em;
+}
+
+.accentWord {
+  font-style: normal;
+  color: var(--orange);
+}
+
+.heroDesc {
+  font-size: clamp(16px, 1.8vw, 20px);
+  line-height: 1.6;
+  color: var(--white-70);
+  max-width: 700px;
+}
+
+.gridSection {
+  padding: clamp(60px, 8vw, 100px) clamp(20px, 4vw, 60px);
+  background: var(--black);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: clamp(20px, 2.5vw, 28px);
+}
+
+.roleCard {
+  display: block;
+  padding: clamp(24px, 3vw, 32px);
+  background: var(--white-3);
+  border: 1px solid var(--white-10);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.roleCard:hover {
+  background: var(--white-5);
+  border-color: var(--orange);
+  transform: translateY(-4px);
+}
+
+.cardTitle {
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.price {
+  font-size: clamp(24px, 2.8vw, 28px);
+  font-weight: 700;
+  color: var(--orange);
+}
+
+.priceUnit {
+  font-size: clamp(13px, 1.4vw, 15px);
+  color: var(--white-50);
+}
+
+.savingsBadge {
+  padding: 8px 12px;
+  background: var(--orange-10);
+  border: 1px solid var(--orange-30);
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.savingsText {
+  font-size: 14px;
+  color: var(--orange);
+  font-weight: 600;
+}
+
+.cardCta {
+  font-size: 14px;
+  color: var(--orange);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.ctaSection {
+  padding: clamp(60px, 8vw, 80px) clamp(20px, 4vw, 60px);
+  background: var(--white-2);
+  border-top: 1px solid var(--white-10);
+  text-align: center;
+}
+
+.ctaContainer {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ctaHeading {
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 20px;
+  letter-spacing: -0.01em;
+}
+
+.ctaText {
+  font-size: clamp(15px, 1.7vw, 18px);
+  line-height: 1.6;
+  color: var(--white-70);
+  margin-bottom: 28px;
+}
+
+.ctaBtn {
+  display: inline-block;
+  padding: 16px 32px;
+  background: var(--orange);
+  color: var(--black);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: transform 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.ctaBtn:hover {
+  transform: translateY(-2px);
+}
+
+/* ── Roles index (all-categories) page ───────────────────────────── */
+.heroSectionIndex {
+  padding: clamp(80px, 12vw, 140px) clamp(20px, 4vw, 60px) clamp(60px, 8vw, 100px);
+  background: var(--black);
+  border-bottom: 1px solid var(--white-10);
+}
+
+.heroDescWithMargin {
+  font-size: clamp(16px, 1.8vw, 20px);
+  line-height: 1.6;
+  color: var(--white-70);
+  max-width: 700px;
+  margin-bottom: clamp(32px, 4vw, 48px);
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(24px, 3vw, 32px);
+}
+
+.categoryCard {
+  display: block;
+  padding: clamp(32px, 4vw, 40px);
+  background: var(--white-3);
+  border: 1px solid var(--white-10);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.categoryCard:hover {
+  background: var(--white-5);
+  border-color: var(--orange);
+  transform: translateY(-4px);
+}
+
+.categoryTitle {
+  font-size: clamp(24px, 2.5vw, 28px);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.categoryDesc {
+  font-size: clamp(14px, 1.5vw, 16px);
+  line-height: 1.6;
+  color: var(--white-60);
+  margin-bottom: 20px;
+}
+
+.roleTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.roleTag {
+  font-size: 12px;
+  padding: 4px 10px;
+  background: var(--white-5);
+  color: var(--white-50);
+  border-radius: 4px;
+  border: 1px solid var(--white-10);
+}
+
+.moreRoles {
+  font-size: 12px;
+  padding: 4px 10px;
+  color: var(--orange);
+}

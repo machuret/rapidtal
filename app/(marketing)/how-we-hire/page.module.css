@@ -1,0 +1,259 @@
+/* ── Hero Section ───────────────────────────────────────────────────── */
+.heroSection {
+  padding: clamp(80px, 12vw, 140px) clamp(20px, 4vw, 60px) clamp(60px, 8vw, 80px);
+  background: var(--black);
+  border-bottom: 1px solid var(--white-10);
+}
+
+.heroInner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.heroEyebrow {
+  display: inline-block;
+  font-size: clamp(11px, 1.2vw, 13px);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: clamp(16px, 2vw, 24px);
+  font-weight: 500;
+}
+
+.heroTitle {
+  font-size: clamp(42px, 6vw, 72px);
+  line-height: 1.1;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: clamp(24px, 3vw, 32px);
+  letter-spacing: -0.02em;
+}
+
+.heroTitleAccent {
+  font-style: normal;
+  color: var(--orange);
+}
+
+.heroBody {
+  font-size: clamp(16px, 1.8vw, 20px);
+  line-height: 1.6;
+  color: var(--white-70);
+  max-width: 700px;
+}
+
+/* ── Process Section ────────────────────────────────────────────────── */
+.processSection {
+  padding: clamp(60px, 8vw, 100px) clamp(20px, 4vw, 60px);
+  background: var(--black);
+}
+
+.processInner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.stepList {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(48px, 6vw, 64px);
+}
+
+.stepRow {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(24px, 4vw, 48px);
+  padding-bottom: clamp(48px, 6vw, 64px);
+  border-bottom: 1px solid var(--white-10);
+}
+
+.stepRowLast {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(24px, 4vw, 48px);
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.stepNumber {
+  font-size: clamp(48px, 6vw, 72px);
+  font-weight: 700;
+  color: var(--orange);
+  line-height: 1;
+  opacity: 0.3;
+  min-width: clamp(60px, 8vw, 100px);
+}
+
+.stepContent {
+  /* layout container */
+}
+
+.stepHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.stepTitle {
+  font-size: clamp(24px, 2.8vw, 32px);
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.01em;
+}
+
+.stepDuration {
+  font-size: clamp(13px, 1.4vw, 15px);
+  color: var(--orange);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.stepDescription {
+  font-size: clamp(15px, 1.6vw, 18px);
+  line-height: 1.7;
+  color: var(--white-70);
+  margin-bottom: 24px;
+}
+
+.stepDetailList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stepDetailItem {
+  font-size: clamp(14px, 1.5vw, 16px);
+  color: var(--white-50);
+  padding-left: 20px;
+  position: relative;
+}
+
+.stepDetailArrow {
+  position: absolute;
+  left: 0;
+  color: var(--orange);
+}
+
+/* ── Guarantees Section ─────────────────────────────────────────────── */
+.guaranteesSection {
+  padding: clamp(60px, 8vw, 100px) clamp(20px, 4vw, 60px);
+  background: var(--white-2);
+  border-top: 1px solid var(--white-10);
+  border-bottom: 1px solid var(--white-10);
+}
+
+.guaranteesInner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.guaranteesTitle {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: clamp(32px, 4vw, 48px);
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.guaranteesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(24px, 3vw, 32px);
+}
+
+.guaranteeCard {
+  padding: clamp(28px, 3.5vw, 36px);
+  background: var(--white-3);
+  border: 1px solid var(--white-10);
+  border-radius: 8px;
+}
+
+.guaranteeCardTitle {
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.guaranteeCardBody {
+  font-size: clamp(14px, 1.5vw, 16px);
+  line-height: 1.6;
+  color: var(--white-60);
+  margin: 0;
+}
+
+/* ── CTA Section ────────────────────────────────────────────────────── */
+.ctaSection {
+  padding: clamp(60px, 8vw, 100px) clamp(20px, 4vw, 60px);
+  background: var(--black);
+  text-align: center;
+}
+
+.ctaInner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ctaTitle {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 24px;
+  letter-spacing: -0.01em;
+}
+
+.ctaBody {
+  font-size: clamp(16px, 1.8vw, 20px);
+  line-height: 1.6;
+  color: var(--white-70);
+  margin-bottom: 32px;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ctaBtnPrimary {
+  display: inline-block;
+  padding: 16px 32px;
+  background: var(--orange);
+  color: var(--black);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: transform 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.ctaBtnPrimary:hover {
+  transform: translateY(-1px);
+}
+
+.ctaBtnSecondary {
+  display: inline-block;
+  padding: 16px 32px;
+  background: transparent;
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  border: 1px solid var(--white-10);
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.ctaBtnSecondary:hover {
+  border-color: var(--white-50);
+}

@@ -505,3 +505,5 @@
   .step { flex-direction: column; gap: .4rem; }
   .cover { padding: 2rem 1.5rem; }
 }
+
+.savings { color: var(--cpa-green); }

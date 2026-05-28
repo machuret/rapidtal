@@ -372,10 +372,10 @@ function CalculatorContent() {
                       One last thing —<br /><em>WHO ARE WE</em><br />TALKING TO?
                     </h2>
                     <p className={styles.qSub}>We&apos;ll use this to send your personalised results and reach out to book your discovery call.</p>
-                    <div style={{ width: '100%', minHeight: '541px' }}>
+                    <div className={styles.calendlyWrap}>
                       <iframe
                         src="https://api.leadconnectorhq.com/widget/form/ilC2jt59hjK129YJXOXR"
-                        style={{ width: '100%', height: '541px', border: 'none', borderRadius: '3px' }}
+                        className={styles.calendlyFrame}
                         id="inline-ilC2jt59hjK129YJXOXR"
                         data-layout="{'id':'INLINE'}"
                         data-trigger-type="alwaysShow"
@@ -467,7 +467,7 @@ function CalculatorContent() {
 
 export default function CalculatorPage() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#060606' }} />}>
+    <Suspense fallback={<div className={styles.fallback} />}>
       <CalculatorContent />
     </Suspense>
   );

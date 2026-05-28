@@ -10,6 +10,7 @@ import {
 } from '@/components/comparison';
 import { ROLES } from '@/data/roles';
 import CursorTracker from '@/components/CursorTracker';
+import s from '@/components/comparison/page.module.css';
 
 // Dynamic imports for below-the-fold components
 const RoleDescription = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.RoleDescription })), { ssr: true });
@@ -87,10 +88,10 @@ export default function HireCrmManagerPage() {
         roleTitle={role.title}
         roleDescription={role.roleDescription}
       />
-      <section style={{ padding: 'clamp(60px, 8vw, 80px) clamp(20px, 4vw, 60px)', background: 'var(--black)', maxWidth: 'var(--max-w)', margin: '0 auto' }}>
+      <section className={s.relatedSection}>
         <SectionHeader 
           tag="The Real Numbers"
-          title={<>WHAT IT <em style={{ fontStyle: 'normal', color: 'var(--orange)' }}>ACTUALLY COSTS</em><br />MONTH BY MONTH.</>}
+          title={<>WHAT IT <em className={s.accentWord}>ACTUALLY COSTS</em><br />MONTH BY MONTH.</>}
         />
         <ComparisonTable costs={role.costs} />
       </section>

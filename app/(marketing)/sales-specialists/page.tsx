@@ -3,6 +3,7 @@ import { ComparisonNav, ComparisonFooter, AnimatedCTA } from '@/components/compa
 import { CategoryHero, RoleGrid } from '@/components/pillar';
 import { ROLES } from '@/data/roles';
 import CursorTracker from '@/components/CursorTracker';
+import s from '../specialists.module.css';
 
 export const metadata: Metadata = {
   title: 'Hire Sales Specialists from Philippines | Save up to 82% | Rapid Tal',
@@ -39,107 +40,45 @@ export default function SalesSpecialistsPage() {
 
       <AnimatedCTA variant="primary" />
 
-      <section style={{
-        padding: 'clamp(60px, 8vw, 100px) clamp(20px, 4vw, 60px)',
-        background: 'rgba(255, 255, 255, 0.02)',
-        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-      }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <h2 style={{
-            fontSize: 'clamp(32px, 4vw, 48px)',
-            fontWeight: '800',
-            lineHeight: '1.1',
-            marginBottom: 'clamp(24px, 3vw, 32px)',
-            fontFamily: 'var(--font-barlow)',
-            textTransform: 'uppercase',
-            color: 'var(--white)'
-          }}>
-            WHY HIRE SALES <span style={{ color: 'var(--orange)' }}>FROM THE PHILIPPINES?</span>
+      <section className={s.whySection}>
+        <div className={s.container}>
+          <h2 className={s.sectionHeading}>
+            WHY HIRE SALES <span className={s.accentSpan}>FROM THE PHILIPPINES?</span>
           </h2>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 'clamp(30px, 4vw, 40px)',
-            marginTop: 'clamp(40px, 5vw, 60px)'
-          }}>
+          <div className={s.grid}>
             <div>
-              <h3 style={{
-                fontSize: '20px',
-                fontWeight: '700',
-                color: 'var(--orange)',
-                marginBottom: '12px',
-                fontFamily: 'var(--font-barlow)'
-              }}>
+              <h3 className={s.featureTitle}>
                 Natural Relationship Builders
               </h3>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontFamily: 'var(--font-dm-sans)'
-              }}>
+              <p className={s.featureText}>
                 Filipino sales professionals excel at building genuine relationships with prospects. They&apos;re naturally warm, patient, and persistent without being pushy.
               </p>
             </div>
 
             <div>
-              <h3 style={{
-                fontSize: '20px',
-                fontWeight: '700',
-                color: 'var(--orange)',
-                marginBottom: '12px',
-                fontFamily: 'var(--font-barlow)'
-              }}>
+              <h3 className={s.featureTitle}>
                 Excellent Communication
               </h3>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontFamily: 'var(--font-dm-sans)'
-              }}>
+              <p className={s.featureText}>
                 Clear English communication with neutral accents. They understand Australian business culture and can build rapport with local prospects easily.
               </p>
             </div>
 
             <div>
-              <h3 style={{
-                fontSize: '20px',
-                fontWeight: '700',
-                color: 'var(--orange)',
-                marginBottom: '12px',
-                fontFamily: 'var(--font-barlow)'
-              }}>
+              <h3 className={s.featureTitle}>
                 Process-Driven
               </h3>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontFamily: 'var(--font-dm-sans)'
-              }}>
+              <p className={s.featureText}>
                 They follow sales processes meticulously, track every interaction in your CRM, and maintain consistent activity levels that drive predictable pipeline growth.
               </p>
             </div>
 
             <div>
-              <h3 style={{
-                fontSize: '20px',
-                fontWeight: '700',
-                color: 'var(--orange)',
-                marginBottom: '12px',
-                fontFamily: 'var(--font-barlow)'
-              }}>
+              <h3 className={s.featureTitle}>
                 Incredible Value
               </h3>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontFamily: 'var(--font-dm-sans)'
-              }}>
+              <p className={s.featureText}>
                 Save 70-82% compared to hiring locally. Build a full sales team for the cost of one local SDR and scale your pipeline without scaling your costs.
               </p>
             </div>

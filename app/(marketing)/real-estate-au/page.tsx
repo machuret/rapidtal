@@ -272,7 +272,7 @@ export default function RealEstateAuPage() {
                 </tbody>
               </table>
             </div>
-            <p style={{ fontSize: '.82rem', color: '#999', fontStyle: 'italic' }}>*Your time valued at AUD $100–$150/hr — a conservative estimate based on average commission per hour of dollar-productive activity for Australian agents.</p>
+            <p className={s.footnote}>*Your time valued at AUD $100–$150/hr — a conservative estimate based on average commission per hour of dollar-productive activity for Australian agents.</p>
             <div className={s.callout}>You&apos;re either spending 40 hours a week doing this yourself (and burning out), or you&apos;re NOT doing it (and losing listings to the agent who is). Your VA solves it for AUD $325 a week. That&apos;s less than the cost of one Premiere listing on realestate.com.au.</div>
           </section>
 

@@ -1,0 +1,172 @@
+/* ── Hero Section ───────────────────────────────────────────────────── */
+.heroSection {
+  padding: clamp(100px, 15vw, 160px) clamp(20px, 4vw, 60px) clamp(80px, 10vw, 120px);
+  background: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+
+.heroInner {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.heroEyebrow {
+  font-size: clamp(12px, 1.5vw, 14px);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 24px;
+  font-family: var(--font-barlow);
+  text-align: center;
+}
+
+.heroTitle {
+  font-size: clamp(56px, 10vw, 120px);
+  font-weight: 800;
+  line-height: 0.9;
+  margin-bottom: clamp(32px, 4vw, 48px);
+  font-family: var(--font-barlow);
+  text-transform: uppercase;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.heroTitleAccent {
+  color: var(--orange);
+}
+
+.heroSubtitle {
+  font-size: clamp(20px, 3vw, 28px);
+  line-height: 1.5;
+  color: var(--white-70);
+  max-width: 900px;
+  margin: 0 auto;
+  margin-bottom: clamp(50px, 6vw, 80px);
+  font-family: var(--font-dm-sans);
+  text-align: center;
+}
+
+.heroSubtitleStrong {
+  color: var(--white);
+}
+
+.heroStats {
+  display: flex;
+  gap: clamp(40px, 5vw, 80px);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.statNumber {
+  font-size: clamp(48px, 7vw, 80px);
+  font-weight: 800;
+  color: var(--orange);
+  font-family: var(--font-barlow);
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 16px;
+  color: var(--white-60);
+  margin-top: 12px;
+  font-family: var(--font-dm-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+.heroGlow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 0%, var(--orange-10) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Categories Section ─────────────────────────────────────────────── */
+.categoriesSection {
+  padding: clamp(80px, 10vw, 120px) clamp(20px, 4vw, 60px);
+  background: var(--black);
+}
+
+.categoriesInner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.categoriesTitle {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: clamp(48px, 6vw, 80px);
+  font-family: var(--font-barlow);
+  text-transform: uppercase;
+  color: var(--white);
+  text-align: center;
+}
+
+.categoriesTitleAccent {
+  color: var(--orange);
+}
+
+.categoriesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: clamp(24px, 3vw, 32px);
+}
+
+/* ── Direct Hire Section ────────────────────────────────────────────── */
+.directHireSection {
+  padding: clamp(80px, 10vw, 120px) clamp(20px, 4vw, 60px);
+  background: var(--white-2);
+  border-top: 1px solid var(--white-10);
+  border-bottom: 1px solid var(--white-10);
+}
+
+.directHireInner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.directHireTitle {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: clamp(32px, 4vw, 48px);
+  font-family: var(--font-barlow);
+  text-transform: uppercase;
+  color: var(--white);
+  text-align: center;
+}
+
+.directHireTitleAccent {
+  color: var(--orange);
+}
+
+.directHireBody {
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--white-70);
+  font-family: var(--font-dm-sans);
+}
+
+.directHireParagraph {
+  margin-bottom: 24px;
+}
+
+.directHireParagraphLast {
+  margin-bottom: 0;
+}
+
+.directHireAccent {
+  color: var(--orange);
+}

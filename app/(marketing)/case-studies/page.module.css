@@ -292,3 +292,5 @@
   .cta { padding: 80px 24px; }
   .ctaActions { flex-direction: column; gap: 16px; }
 }
+
+.introText { color: var(--grey-light); max-width: 640px; font-size: 18px; line-height: 1.75; margin-top: 8px; }

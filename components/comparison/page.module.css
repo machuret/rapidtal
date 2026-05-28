@@ -1,0 +1,11 @@
+.relatedSection {
+  padding: clamp(60px, 8vw, 80px) clamp(20px, 4vw, 60px);
+  background: var(--black);
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+.accentWord {
+  font-style: normal;
+  color: var(--orange);
+}

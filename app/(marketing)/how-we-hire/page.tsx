@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import CursorTracker from '@/components/CursorTracker';
+import s from './page.module.css';
 
 const ComparisonNav = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonNav })), { ssr: true });
 const ComparisonFooter = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonFooter })), { ssr: true });
@@ -107,136 +108,58 @@ export default function HowWeHirePage() {
     <>
       <CursorTracker />
       <ComparisonNav />
-      
-      <section style={{ 
-        padding: 'clamp(80px, 12vw, 140px) clamp(20px, 4vw, 60px) clamp(60px, 8vw, 80px)',
-        background: 'var(--black)',
-        borderBottom: '1px solid rgba(255,255,255,0.1)'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <span style={{
-            display: 'inline-block',
-            fontSize: 'clamp(11px, 1.2vw, 13px)',
-            letterSpacing: '0.15em',
-            textTransform: 'uppercase',
-            color: 'var(--orange)',
-            marginBottom: 'clamp(16px, 2vw, 24px)',
-            fontWeight: 500
-          }}>
+
+      <section className={s.heroSection}>
+        <div className={s.heroInner}>
+          <span className={s.heroEyebrow}>
             — Our Process
           </span>
-          
-          <h1 style={{
-            fontSize: 'clamp(42px, 6vw, 72px)',
-            lineHeight: 1.1,
-            fontWeight: 700,
-            color: 'var(--white)',
-            marginBottom: 'clamp(24px, 3vw, 32px)',
-            letterSpacing: '-0.02em'
-          }}>
+
+          <h1 className={s.heroTitle}>
             HOW WE<br />
-            <em style={{ fontStyle: 'normal', color: 'var(--orange)' }}>HIRE</em><br />
+            <em className={s.heroTitleAccent}>HIRE</em><br />
             FOR YOU.
           </h1>
-          
-          <p style={{
-            fontSize: 'clamp(16px, 1.8vw, 20px)',
-            lineHeight: 1.6,
-            color: 'rgba(255,255,255,0.7)',
-            maxWidth: '700px'
-          }}>
+
+          <p className={s.heroBody}>
             Our recruitment process is built for speed and quality. No agencies. No markup. No 60-day hiring cycles. Just experienced candidates who can start contributing from day one.
           </p>
         </div>
       </section>
 
-      <section style={{ 
-        padding: 'clamp(60px, 8vw, 100px) clamp(20px, 4vw, 60px)',
-        background: 'var(--black)'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(48px, 6vw, 64px)' }}>
+      <section className={s.processSection}>
+        <div className={s.processInner}>
+          <div className={s.stepList}>
             {PROCESS_STEPS.map((step, idx) => (
-              <div 
+              <div
                 key={step.number}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'auto 1fr',
-                  gap: 'clamp(24px, 4vw, 48px)',
-                  paddingBottom: idx < PROCESS_STEPS.length - 1 ? 'clamp(48px, 6vw, 64px)' : '0',
-                  borderBottom: idx < PROCESS_STEPS.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none'
-                }}
+                className={idx < PROCESS_STEPS.length - 1 ? s.stepRow : s.stepRowLast}
               >
-                <div style={{ 
-                  fontSize: 'clamp(48px, 6vw, 72px)',
-                  fontWeight: 700,
-                  color: 'var(--orange)',
-                  lineHeight: 1,
-                  opacity: 0.3,
-                  minWidth: 'clamp(60px, 8vw, 100px)'
-                }}>
+                <div className={s.stepNumber}>
                   {step.number}
                 </div>
-                
-                <div>
-                  <div style={{ 
-                    display: 'flex', 
-                    alignItems: 'baseline', 
-                    gap: '16px',
-                    marginBottom: '12px',
-                    flexWrap: 'wrap'
-                  }}>
-                    <h2 style={{
-                      fontSize: 'clamp(24px, 2.8vw, 32px)',
-                      fontWeight: 700,
-                      color: 'var(--white)',
-                      letterSpacing: '-0.01em'
-                    }}>
+
+                <div className={s.stepContent}>
+                  <div className={s.stepHeader}>
+                    <h2 className={s.stepTitle}>
                       {step.title}
                     </h2>
-                    <span style={{
-                      fontSize: 'clamp(13px, 1.4vw, 15px)',
-                      color: 'var(--orange)',
-                      fontWeight: 600,
-                      letterSpacing: '0.05em',
-                      textTransform: 'uppercase'
-                    }}>
+                    <span className={s.stepDuration}>
                       {step.duration}
                     </span>
                   </div>
-                  
-                  <p style={{
-                    fontSize: 'clamp(15px, 1.6vw, 18px)',
-                    lineHeight: 1.7,
-                    color: 'rgba(255,255,255,0.7)',
-                    marginBottom: '24px'
-                  }}>
+
+                  <p className={s.stepDescription}>
                     {step.description}
                   </p>
 
-                  <ul style={{
-                    listStyle: 'none',
-                    padding: 0,
-                    margin: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '10px'
-                  }}>
+                  <ul className={s.stepDetailList}>
                     {step.details.map((detail, detailIdx) => (
-                      <li 
+                      <li
                         key={detailIdx}
-                        style={{
-                          fontSize: 'clamp(14px, 1.5vw, 16px)',
-                          color: 'rgba(255,255,255,0.5)',
-                          paddingLeft: '20px',
-                          position: 'relative'
-                        }}
+                        className={s.stepDetailItem}
                       >
-                        <span style={{
-                          position: 'absolute',
-                          left: 0,
-                          color: 'var(--orange)'
-                        }}>→</span>
+                        <span className={s.stepDetailArrow}>→</span>
                         {detail}
                       </li>
                     ))}
@@ -248,54 +171,22 @@ export default function HowWeHirePage() {
         </div>
       </section>
 
-      <section style={{ 
-        padding: 'clamp(60px, 8vw, 100px) clamp(20px, 4vw, 60px)',
-        background: 'rgba(255,255,255,0.02)',
-        borderTop: '1px solid rgba(255,255,255,0.1)',
-        borderBottom: '1px solid rgba(255,255,255,0.1)'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h2 style={{
-            fontSize: 'clamp(32px, 4vw, 48px)',
-            fontWeight: 700,
-            color: 'var(--white)',
-            marginBottom: 'clamp(32px, 4vw, 48px)',
-            letterSpacing: '-0.01em',
-            textAlign: 'center'
-          }}>
+      <section className={s.guaranteesSection}>
+        <div className={s.guaranteesInner}>
+          <h2 className={s.guaranteesTitle}>
             Our Guarantees
           </h2>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: 'clamp(24px, 3vw, 32px)'
-          }}>
+          <div className={s.guaranteesGrid}>
             {GUARANTEES.map((guarantee) => (
               <div
                 key={guarantee.title}
-                style={{
-                  padding: 'clamp(28px, 3.5vw, 36px)',
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '8px'
-                }}
+                className={s.guaranteeCard}
               >
-                <h3 style={{
-                  fontSize: 'clamp(18px, 2vw, 22px)',
-                  fontWeight: 700,
-                  color: 'var(--orange)',
-                  marginBottom: '12px',
-                  letterSpacing: '-0.01em'
-                }}>
+                <h3 className={s.guaranteeCardTitle}>
                   {guarantee.title}
                 </h3>
-                <p style={{
-                  fontSize: 'clamp(14px, 1.5vw, 16px)',
-                  lineHeight: 1.6,
-                  color: 'rgba(255,255,255,0.6)',
-                  margin: 0
-                }}>
+                <p className={s.guaranteeCardBody}>
                   {guarantee.description}
                 </p>
               </div>
@@ -304,70 +195,27 @@ export default function HowWeHirePage() {
         </div>
       </section>
 
-      <section style={{ 
-        padding: 'clamp(60px, 8vw, 100px) clamp(20px, 4vw, 60px)',
-        background: 'var(--black)',
-        textAlign: 'center'
-      }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h2 style={{
-            fontSize: 'clamp(32px, 4vw, 48px)',
-            fontWeight: 700,
-            color: 'var(--white)',
-            marginBottom: '24px',
-            letterSpacing: '-0.01em'
-          }}>
+      <section className={s.ctaSection}>
+        <div className={s.ctaInner}>
+          <h2 className={s.ctaTitle}>
             Ready to Start Hiring?
           </h2>
-          
-          <p style={{
-            fontSize: 'clamp(16px, 1.8vw, 20px)',
-            lineHeight: 1.6,
-            color: 'rgba(255,255,255,0.7)',
-            marginBottom: '32px'
-          }}>
+
+          <p className={s.ctaBody}>
             Browse our roles or book a call to discuss your hiring needs.
           </p>
 
-          <div style={{
-            display: 'flex',
-            gap: '16px',
-            justifyContent: 'center',
-            flexWrap: 'wrap'
-          }}>
-            <Link 
+          <div className={s.ctaButtons}>
+            <Link
               href="/roles"
-              style={{
-                display: 'inline-block',
-                padding: '16px 32px',
-                background: 'var(--orange)',
-                color: 'var(--black)',
-                fontSize: '15px',
-                fontWeight: 600,
-                textDecoration: 'none',
-                borderRadius: '4px',
-                transition: 'transform 0.2s ease',
-                letterSpacing: '0.02em'
-              }}
+              className={s.ctaBtnPrimary}
             >
               Browse Roles
             </Link>
-            
-            <a 
+
+            <a
               href="https://calendly.com/machuret/rapid-tal"
-              style={{
-                display: 'inline-block',
-                padding: '16px 32px',
-                background: 'transparent',
-                color: 'var(--white)',
-                fontSize: '15px',
-                fontWeight: 600,
-                textDecoration: 'none',
-                borderRadius: '4px',
-                border: '1px solid rgba(255,255,255,0.2)',
-                transition: 'all 0.2s ease',
-                letterSpacing: '0.02em'
-              }}
+              className={s.ctaBtnSecondary}
             >
               Book a Call
             </a>

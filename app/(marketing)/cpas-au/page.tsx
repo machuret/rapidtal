@@ -333,10 +333,10 @@ export default function CPAsAUPage() {
           </div>
 
           <h3>The Savings</h3>
-          <p><strong>Accounting VA vs. local:</strong> $80,000 − $15,600 = <strong style={{color:'#1B7340'}}>AUD $64,400 saved/year.</strong></p>
-          <p><strong>Accounting VA vs. BPO:</strong> $42,000 − $15,600 = <strong style={{color:'#1B7340'}}>AUD $26,400 saved/year</strong> (and you own the relationship).</p>
-          <p><strong>Marketing VA vs. agency:</strong> $54,000 − $15,960 = <strong style={{color:'#1B7340'}}>AUD $38,040 saved/year.</strong></p>
-          <p><strong>Both VAs vs. local + agency:</strong> $134,000 − $31,560 = <strong style={{color:'#1B7340'}}>AUD $102,440 saved/year.</strong></p>
+          <p><strong>Accounting VA vs. local:</strong> $80,000 − $15,600 = <strong className={s.savings}>AUD $64,400 saved/year.</strong></p>
+          <p><strong>Accounting VA vs. BPO:</strong> $42,000 − $15,600 = <strong className={s.savings}>AUD $26,400 saved/year</strong> (and you own the relationship).</p>
+          <p><strong>Marketing VA vs. agency:</strong> $54,000 − $15,960 = <strong className={s.savings}>AUD $38,040 saved/year.</strong></p>
+          <p><strong>Both VAs vs. local + agency:</strong> $134,000 − $31,560 = <strong className={s.savings}>AUD $102,440 saved/year.</strong></p>
           <div className={s.callout}>Over 3 years with both VAs: AUD $298,820 saved. Add recovered billable hours ($97,500+ per CPA/year) and the maths becomes absurd. This isn&apos;t cost-cutting. It&apos;s the most profitable investment you&apos;ll make this year.</div>
         </section>
 

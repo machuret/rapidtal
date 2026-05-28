@@ -315,7 +315,7 @@ export default function DrivingSchoolsPage() {
                     </tbody>
                   </table>
                 </div>
-                <p style={{ fontSize: '.85rem', color: '#999', fontStyle: 'italic' }}>*Your time valued at $50–$75/hr — a conservative estimate of what you COULD be earning if you were teaching, training, or growing the business.</p>
+                <p className={s.footnote}>*Your time valued at $50–$75/hr — a conservative estimate of what you COULD be earning if you were teaching, training, or growing the business.</p>
                 <div className={s.callout}>You&apos;re either spending 34 hours a week doing this yourself (and burning out), or you&apos;re NOT doing it (and losing students). Either way, your VA solves it — for $200 a week.</div>
               </section>
 
@@ -382,7 +382,7 @@ export default function DrivingSchoolsPage() {
                     </tbody>
                   </table>
                 </div>
-                <p style={{ fontSize: '.85rem', color: '#999', fontStyle: 'italic' }}>*VA salary ~$800 USD/month paid directly by you. Claude Pro $20 USD/month. One-time RapidTal placement fee of $2,800 USD.</p>
+                <p className={s.footnote}>*VA salary ~$800 USD/month paid directly by you. Claude Pro $20 USD/month. One-time RapidTal placement fee of $2,800 USD.</p>
 
                 <h3>Annual Savings Breakdown</h3>
                 <p>Let&apos;s walk through this clearly, because the numbers are staggering when you see them laid out.</p>

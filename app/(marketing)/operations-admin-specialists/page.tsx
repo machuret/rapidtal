@@ -3,6 +3,7 @@ import { ComparisonNav, ComparisonFooter, AnimatedCTA } from '@/components/compa
 import { CategoryHero, RoleGrid } from '@/components/pillar';
 import { ROLES } from '@/data/roles';
 import CursorTracker from '@/components/CursorTracker';
+import s from '../specialists.module.css';
 
 export const metadata: Metadata = {
   title: 'Hire Operations & Admin Specialists from Philippines | Save up to 81% | Rapid Tal',
@@ -39,107 +40,45 @@ export default function OperationsAdminSpecialistsPage() {
 
       <AnimatedCTA variant="primary" />
 
-      <section style={{
-        padding: 'clamp(60px, 8vw, 100px) clamp(20px, 4vw, 60px)',
-        background: 'rgba(255, 255, 255, 0.02)',
-        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-      }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <h2 style={{
-            fontSize: 'clamp(32px, 4vw, 48px)',
-            fontWeight: '800',
-            lineHeight: '1.1',
-            marginBottom: 'clamp(24px, 3vw, 32px)',
-            fontFamily: 'var(--font-barlow)',
-            textTransform: 'uppercase',
-            color: 'var(--white)'
-          }}>
-            WHY HIRE OPERATIONS <span style={{ color: 'var(--orange)' }}>FROM THE PHILIPPINES?</span>
+      <section className={s.whySection}>
+        <div className={s.container}>
+          <h2 className={s.sectionHeading}>
+            WHY HIRE OPERATIONS <span className={s.accentSpan}>FROM THE PHILIPPINES?</span>
           </h2>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 'clamp(30px, 4vw, 40px)',
-            marginTop: 'clamp(40px, 5vw, 60px)'
-          }}>
+          <div className={s.grid}>
             <div>
-              <h3 style={{
-                fontSize: '20px',
-                fontWeight: '700',
-                color: 'var(--orange)',
-                marginBottom: '12px',
-                fontFamily: 'var(--font-barlow)'
-              }}>
+              <h3 className={s.featureTitle}>
                 Reliability & Consistency
               </h3>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontFamily: 'var(--font-dm-sans)'
-              }}>
+              <p className={s.featureText}>
                 Filipino operations professionals are known for their reliability, attention to detail, and consistent work quality. They show up, follow processes, and get things done.
               </p>
             </div>
 
             <div>
-              <h3 style={{
-                fontSize: '20px',
-                fontWeight: '700',
-                color: 'var(--orange)',
-                marginBottom: '12px',
-                fontFamily: 'var(--font-barlow)'
-              }}>
+              <h3 className={s.featureTitle}>
                 Process-Oriented
               </h3>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontFamily: 'var(--font-dm-sans)'
-              }}>
+              <p className={s.featureText}>
                 They excel at following and improving operational processes. From CRM management to data entry to customer support, they maintain high standards and accuracy.
               </p>
             </div>
 
             <div>
-              <h3 style={{
-                fontSize: '20px',
-                fontWeight: '700',
-                color: 'var(--orange)',
-                marginBottom: '12px',
-                fontFamily: 'var(--font-barlow)'
-              }}>
+              <h3 className={s.featureTitle}>
                 Service Excellence
               </h3>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontFamily: 'var(--font-dm-sans)'
-              }}>
+              <p className={s.featureText}>
                 The Philippines is the global benchmark for customer service and support. Filipino professionals are naturally service-oriented, patient, and empathetic.
               </p>
             </div>
 
             <div>
-              <h3 style={{
-                fontSize: '20px',
-                fontWeight: '700',
-                color: 'var(--orange)',
-                marginBottom: '12px',
-                fontFamily: 'var(--font-barlow)'
-              }}>
+              <h3 className={s.featureTitle}>
                 Exceptional Value
               </h3>
-              <p style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontFamily: 'var(--font-dm-sans)'
-              }}>
+              <p className={s.featureText}>
                 Save 68-81% compared to hiring locally. Build an entire operations team for the cost of one local hire and scale your business without scaling your overhead.
               </p>
             </div>

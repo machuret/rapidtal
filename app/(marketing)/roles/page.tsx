@@ -1,5 +1,6 @@
 'use client';
 
+import s from './roles.module.css';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import CursorTracker from '@/components/CursorTracker';
@@ -16,7 +17,7 @@ const CATEGORIES = [
     description: 'Paid ads, SEO, email marketing, social media, and growth specialists who drive pipeline.',
     roles: [
       'Paid Ads Specialist',
-      'SEO Strategist', 
+      'SEO Strategist',
       'Email Marketing Manager',
       'Social Media Manager',
       'CRM Manager',
@@ -72,160 +73,60 @@ export default function RolesPage() {
     <>
       <CursorTracker />
       <ComparisonNav />
-      
-      <section style={{ 
-        padding: 'clamp(80px, 12vw, 140px) clamp(20px, 4vw, 60px) clamp(60px, 8vw, 100px)',
-        background: 'var(--black)',
-        borderBottom: '1px solid rgba(255,255,255,0.1)'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <span style={{
-            display: 'inline-block',
-            fontSize: 'clamp(11px, 1.2vw, 13px)',
-            letterSpacing: '0.15em',
-            textTransform: 'uppercase',
-            color: 'var(--orange)',
-            marginBottom: 'clamp(16px, 2vw, 24px)',
-            fontWeight: 500
-          }}>
+
+      <section className={s.heroSectionIndex}>
+        <div className={s.container}>
+          <span className={s.categoryLabel}>
             — Roles We Fill
           </span>
-          
-          <h1 style={{
-            fontSize: 'clamp(42px, 6vw, 72px)',
-            lineHeight: 1.1,
-            fontWeight: 700,
-            color: 'var(--white)',
-            marginBottom: 'clamp(24px, 3vw, 32px)',
-            letterSpacing: '-0.02em'
-          }}>
+
+          <h1 className={s.heroHeading}>
             BUILT FOR<br />
-            <em style={{ fontStyle: 'normal', color: 'var(--orange)' }}>REVENUE</em><br />
+            <em className={s.accentWord}>REVENUE</em><br />
             TEAMS.
           </h1>
-          
-          <p style={{
-            fontSize: 'clamp(16px, 1.8vw, 20px)',
-            lineHeight: 1.6,
-            color: 'rgba(255,255,255,0.7)',
-            maxWidth: '700px',
-            marginBottom: 'clamp(32px, 4vw, 48px)'
-          }}>
+
+          <p className={s.heroDescWithMargin}>
             We specialise in the roles that directly impact your pipeline. Every candidate has international client exposure and a minimum 3 years experience. Browse by category or explore individual roles below.
           </p>
 
-          <Link 
-            href="/how-we-hire"
-            style={{
-              display: 'inline-block',
-              padding: '16px 32px',
-              background: 'var(--orange)',
-              color: 'var(--black)',
-              fontSize: '15px',
-              fontWeight: 600,
-              textDecoration: 'none',
-              borderRadius: '4px',
-              transition: 'transform 0.2s ease',
-              letterSpacing: '0.02em'
-            }}
-          >
+          <Link href="/how-we-hire" className={s.ctaBtn}>
             How We Hire →
           </Link>
         </div>
       </section>
 
-      <section style={{ 
-        padding: 'clamp(60px, 8vw, 100px) clamp(20px, 4vw, 60px)',
-        background: 'var(--black)'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 'clamp(24px, 3vw, 32px)'
-          }}>
+      <section className={s.gridSection}>
+        <div className={s.container}>
+          <div className={s.categoryGrid}>
             {CATEGORIES.map((category) => (
               <Link
                 key={category.id}
                 href={`/roles/${category.slug}`}
-                style={{
-                  display: 'block',
-                  padding: 'clamp(32px, 4vw, 40px)',
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '8px',
-                  textDecoration: 'none',
-                  transition: 'all 0.3s ease',
-                  cursor: 'pointer'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
-                  e.currentTarget.style.borderColor = 'var(--orange)';
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
+                className={s.categoryCard}
               >
-                <h2 style={{
-                  fontSize: 'clamp(24px, 2.5vw, 28px)',
-                  fontWeight: 700,
-                  color: 'var(--white)',
-                  marginBottom: '12px',
-                  letterSpacing: '-0.01em'
-                }}>
+                <h2 className={s.categoryTitle}>
                   {category.title}
                 </h2>
-                
-                <p style={{
-                  fontSize: 'clamp(14px, 1.5vw, 16px)',
-                  lineHeight: 1.6,
-                  color: 'rgba(255,255,255,0.6)',
-                  marginBottom: '20px'
-                }}>
+
+                <p className={s.categoryDesc}>
                   {category.description}
                 </p>
 
-                <div style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: '8px',
-                  marginBottom: '20px'
-                }}>
+                <div className={s.roleTags}>
                   {category.roles.slice(0, 3).map((role, idx) => (
-                    <span
-                      key={idx}
-                      style={{
-                        fontSize: '12px',
-                        padding: '4px 10px',
-                        background: 'rgba(255,255,255,0.05)',
-                        color: 'rgba(255,255,255,0.5)',
-                        borderRadius: '4px',
-                        border: '1px solid rgba(255,255,255,0.1)'
-                      }}
-                    >
+                    <span key={idx} className={s.roleTag}>
                       {role}
                     </span>
                   ))}
                   {category.roles.length > 3 && (
-                    <span style={{
-                      fontSize: '12px',
-                      padding: '4px 10px',
-                      color: 'var(--orange)'
-                    }}>
+                    <span className={s.moreRoles}>
                       +{category.roles.length - 3} more
                     </span>
                   )}
                 </div>
 
-                <span style={{
-                  fontSize: '14px',
-                  color: 'var(--orange)',
-                  fontWeight: 600,
-                  letterSpacing: '0.02em'
-                }}>
+                <span className={s.cardCta}>
                   View All {category.title} Roles →
                 </span>
               </Link>

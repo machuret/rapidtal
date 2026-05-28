@@ -27,6 +27,19 @@
   --grey-faint:     #a09890;
   --grey-pale:      #c8c0b8;
 
+  /* ── White alpha scale (for overlays, cards, text) ── */
+  --white-2:        rgba(255, 255, 255, 0.02);
+  --white-3:        rgba(255, 255, 255, 0.03);
+  --white-5:        rgba(255, 255, 255, 0.05);
+  --white-10:       rgba(255, 255, 255, 0.10);
+  --white-50:       rgba(255, 255, 255, 0.50);
+  --white-60:       rgba(255, 255, 255, 0.60);
+  --white-70:       rgba(255, 255, 255, 0.70);
+
+  /* ── Orange alpha scale (for badges, glows) ── */
+  --orange-10:      rgba(255, 107, 0, 0.10);
+  --orange-30:      rgba(255, 107, 0, 0.30);
+
   /* ── Borders ── */
   --border:         #1e1e1e;
   --border-light:   #252525;

@@ -65,7 +65,11 @@ some, run `npm run lint:css:update` to lower the budget so it can't creep back.
       `base.css`; `marketing-theme.css` is now the sole definition of all
       marketing palette/spacing tokens. `base.css` retains reset, animations,
       cursor, and scrollbar with safe fallbacks.
-- [ ] Phase 3 — migrate the ~360 page-level inline styles into modules.
+- [x] **Phase 3** — migrate page-level inline styles into CSS Modules.
+      Budget ratcheted 424 → 360 → 2. The only remaining inline style is a
+      legitimately dynamic JS value (`width: ${progressPct}%` in calculator).
+      New alpha tokens added to marketing-theme.css (`--white-2` through
+      `--white-70`, `--orange-10`, `--orange-30`).
 - [ ] Phase 4 — consolidate repeated page structures into shared sections.
 - [ ] Phase 5 — collapse duplicate font aliases (`--font-barlow`,
       `--font-dm-sans`) into the canonical names, then remove them.
