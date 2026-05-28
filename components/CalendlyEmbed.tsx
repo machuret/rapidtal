@@ -1,14 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-
-declare global {
-  interface Window {
-    Calendly?: {
-      initInlineWidget: (opts: { url: string; parentElement: HTMLElement }) => void;
-    };
-  }
-}
+import { useEffect } from 'react';
 
 interface CalendlyEmbedProps {
   title?: string;
@@ -21,29 +13,12 @@ export default function CalendlyEmbed({
   titleHighlight = 'Filipino Ninja',
   subtitle = 'Book a free discovery call — no pitch, no pressure.',
 }: CalendlyEmbedProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
-    const url = 'https://calendly.com/machuret/rapid-tal?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=ff7100';
-
-    function initWidget() {
-      if (window.Calendly && containerRef.current) {
-        containerRef.current.innerHTML = '';
-        window.Calendly.initInlineWidget({
-          url,
-          parentElement: containerRef.current,
-        });
-      }
-    }
-
     const existing = document.querySelector('script[src="https://assets.calendly.com/assets/external/widget.js"]');
-    if (existing) {
-      initWidget();
-    } else {
+    if (!existing) {
       const script = document.createElement('script');
       script.src = 'https://assets.calendly.com/assets/external/widget.js';
       script.async = true;
-      script.onload = initWidget;
       document.head.appendChild(script);
     }
   }, []);
@@ -70,9 +45,11 @@ export default function CalendlyEmbed({
       }}>
         {subtitle}
       </p>
+      {/* Standard Calendly inline widget — widget.js auto-detects this class */}
       <div
-        ref={containerRef}
-        style={{ minWidth: '320px', minHeight: '700px', height: 'auto', maxWidth: '900px', margin: '0 auto' }}
+        className="calendly-inline-widget"
+        data-url="https://calendly.com/machuret/rapid-tal?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=ff7100"
+        style={{ minWidth: '320px', height: '700px', maxWidth: '900px', margin: '0 auto' }}
       />
     </section>
   );
