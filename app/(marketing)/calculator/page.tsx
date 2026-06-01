@@ -223,6 +223,19 @@ function CalculatorContent() {
     }, 420);
   }, [animating]);
 
+  const goBack = useCallback(() => {
+    transition(() => {
+      if (screen === 'form' || screen === 'disqualified') {
+        setQuestionIdx(QUESTIONS.length - 1);
+        setScreen('question');
+      } else if (questionIdx > 0) {
+        setQuestionIdx(questionIdx - 1);
+      } else {
+        setScreen('intro');
+      }
+    });
+  }, [screen, questionIdx, QUESTIONS.length, transition]);
+
   const selectOption = useCallback((opt: Option, qId: number) => {
     setAnswers(prev => ({ ...prev, [qId]: { val: opt.label, qualify: opt.qualify } }));
 
@@ -257,6 +270,11 @@ function CalculatorContent() {
         {/* HEADER */}
         <header className={styles.header}>
           <a href="/" className={styles.logo}>RAPID<span>TAL</span></a>
+          {screen !== 'intro' && (
+            <button type="button" className={styles.backBtn} onClick={goBack}>
+              ← Back
+            </button>
+          )}
 
           <div className={styles.progressWrap}>
             <div className={styles.progressTrack}>
@@ -296,7 +314,7 @@ function CalculatorContent() {
                     TO <span className={styles.accent}>RIP YOU OFF.</span>
                   </h1>
                   <p className={styles.introBody}>
-                    Answer 7 quick questions. We&apos;ll tell you exactly whether Rapid Tal is right for you — no fluff, no sales pressure.
+                    Answer 6 quick questions. If you&apos;re a fit, book your free discovery call straight away — no fluff, no sales pressure.
                   </p>
                   <ul className={styles.introFeatures}>
                     <li>Takes under 2 minutes</li>
@@ -400,10 +418,11 @@ function CalculatorContent() {
                   </div>
                 )}
                 <p className={styles.resultSub}>
-                  We&apos;ll still send you our free guide: <strong>&quot;How to Hire Elite Filipino Marketing Talent Without Getting Burned&quot;</strong> — so when you&apos;re ready, you know exactly what to do. Check your inbox.
+                  Bookmark this page and come back when the timing is right. The talent, the process, and the flat fee will all be here waiting.
                 </p>
                 <div className={`${styles.resultCtaWrap} ${styles.mt}`}>
                   <a href="/" className={`${styles.btnGhost} ${styles.btnFull}`}>Visit Rapid Tal Anyway →</a>
+                  <button type="button" className={styles.resultCall} onClick={goBack}>← Change my answers</button>
                 </div>
               </div>
             )}

@@ -54,6 +54,24 @@
 }
 .logo span { color: var(--orange); }
 
+/* ─── BACK BUTTON ────────────────────────────────────────────────────── */
+.backBtn {
+  background: none;
+  border: none;
+  color: var(--grey-muted);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 8px 0;
+  flex-shrink: 0;
+  transition: color var(--ease-normal);
+  margin-left: 20px;
+}
+.backBtn:hover { color: var(--orange); }
+
 /* ─── PROGRESS ───────────────────────────────────────────────────────── */
 .progressWrap {
   display: flex;
