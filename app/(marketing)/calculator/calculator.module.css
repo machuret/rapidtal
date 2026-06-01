@@ -37,7 +37,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 48px;
-  background: rgba(6,6,6,0.97);
+  background: var(--calc-header-bg);
   border-bottom: 1px solid var(--border-subtle);
   z-index: 900;
   backdrop-filter: blur(12px);
@@ -465,8 +465,8 @@
   background: currentColor;
   flex-shrink: 0;
 }
-.qualified   { background: rgba(60,255,100,0.1); color: #3cff64; border: 1px solid rgba(60,255,100,0.3); }
-.disqualified { background: rgba(255,85,85,0.1);  color: #ff5555; border: 1px solid rgba(255,85,85,0.3); }
+.qualified    { background: var(--calc-badge-green-bg);  color: var(--calc-badge-green);  border: 1px solid var(--calc-badge-green-border); }
+.disqualified { background: var(--calc-badge-red-bg);    color: var(--calc-badge-red);    border: 1px solid var(--calc-badge-red-border); }
 
 .resultHeadline {
   font-family: var(--font-display);
@@ -524,12 +524,12 @@
   width: 160px;
 }
 .summaryVal { font-size: 14px; color: var(--white); }
-.green { color: #3cff64; font-weight: 600; }
+.green { color: var(--calc-badge-green); font-weight: 600; }
 
 .disqCard {
   background: var(--black-2);
   border: 1px solid var(--border-light);
-  border-left: 4px solid #ff5555;
+  border-left: 4px solid var(--calc-badge-red);
   padding: 24px 28px;
   margin-bottom: 24px;
   max-width: 600px;
@@ -540,7 +540,7 @@
   font-size: 13px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: #ff5555;
+  color: var(--calc-badge-red);
   margin-bottom: 8px;
 }
 .disqRec {
@@ -611,3 +611,51 @@
 .calendlyWrap { width: 100%; min-height: 700px; }
 .calendlyFrame { width: 100%; height: 700px; border: none; border-radius: 3px; }
 .fallback { min-height: 100vh; background: var(--black); }
+
+/* ─── THEME TOGGLE ───────────────────────────────────────────────────── */
+.themeToggle {
+  background: none;
+  border: 1px solid var(--border-light);
+  color: var(--grey-muted);
+  font-size: 18px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  flex-shrink: 0;
+  transition: border-color var(--ease-normal), color var(--ease-normal);
+  line-height: 1;
+  padding: 0;
+  margin-left: 12px;
+}
+.themeToggle:hover { border-color: var(--orange); color: var(--orange); }
+
+/* ─── LIGHT THEME ────────────────────────────────────────────────────── */
+/* Token overrides live in marketing-theme.css (.lightRoot block).
+   Only structural/specificity overrides that can't be resolved by
+   token inheritance go here. */
+
+.lightRoot::before { opacity: 0.012; }
+
+.lightRoot .trustBadge {
+  background: var(--black-2);
+  border-color: var(--border-light);
+  color: var(--grey);
+}
+
+.lightRoot .optionCard:hover {
+  border-color: var(--grey-muted);
+}
+
+.lightRoot .selected {
+  background: var(--orange-10);
+}
+
+.lightRoot .optionSub  { color: var(--grey-muted); }
+.lightRoot .summaryKey { color: var(--grey-muted); }
+.lightRoot .resultSub  { color: var(--grey); }
+
+.lightRoot .btnGhost { border-color: var(--border); }

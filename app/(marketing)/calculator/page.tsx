@@ -147,6 +147,16 @@ function CalculatorContent() {
   const [disqualify, setDisqualify]       = useState<DisqualifyEntry | null>(null);
   const [animating, setAnimating]         = useState(false);
   const [exiting, setExiting]             = useState(false);
+  const [theme, setTheme]                 = useState<'dark' | 'light'>('dark');
+
+  /* load + save theme preference */
+  useEffect(() => {
+    const saved = localStorage.getItem('calc-theme');
+    if (saved === 'light') setTheme('light');
+  }, []);
+  useEffect(() => {
+    localStorage.setItem('calc-theme', theme);
+  }, [theme]);;
 
 
   const currentQ = QUESTIONS[questionIdx];
@@ -240,7 +250,7 @@ function CalculatorContent() {
   return (
     <>
       <CursorTracker />
-      <div className={styles.root}>
+      <div className={`${styles.root} ${theme === 'light' ? styles.lightRoot : ''}`}>
         {/* ORANGE TOP BAR */}
         <div className={styles.topBar} />
 
@@ -260,6 +270,15 @@ function CalculatorContent() {
             <span className={styles.trustBadge}>94% retention</span>
             <span className={styles.trustBadge}>6-mo guarantee</span>
           </div>
+
+          <button
+            type="button"
+            className={styles.themeToggle}
+            onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? '☀' : '🌙'}
+          </button>
         </header>
 
         {/* CALCULATOR MAIN */}
