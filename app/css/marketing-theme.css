@@ -95,11 +95,13 @@
   --black-2:       #f5f3f0;
   --black-3:       #edebe8;
   --white:         #111111;
-  --grey:          #555555;
-  --grey-muted:    #666666;
-  --grey-faint:    #777777;
-  --grey-dim:      #777777;
-  --grey-pale:     #888888;
+  --grey:          #111111;
+  --grey-light:    #222222;
+  --grey-warm:     #333333;
+  --grey-muted:    #222222;
+  --grey-dim:      #333333;
+  --grey-faint:    #333333;
+  --grey-pale:     #444444;
   --border:        #e0dcd8;
   --border-light:  #d8d4d0;
   --border-subtle: #e8e4e0;
