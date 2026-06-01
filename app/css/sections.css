@@ -88,7 +88,7 @@
   transform-origin: left;
   transition: transform var(--ease-reveal);
 }
-.process-card:hover { background: #161616; }
+.process-card:hover { background: var(--surface-hover); }
 .process-card:hover::before { transform: scaleX(1); }
 .process-num { font-family: var(--font-display); font-size: 80px; color: rgba(255,85,0,0.12); line-height: 1; position: absolute; top: 20px; right: 24px; }
 .process-icon { width: 44px; height: 44px; background: var(--orange); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; font-size: 20px; }
@@ -132,7 +132,7 @@
   margin-right: auto;
 }
 .role-card { background: var(--black-3); padding: 28px 32px; display: flex; justify-content: space-between; align-items: center; transition: background var(--ease-normal); border-left: 3px solid transparent; }
-.role-card:hover { background: #161616; border-left-color: var(--orange); }
+.role-card:hover { background: var(--surface-hover); border-left-color: var(--orange); }
 .role-title { font-family: var(--font-ui); font-weight: 700; font-size: 19px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--white); }
 .role-salary { text-align: right; }
 .role-salary .amount { font-family: var(--font-display); font-size: 22px; color: var(--orange); display: block; }
@@ -147,7 +147,7 @@
 .vs-table thead th:nth-child(2) { background: rgba(255,85,0,0.1); border-bottom-color: var(--orange); color: var(--orange); text-align: center; }
 .vs-table thead th:nth-child(3) { color: var(--grey); text-align: center; }
 .vs-table tbody tr { border-bottom: 1px solid var(--border-subtle); transition: background var(--ease-normal); }
-.vs-table tbody tr:hover { background: #111; }
+.vs-table tbody tr:hover { background: var(--surface-hover); }
 .vs-table tbody td { padding: 22px 36px; font-size: 18px; font-weight: 600; color: var(--grey-light); }
 .vs-table tbody td:nth-child(2) { background: rgba(255,85,0,0.04); text-align: center; color: #3cff7a; font-size: 22px; font-weight: 800; }
 .vs-table tbody td:nth-child(3) { text-align: center; color: #ff5555; font-size: 22px; font-weight: 800; }
