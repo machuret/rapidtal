@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import CurrencyToggle from './CurrencyToggle';
+import ThemeToggle from './ThemeToggle';
 import s from './Nav.module.css';
 
 export default function Nav() {
@@ -21,6 +22,7 @@ export default function Nav() {
       <a href="/" className={s.logo}>RAPID<span>TAL</span></a>
 
       <CurrencyToggle />
+      <ThemeToggle />
 
       <ul className={s.navLinks}>
         <li><a href="/#roles" onClick={close}>Roles</a></li>

@@ -1,3 +1,4 @@
+import ThemeToggle from '@/components/ThemeToggle';
 import styles from './ComparisonNav.module.css';
 
 export default function ComparisonNav() {
@@ -9,6 +10,7 @@ export default function ComparisonNav() {
         <a href="/#process" className={styles.navLink}>How It Works</a>
         <a href="/#pricing" className={styles.navLink}>Pricing</a>
         <a href="/calculator" className={styles.navCta}>Saving$ Calculator</a>
+        <ThemeToggle />
       </div>
     </nav>
   );

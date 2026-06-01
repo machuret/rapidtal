@@ -630,27 +630,6 @@
 .calendlyFrame { width: 100%; height: 700px; border: none; border-radius: 3px; }
 .fallback { min-height: 100vh; background: var(--black); }
 
-/* ─── THEME TOGGLE ───────────────────────────────────────────────────── */
-.themeToggle {
-  background: none;
-  border: 1px solid var(--border-light);
-  color: var(--grey-muted);
-  font-size: 18px;
-  width: 36px;
-  height: 36px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0;
-  flex-shrink: 0;
-  transition: border-color var(--ease-normal), color var(--ease-normal);
-  line-height: 1;
-  padding: 0;
-  margin-left: 12px;
-}
-.themeToggle:hover { border-color: var(--orange); color: var(--orange); }
-
 /* ─── LIGHT THEME ────────────────────────────────────────────────────── */
 /* Token overrides live in marketing-theme.css (.lightRoot block).
    Only structural/specificity overrides that can't be resolved by
