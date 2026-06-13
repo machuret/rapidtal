@@ -20,15 +20,9 @@ const nextConfig = {
   // Headers for caching and security
   async headers() {
     return [
-      {
-        source: '/api/(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=300, stale-while-revalidate=600',
-          },
-        ],
-      },
+      // NOTE: /api/* is intentionally NOT cached. These routes return
+      // per-user, auth-scoped data and mutation responses — caching them
+      // at a shared CDN would leak one user's data to another.
       {
         source: '/_next/static/(.*)',
         headers: [
@@ -38,6 +32,14 @@ const nextConfig = {
           },
         ],
       },
+    ];
+  },
+
+  // Permanent redirects
+  async redirects() {
+    return [
+      // The quiz lives at /calculator — keep the old /quiz URL working (SEO 301).
+      { source: '/quiz', destination: '/calculator', permanent: true },
     ];
   },
   
