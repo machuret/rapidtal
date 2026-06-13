@@ -93,7 +93,7 @@
   align-items: center;
   gap: 12px;
   padding: 12px 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--m-border);
   font-size: 14px;
   color: var(--grey);
 }

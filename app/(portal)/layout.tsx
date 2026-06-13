@@ -4,6 +4,9 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { MobileSidebarTrigger } from "@/components/layout/MobileSidebarTrigger";
 import { createClient } from "@/lib/supabase/server";
 
+// All portal routes require a live auth session — never statically prerender.
+export const dynamic = "force-dynamic";
+
 export default async function PortalLayout({
   children,
 }: {

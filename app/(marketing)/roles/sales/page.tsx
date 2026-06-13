@@ -8,23 +8,13 @@ import { ROLES } from '@/data/roles';
 const ComparisonNav = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonNav })), { ssr: true });
 const ComparisonFooter = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonFooter })), { ssr: true });
 
-const metadata = {
-  title: 'Marketing Roles | Paid Ads, SEO, Email & Social Media Specialists | Rapid Tal',
-  description: 'Hire experienced marketing specialists from the Philippines. Paid ads, SEO, email marketing, social media managers, and growth marketers. Save up to 80%.',
-  openGraph: {
-    title: 'Marketing Roles | Paid Ads, SEO, Email & Social Media Specialists',
-    description: 'Hire experienced marketing specialists from the Philippines. Save up to 80% on costs.',
-  }
-};
 
-const marketingRoles = Object.values(ROLES).filter(role => 
-  role.category === 'Marketing Specialists' || 
-  role.category === 'Paid Advertising Specialists' ||
-  role.category === 'SEO & Content Marketing Specialists' ||
-  role.category === 'Social Media & Email Marketing Specialists'
+const salesRoles = Object.values(ROLES).filter(role => 
+  role.category === 'Sales Specialists' ||
+  role.category === 'Sales Development & Lead Generation Specialists'
 );
 
-export default function MarketingRolesPage() {
+export default function SalesRolesPage() {
   return (
     <div style={{ background: 'var(--black)', minHeight: '100vh' }}>
       <CursorTracker />
@@ -59,7 +49,7 @@ export default function MarketingRolesPage() {
             marginBottom: 'clamp(16px, 2vw, 24px)',
             fontWeight: 500
           }}>
-            — Marketing Specialists
+            — Sales Specialists
           </span>
           
           <h1 style={{
@@ -70,7 +60,7 @@ export default function MarketingRolesPage() {
             marginBottom: 'clamp(24px, 3vw, 32px)',
             letterSpacing: '-0.02em'
           }}>
-            MARKETING<br />
+            SALES<br />
             <em style={{ fontStyle: 'normal', color: 'var(--orange)' }}>ROLES</em>
           </h1>
           
@@ -80,7 +70,7 @@ export default function MarketingRolesPage() {
             color: 'rgba(255,255,255,0.7)',
             maxWidth: '700px'
           }}>
-            Paid ads specialists, SEO strategists, email marketers, social media managers, and growth hackers who drive pipeline and revenue. Every candidate has 3+ years experience with international clients.
+            SDRs, account executives, sales closers, lead generation specialists, and client success managers who convert prospects into revenue. Every candidate has 3+ years experience with international clients.
           </p>
         </div>
       </section>
@@ -95,7 +85,7 @@ export default function MarketingRolesPage() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
             gap: 'clamp(20px, 2.5vw, 28px)'
           }}>
-            {marketingRoles.map((role) => {
+            {salesRoles.map((role) => {
               const auTotal = role.costs.auBaseSalary + role.costs.auSuper + role.costs.auLeave + 
                             role.costs.auSick + role.costs.auRecruitment + role.costs.tools + 
                             role.costs.auOffice + role.costs.auHR + role.costs.auWorkersComp;
@@ -203,7 +193,7 @@ export default function MarketingRolesPage() {
             marginBottom: '20px',
             letterSpacing: '-0.01em'
           }}>
-            Don't See Your Role?
+            Don&apos;t See Your Role?
           </h2>
           
           <p style={{
@@ -212,11 +202,11 @@ export default function MarketingRolesPage() {
             color: 'rgba(255,255,255,0.7)',
             marginBottom: '28px'
           }}>
-            We fill custom marketing roles too. Book a call to discuss your specific needs.
+            We fill custom sales roles too. Book a call to discuss your specific needs.
           </p>
 
           <a 
-            href="https://rapidtal.com/#contact"
+            href="https://calendly.com/machuret/rapid-tal"
             style={{
               display: 'inline-block',
               padding: '16px 32px',

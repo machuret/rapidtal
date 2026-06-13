@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import type { Metadata } from 'next';
 import styles from './calculator.module.css';
 import CursorTracker from '@/components/CursorTracker';
 import { useCurrency } from '@/components/CurrencyProvider';
@@ -173,7 +172,9 @@ function CalculatorContent() {
     }
     
     // Track ViewContent when calculator loads
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (typeof window !== 'undefined' && (window as any).fbq) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).fbq('track', 'ViewContent', {
         content_name: 'Savings Calculator',
         content_category: 'Calculator'
@@ -201,7 +202,9 @@ function CalculatorContent() {
       document.body.appendChild(script);
       
       // Track Lead event when form is shown
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (typeof window !== 'undefined' && (window as any).fbq) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (window as any).fbq('track', 'Lead', {
           content_name: 'Calculator Contact Form',
           content_category: 'Form'

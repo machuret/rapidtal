@@ -131,12 +131,12 @@
 .heroStats {
   display: inline-flex;
   gap: 0;
-  border: 1px solid var(--border);
+  border: 1px solid var(--m-border);
 }
 
 .heroStat {
   padding: 20px 36px;
-  border-right: 1px solid var(--border);
+  border-right: 1px solid var(--m-border);
   text-align: center;
 }
 

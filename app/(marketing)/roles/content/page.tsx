@@ -8,21 +8,13 @@ import { ROLES } from '@/data/roles';
 const ComparisonNav = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonNav })), { ssr: true });
 const ComparisonFooter = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonFooter })), { ssr: true });
 
-const metadata = {
-  title: 'Revenue Ops Roles | Marketing Ops, CRM Admins & Data Analysts | Rapid Tal',
-  description: 'Hire experienced operations specialists from the Philippines. Marketing ops, HubSpot/Salesforce admins, data analysts, and automation specialists. Save up to 76%.',
-  openGraph: {
-    title: 'Revenue Ops Roles | Marketing Ops, CRM Admins & Data Analysts',
-    description: 'Hire experienced operations specialists from the Philippines. Save up to 76% on costs.',
-  }
-};
 
-const opsRoles = Object.values(ROLES).filter(role => 
-  role.category === 'Operations & Admin Specialists' ||
-  role.category === 'Revenue Operations Specialists'
+const contentRoles = Object.values(ROLES).filter(role => 
+  role.category === 'Content & Creative Specialists' ||
+  role.category === 'Design & Video Specialists'
 );
 
-export default function OpsRolesPage() {
+export default function ContentRolesPage() {
   return (
     <div style={{ background: 'var(--black)', minHeight: '100vh' }}>
       <CursorTracker />
@@ -57,7 +49,7 @@ export default function OpsRolesPage() {
             marginBottom: 'clamp(16px, 2vw, 24px)',
             fontWeight: 500
           }}>
-            — Revenue Operations Specialists
+            — Content & Creative Specialists
           </span>
           
           <h1 style={{
@@ -68,8 +60,8 @@ export default function OpsRolesPage() {
             marginBottom: 'clamp(24px, 3vw, 32px)',
             letterSpacing: '-0.02em'
           }}>
-            REVENUE<br />
-            <em style={{ fontStyle: 'normal', color: 'var(--orange)' }}>OPS</em><br />
+            CONTENT &<br />
+            <em style={{ fontStyle: 'normal', color: 'var(--orange)' }}>CREATIVE</em><br />
             ROLES
           </h1>
           
@@ -79,7 +71,7 @@ export default function OpsRolesPage() {
             color: 'rgba(255,255,255,0.7)',
             maxWidth: '700px'
           }}>
-            Marketing ops managers, HubSpot/Salesforce admins, data analysts, funnel builders, and automation specialists who scale your revenue systems. Every candidate has 3+ years experience with international clients.
+            Copywriters, content strategists, video editors, graphic designers, and UGC managers who create assets that convert. Every candidate has 3+ years experience with international clients.
           </p>
         </div>
       </section>
@@ -94,7 +86,7 @@ export default function OpsRolesPage() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
             gap: 'clamp(20px, 2.5vw, 28px)'
           }}>
-            {opsRoles.map((role) => {
+            {contentRoles.map((role) => {
               const auTotal = role.costs.auBaseSalary + role.costs.auSuper + role.costs.auLeave + 
                             role.costs.auSick + role.costs.auRecruitment + role.costs.tools + 
                             role.costs.auOffice + role.costs.auHR + role.costs.auWorkersComp;
@@ -202,7 +194,7 @@ export default function OpsRolesPage() {
             marginBottom: '20px',
             letterSpacing: '-0.01em'
           }}>
-            Don't See Your Role?
+            Don&apos;t See Your Role?
           </h2>
           
           <p style={{
@@ -211,7 +203,7 @@ export default function OpsRolesPage() {
             color: 'rgba(255,255,255,0.7)',
             marginBottom: '28px'
           }}>
-            We fill custom operations roles too. Book a call to discuss your specific needs.
+            We fill custom content and creative roles too. Book a call to discuss your specific needs.
           </p>
 
           <a 

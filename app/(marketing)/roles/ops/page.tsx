@@ -8,21 +8,13 @@ import { ROLES } from '@/data/roles';
 const ComparisonNav = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonNav })), { ssr: true });
 const ComparisonFooter = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonFooter })), { ssr: true });
 
-const metadata = {
-  title: 'Sales Roles | SDRs, Account Executives & Lead Gen Specialists | Rapid Tal',
-  description: 'Hire experienced sales professionals from the Philippines. SDRs, account executives, closers, and lead generation specialists. Save up to 79%.',
-  openGraph: {
-    title: 'Sales Roles | SDRs, Account Executives & Lead Gen Specialists',
-    description: 'Hire experienced sales professionals from the Philippines. Save up to 79% on costs.',
-  }
-};
 
-const salesRoles = Object.values(ROLES).filter(role => 
-  role.category === 'Sales Specialists' ||
-  role.category === 'Sales Development & Lead Generation Specialists'
+const opsRoles = Object.values(ROLES).filter(role => 
+  role.category === 'Operations & Admin Specialists' ||
+  role.category === 'Revenue Operations Specialists'
 );
 
-export default function SalesRolesPage() {
+export default function OpsRolesPage() {
   return (
     <div style={{ background: 'var(--black)', minHeight: '100vh' }}>
       <CursorTracker />
@@ -57,7 +49,7 @@ export default function SalesRolesPage() {
             marginBottom: 'clamp(16px, 2vw, 24px)',
             fontWeight: 500
           }}>
-            — Sales Specialists
+            — Revenue Operations Specialists
           </span>
           
           <h1 style={{
@@ -68,8 +60,9 @@ export default function SalesRolesPage() {
             marginBottom: 'clamp(24px, 3vw, 32px)',
             letterSpacing: '-0.02em'
           }}>
-            SALES<br />
-            <em style={{ fontStyle: 'normal', color: 'var(--orange)' }}>ROLES</em>
+            REVENUE<br />
+            <em style={{ fontStyle: 'normal', color: 'var(--orange)' }}>OPS</em><br />
+            ROLES
           </h1>
           
           <p style={{
@@ -78,7 +71,7 @@ export default function SalesRolesPage() {
             color: 'rgba(255,255,255,0.7)',
             maxWidth: '700px'
           }}>
-            SDRs, account executives, sales closers, lead generation specialists, and client success managers who convert prospects into revenue. Every candidate has 3+ years experience with international clients.
+            Marketing ops managers, HubSpot/Salesforce admins, data analysts, funnel builders, and automation specialists who scale your revenue systems. Every candidate has 3+ years experience with international clients.
           </p>
         </div>
       </section>
@@ -93,7 +86,7 @@ export default function SalesRolesPage() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
             gap: 'clamp(20px, 2.5vw, 28px)'
           }}>
-            {salesRoles.map((role) => {
+            {opsRoles.map((role) => {
               const auTotal = role.costs.auBaseSalary + role.costs.auSuper + role.costs.auLeave + 
                             role.costs.auSick + role.costs.auRecruitment + role.costs.tools + 
                             role.costs.auOffice + role.costs.auHR + role.costs.auWorkersComp;
@@ -201,7 +194,7 @@ export default function SalesRolesPage() {
             marginBottom: '20px',
             letterSpacing: '-0.01em'
           }}>
-            Don't See Your Role?
+            Don&apos;t See Your Role?
           </h2>
           
           <p style={{
@@ -210,11 +203,11 @@ export default function SalesRolesPage() {
             color: 'rgba(255,255,255,0.7)',
             marginBottom: '28px'
           }}>
-            We fill custom sales roles too. Book a call to discuss your specific needs.
+            We fill custom operations roles too. Book a call to discuss your specific needs.
           </p>
 
           <a 
-            href="https://calendly.com/machuret/rapid-tal"
+            href="https://rapidtal.com/#contact"
             style={{
               display: 'inline-block',
               padding: '16px 32px',

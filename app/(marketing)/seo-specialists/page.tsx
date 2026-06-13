@@ -5,17 +5,18 @@ import { ROLES } from '@/data/roles';
 import CursorTracker from '@/components/CursorTracker';
 
 export const metadata: Metadata = {
-  title: 'Hire Sales Specialists from Philippines | Save up to 82% | Rapid Tal',
-  description: 'Compare the real cost of hiring sales specialists in Australia vs the Philippines. 10 role comparisons including SDR, BDM, Account Executive, and more. Save up to 82%.',
+  title: 'Hire SEO Specialists from Philippines | Save up to 77% | Rapid Tal',
+  description: 'Compare the real cost of hiring SEO specialists in Australia vs the Philippines. 11 role comparisons including WordPress SEO, Shopify SEO, Technical SEO, and more. Save up to 77%.',
   openGraph: {
-    title: 'Hire Sales Specialists from Philippines | Save up to 82%',
-    description: 'Compare the real cost of hiring sales specialists in Australia vs the Philippines. 10 role comparisons. Save up to 82%.',
+    title: 'Hire SEO Specialists from Philippines | Save up to 77%',
+    description: 'Compare the real cost of hiring SEO specialists in Australia vs the Philippines. 11 role comparisons. Save up to 77%.',
   }
 };
 
-export default function SalesSpecialistsPage() {
-  const salesRoles = Object.values(ROLES)
-    .filter(role => role.category === 'Sales Specialists')
+export default function SEOSpecialistsPage() {
+  // Get all SEO roles
+  const seoRoles = Object.values(ROLES)
+    .filter(role => role.category === 'SEO Specialists')
     .map(role => ({
       title: role.title,
       slug: role.slug,
@@ -29,13 +30,13 @@ export default function SalesSpecialistsPage() {
       <ComparisonNav />
       
       <CategoryHero 
-        category="Sales Specialists"
-        description="Compare the real cost of hiring sales specialists in Australia versus hiring directly from the Philippines. From SDRs to Account Executives, see the exact numbers behind every role."
-        totalRoles={10}
-        averageSavings="76%"
+        category="SEO Specialists"
+        description="Compare the real cost of hiring SEO specialists in Australia versus hiring directly from the Philippines. From WordPress SEO to Technical SEO, see the exact numbers behind every role."
+        totalRoles={11}
+        averageSavings="74%"
       />
 
-      <RoleGrid roles={salesRoles} />
+      <RoleGrid roles={seoRoles} />
 
       <AnimatedCTA variant="primary" />
 
@@ -55,7 +56,7 @@ export default function SalesSpecialistsPage() {
             textTransform: 'uppercase',
             color: 'var(--white)'
           }}>
-            WHY HIRE SALES <span style={{ color: 'var(--orange)' }}>FROM THE PHILIPPINES?</span>
+            WHY HIRE SEO <span style={{ color: 'var(--orange)' }}>FROM THE PHILIPPINES?</span>
           </h2>
 
           <div style={{
@@ -72,7 +73,7 @@ export default function SalesSpecialistsPage() {
                 marginBottom: '12px',
                 fontFamily: 'var(--font-barlow)'
               }}>
-                Natural Relationship Builders
+                Technical Excellence
               </h3>
               <p style={{
                 fontSize: '16px',
@@ -80,7 +81,7 @@ export default function SalesSpecialistsPage() {
                 color: 'rgba(255, 255, 255, 0.7)',
                 fontFamily: 'var(--font-dm-sans)'
               }}>
-                Filipino sales professionals excel at building genuine relationships with prospects. They're naturally warm, patient, and persistent without being pushy.
+                Filipino SEO specialists are highly trained in technical SEO, content optimization, and link building. They understand Australian search behavior and Google&apos;s latest algorithm updates.
               </p>
             </div>
 
@@ -92,7 +93,7 @@ export default function SalesSpecialistsPage() {
                 marginBottom: '12px',
                 fontFamily: 'var(--font-barlow)'
               }}>
-                Excellent Communication
+                Cost Efficiency
               </h3>
               <p style={{
                 fontSize: '16px',
@@ -100,7 +101,7 @@ export default function SalesSpecialistsPage() {
                 color: 'rgba(255, 255, 255, 0.7)',
                 fontFamily: 'var(--font-dm-sans)'
               }}>
-                Clear English communication with neutral accents. They understand Australian business culture and can build rapport with local prospects easily.
+                Save 70-77% compared to hiring locally in Australia. Get the same quality work for a fraction of the cost, with no compromise on results or communication.
               </p>
             </div>
 
@@ -112,7 +113,7 @@ export default function SalesSpecialistsPage() {
                 marginBottom: '12px',
                 fontFamily: 'var(--font-barlow)'
               }}>
-                Process-Driven
+                Time Zone Advantage
               </h3>
               <p style={{
                 fontSize: '16px',
@@ -120,7 +121,7 @@ export default function SalesSpecialistsPage() {
                 color: 'rgba(255, 255, 255, 0.7)',
                 fontFamily: 'var(--font-dm-sans)'
               }}>
-                They follow sales processes meticulously, track every interaction in your CRM, and maintain consistent activity levels that drive predictable pipeline growth.
+                Only 2-3 hours behind Australian time zones. Your SEO team can work during your business hours or provide overnight optimization and reporting.
               </p>
             </div>
 
@@ -132,7 +133,7 @@ export default function SalesSpecialistsPage() {
                 marginBottom: '12px',
                 fontFamily: 'var(--font-barlow)'
               }}>
-                Incredible Value
+                Platform Expertise
               </h3>
               <p style={{
                 fontSize: '16px',
@@ -140,7 +141,7 @@ export default function SalesSpecialistsPage() {
                 color: 'rgba(255, 255, 255, 0.7)',
                 fontFamily: 'var(--font-dm-sans)'
               }}>
-                Save 70-82% compared to hiring locally. Build a full sales team for the cost of one local SDR and scale your pipeline without scaling your costs.
+                Deep expertise in WordPress, Shopify, WooCommerce, and all major CMS platforms. They know the tools, plugins, and best practices for each platform.
               </p>
             </div>
           </div>

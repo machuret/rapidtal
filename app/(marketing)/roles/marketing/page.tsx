@@ -8,21 +8,15 @@ import { ROLES } from '@/data/roles';
 const ComparisonNav = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonNav })), { ssr: true });
 const ComparisonFooter = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonFooter })), { ssr: true });
 
-const metadata = {
-  title: 'Content & Creative Roles | Copywriters, Designers & Video Editors | Rapid Tal',
-  description: 'Hire experienced content and creative professionals from the Philippines. Copywriters, designers, video editors, and content strategists. Save up to 80%.',
-  openGraph: {
-    title: 'Content & Creative Roles | Copywriters, Designers & Video Editors',
-    description: 'Hire experienced content and creative professionals from the Philippines. Save up to 80% on costs.',
-  }
-};
 
-const contentRoles = Object.values(ROLES).filter(role => 
-  role.category === 'Content & Creative Specialists' ||
-  role.category === 'Design & Video Specialists'
+const marketingRoles = Object.values(ROLES).filter(role => 
+  role.category === 'Marketing Specialists' || 
+  role.category === 'Paid Advertising Specialists' ||
+  role.category === 'SEO & Content Marketing Specialists' ||
+  role.category === 'Social Media & Email Marketing Specialists'
 );
 
-export default function ContentRolesPage() {
+export default function MarketingRolesPage() {
   return (
     <div style={{ background: 'var(--black)', minHeight: '100vh' }}>
       <CursorTracker />
@@ -57,7 +51,7 @@ export default function ContentRolesPage() {
             marginBottom: 'clamp(16px, 2vw, 24px)',
             fontWeight: 500
           }}>
-            — Content & Creative Specialists
+            — Marketing Specialists
           </span>
           
           <h1 style={{
@@ -68,9 +62,8 @@ export default function ContentRolesPage() {
             marginBottom: 'clamp(24px, 3vw, 32px)',
             letterSpacing: '-0.02em'
           }}>
-            CONTENT &<br />
-            <em style={{ fontStyle: 'normal', color: 'var(--orange)' }}>CREATIVE</em><br />
-            ROLES
+            MARKETING<br />
+            <em style={{ fontStyle: 'normal', color: 'var(--orange)' }}>ROLES</em>
           </h1>
           
           <p style={{
@@ -79,7 +72,7 @@ export default function ContentRolesPage() {
             color: 'rgba(255,255,255,0.7)',
             maxWidth: '700px'
           }}>
-            Copywriters, content strategists, video editors, graphic designers, and UGC managers who create assets that convert. Every candidate has 3+ years experience with international clients.
+            Paid ads specialists, SEO strategists, email marketers, social media managers, and growth hackers who drive pipeline and revenue. Every candidate has 3+ years experience with international clients.
           </p>
         </div>
       </section>
@@ -94,7 +87,7 @@ export default function ContentRolesPage() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
             gap: 'clamp(20px, 2.5vw, 28px)'
           }}>
-            {contentRoles.map((role) => {
+            {marketingRoles.map((role) => {
               const auTotal = role.costs.auBaseSalary + role.costs.auSuper + role.costs.auLeave + 
                             role.costs.auSick + role.costs.auRecruitment + role.costs.tools + 
                             role.costs.auOffice + role.costs.auHR + role.costs.auWorkersComp;
@@ -202,7 +195,7 @@ export default function ContentRolesPage() {
             marginBottom: '20px',
             letterSpacing: '-0.01em'
           }}>
-            Don't See Your Role?
+            Don&apos;t See Your Role?
           </h2>
           
           <p style={{
@@ -211,7 +204,7 @@ export default function ContentRolesPage() {
             color: 'rgba(255,255,255,0.7)',
             marginBottom: '28px'
           }}>
-            We fill custom content and creative roles too. Book a call to discuss your specific needs.
+            We fill custom marketing roles too. Book a call to discuss your specific needs.
           </p>
 
           <a 

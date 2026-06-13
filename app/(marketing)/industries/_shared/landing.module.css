@@ -953,6 +953,11 @@
  * rendered at 3px wide which was effectively invisible on most displays; now
  * 6px with a strong multi-stop glow and a subtle pulse, aligned to text
  * baseline via align-self. */
+@keyframes twCursorBlink {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 .typewriterCursor {
   display: inline-block;
   width: 6px;
@@ -965,6 +970,7 @@
     0 0 32px rgba(255, 107, 0, 0.4);
   align-self: center;
   flex-shrink: 0;
+  animation: twCursorBlink 0.8s ease infinite alternate;
 }
 /* Respect user's motion preference — static text is still fully readable */
 @media (prefers-reduced-motion: reduce) {

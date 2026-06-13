@@ -18,13 +18,13 @@
   --grey-pale: #c8c0b8;
 
   /* ── Borders ── */
-  --border: #1e1e1e;
+  --m-border: #1e1e1e;
   --border-light: #252525;
   --border-subtle: #1a1a1a;
   --border-card: #242424;
 
   /* ── Surfaces ── */
-  --surface-raised: #101010;
+  --m-surface-raised: #101010;
   --surface-hover: #131313;
 
   /* ── Font stacks ── */

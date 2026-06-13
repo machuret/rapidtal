@@ -120,7 +120,7 @@ nav.nav-scrolled {
 }
 .currency-toggle:hover { border-color: var(--border-light); }
 .currency-toggle .active { color: var(--orange); }
-.currency-toggle .divider { color: var(--border); }
+.currency-toggle .divider { color: var(--m-border); }
 .currency-toggle-placeholder {
   display: inline-block;
   width: 60px;

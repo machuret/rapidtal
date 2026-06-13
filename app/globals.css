@@ -1,3 +1,14 @@
+/* ── Marketing site styles (brand tokens, nav, hero, sections) ───────────
+ * Imported before Tailwind so Tailwind utilities can override at element
+ * level where needed (e.g. portal pages use bg-zinc-950 on their wrapper,
+ * which takes priority over the body background set in base.css). */
+@import './css/base.css';
+@import './css/layout.css';
+@import './css/nav.css';
+@import './css/hero.css';
+@import './css/sections.css';
+@import './css/responsive.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

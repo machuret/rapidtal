@@ -20,7 +20,6 @@ import { useMemo, useState } from 'react';
 import styles from './landing.module.css';
 import type { CalcConfig } from './types';
 import { useCurrency } from '@/components/CurrencyProvider';
-import { formatPrice } from '@/lib/currency';
 
 /* ─── CALCULATION CONSTANTS ──────────────────────────────────────────────────
  * Australian employment cost loading — figures drawn from ATO / Fair Work /
