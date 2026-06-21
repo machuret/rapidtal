@@ -54,6 +54,25 @@
 }
 .navCta:hover { background: var(--orange-hot); transform: scale(1.04); }
 
+.navPortal {
+  border: 1px solid var(--border-light);
+  color: var(--grey-light);
+  padding: 9px 20px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color var(--ease-normal), color var(--ease-normal);
+  white-space: nowrap;
+}
+.navPortal:hover { border-color: var(--orange); color: var(--orange); }
+
+.mobilePortal {
+  color: var(--grey-light) !important;
+  font-size: clamp(28px, 7vw, 44px) !important;
+}
+
 /* HAMBURGER */
 .hamburger {
   display: none;
