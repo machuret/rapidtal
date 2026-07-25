@@ -3,13 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@11.9.0",
-  "pnpm": {
-    "ignoredBuiltDependencies": [
-      "canvas",
-      "msw",
-      "unrs-resolver"
-    ]
-  },
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/check-css.mjs",
