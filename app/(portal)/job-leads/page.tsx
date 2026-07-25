@@ -5,7 +5,9 @@ import { getCurrentUserAndClient } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { JobLeadIngest } from "@/components/job-leads/JobLeadIngest";
 import { JobLeadReviewActions } from "@/components/job-leads/JobLeadReviewActions";
-import type { DbJobAd, DbJobScrapeRun } from "@/types/database";
+import { JobDiscoverySearch } from "@/components/job-leads/JobDiscoverySearch";
+import { JobDiscoveryActions } from "@/components/job-leads/JobDiscoveryActions";
+import type { DbJobAd, DbJobDiscovery, DbJobScrapeRun, DbJobSearch } from "@/types/database";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Job Leads — RapidTal" };
@@ -25,6 +27,18 @@ type FailedRunListItem = Pick<
   "id" | "requested_url" | "error_code" | "error_message" | "started_at"
 >;
 
+type DiscoveryListItem = Pick<
+  DbJobDiscovery,
+  "id" | "source" | "job_url" | "title" | "company_name" | "location"
+    | "salary_text" | "work_type" | "work_arrangement" | "summary" | "listed_at"
+    | "last_seen_at"
+>;
+
+type SavedSearchListItem = Pick<
+  DbJobSearch,
+  "id" | "source" | "search_term" | "location"
+>;
+
 function salaryLabel(job: JobLeadListItem): string | null {
   if (job.salary_min === null && job.salary_max === null) return null;
   const currency = job.salary_currency ? `${job.salary_currency} ` : "";
@@ -41,7 +55,7 @@ export default async function JobLeadsPage() {
   const clientId = ctx.user.client_id;
 
   const admin = createAdminClient();
-  const [jobResult, failedRunResult] = await Promise.all([
+  const [jobResult, failedRunResult, discoveryResult, searchResult] = await Promise.all([
     admin
       .from("job_ads")
       .select(`
@@ -60,10 +74,29 @@ export default async function JobLeadsPage() {
       .eq("status", "failed")
       .order("started_at", { ascending: false })
       .limit(10),
+    admin
+      .from("job_discoveries")
+      .select(`
+        id, source, job_url, title, company_name, location, salary_text,
+        work_type, work_arrangement, summary, listed_at, last_seen_at
+      `)
+      .eq("client_id", clientId)
+      .eq("status", "new")
+      .order("last_seen_at", { ascending: false })
+      .limit(50),
+    admin
+      .from("job_searches")
+      .select("id, source, search_term, location")
+      .eq("client_id", clientId)
+      .eq("is_active", true)
+      .order("last_run_at", { ascending: false, nullsFirst: false })
+      .limit(5),
   ]);
 
   const jobs = (jobResult.data ?? []) as JobLeadListItem[];
   const failedRuns = (failedRunResult.data ?? []) as FailedRunListItem[];
+  const discoveries = (discoveryResult.data ?? []) as DiscoveryListItem[];
+  const savedSearches = (searchResult.data ?? []) as SavedSearchListItem[];
 
   return (
     <div>
@@ -74,7 +107,61 @@ export default async function JobLeadsPage() {
         </p>
       </div>
 
+      <JobDiscoverySearch clientId={clientId} savedSearches={savedSearches} />
       <JobLeadIngest clientId={clientId} />
+
+      {discoveries.length > 0 && (
+        <section className="mb-10">
+          <div className="mb-3 flex items-end justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-semibold text-zinc-100">Discovery queue</h2>
+              <p className="text-sm text-zinc-500">
+                {discoveries.length} public listings waiting for extraction.
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+            {discoveries.map((item) => (
+              <article key={item.id} className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <span className="text-xs font-medium uppercase tracking-wide text-violet-400">
+                      {item.source}
+                    </span>
+                    <h3 className="mt-1 font-semibold text-zinc-100">{item.title}</h3>
+                    <p className="mt-1 text-sm text-zinc-400">
+                      {item.company_name ?? "Company not identified"}
+                      {item.location ? ` · ${item.location}` : ""}
+                    </p>
+                  </div>
+                  <a
+                    href={item.job_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="shrink-0 text-xs text-blue-400 hover:text-blue-300"
+                  >
+                    Source
+                  </a>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-zinc-500">
+                  {item.salary_text && <span>{item.salary_text}</span>}
+                  {item.work_type && <span>{item.work_type}</span>}
+                  {item.work_arrangement && <span>{item.work_arrangement}</span>}
+                  {item.listed_at && (
+                    <span>listed {formatDistanceToNow(new Date(item.listed_at), { addSuffix: true })}</span>
+                  )}
+                </div>
+                {item.summary && <p className="mt-3 line-clamp-3 text-sm text-zinc-400">{item.summary}</p>}
+                <JobDiscoveryActions
+                  clientId={clientId}
+                  discoveryId={item.id}
+                  jobUrl={item.job_url}
+                />
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       {jobResult.error && (
         <div className="rounded-xl border border-red-500/30 bg-red-500/5 p-4 text-sm text-red-300">

@@ -8,6 +8,8 @@ export type JobAdStatus = "discovered" | "extracted" | "needs_review" | "approve
 export type JobRemoteType = "onsite" | "hybrid" | "remote" | "unknown";
 export type JobExtractionMethod = "json_ld" | "ai" | "json_ld+ai";
 export type JobScrapeRunStatus = "running" | "completed" | "failed";
+export type JobDiscoverySource = "seek" | "indeed" | "linkedin";
+export type JobDiscoveryStatus = "new" | "imported" | "dismissed" | "error";
 
 export interface DbClient {
   id: string;
@@ -184,6 +186,70 @@ export type DbJobScrapeRun = {
   completed_at: string | null;
 };
 
+export type DbJobSearch = {
+  id: string;
+  client_id: string;
+  source: JobDiscoverySource;
+  search_term: string;
+  location: string;
+  country: string;
+  work_type: string;
+  date_range_days: number;
+  max_results: number;
+  is_active: boolean;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+  last_run_at: string | null;
+};
+
+export type DbJobDiscoveryRun = {
+  id: string;
+  client_id: string;
+  search_id: string | null;
+  source: JobDiscoverySource;
+  search_term: string;
+  location: string;
+  status: JobScrapeRunStatus;
+  provider: string;
+  provider_run_id: string | null;
+  result_count: number;
+  new_count: number;
+  cost_usd: number;
+  duration_ms: number | null;
+  error_code: string | null;
+  error_message: string | null;
+  created_by: string | null;
+  started_at: string;
+  completed_at: string | null;
+};
+
+export type DbJobDiscovery = {
+  id: string;
+  client_id: string;
+  discovery_run_id: string | null;
+  job_ad_id: string | null;
+  source: JobDiscoverySource;
+  source_job_id: string | null;
+  job_url: string;
+  canonical_url: string;
+  title: string;
+  company_name: string | null;
+  company_website: string | null;
+  location: string | null;
+  country: string | null;
+  salary_text: string | null;
+  work_type: string | null;
+  work_arrangement: string | null;
+  summary: string | null;
+  listed_at: string | null;
+  expires_at: string | null;
+  status: JobDiscoveryStatus;
+  discovered_at: string;
+  last_seen_at: string;
+  updated_at: string;
+};
+
 type NoRelationships = {
   foreignKeyName: string;
   columns: string[];
@@ -329,6 +395,82 @@ export interface Database {
         Update: Partial<DbJobScrapeRun>;
         Relationships: NoRelationships;
       };
+      job_searches: {
+        Row: DbJobSearch;
+        Insert: {
+          id?: string;
+          client_id: string;
+          source: JobDiscoverySource;
+          search_term: string;
+          location?: string;
+          country?: string;
+          work_type?: string;
+          date_range_days?: number;
+          max_results?: number;
+          is_active?: boolean;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          last_run_at?: string | null;
+        };
+        Update: Partial<DbJobSearch>;
+        Relationships: NoRelationships;
+      };
+      job_discovery_runs: {
+        Row: DbJobDiscoveryRun;
+        Insert: {
+          id?: string;
+          client_id: string;
+          search_id?: string | null;
+          source: JobDiscoverySource;
+          search_term: string;
+          location?: string;
+          status?: JobScrapeRunStatus;
+          provider?: string;
+          provider_run_id?: string | null;
+          result_count?: number;
+          new_count?: number;
+          cost_usd?: number;
+          duration_ms?: number | null;
+          error_code?: string | null;
+          error_message?: string | null;
+          created_by?: string | null;
+          started_at?: string;
+          completed_at?: string | null;
+        };
+        Update: Partial<DbJobDiscoveryRun>;
+        Relationships: NoRelationships;
+      };
+      job_discoveries: {
+        Row: DbJobDiscovery;
+        Insert: {
+          id?: string;
+          client_id: string;
+          discovery_run_id?: string | null;
+          job_ad_id?: string | null;
+          source: JobDiscoverySource;
+          source_job_id?: string | null;
+          job_url: string;
+          canonical_url: string;
+          title: string;
+          company_name?: string | null;
+          company_website?: string | null;
+          location?: string | null;
+          country?: string | null;
+          salary_text?: string | null;
+          work_type?: string | null;
+          work_arrangement?: string | null;
+          summary?: string | null;
+          listed_at?: string | null;
+          expires_at?: string | null;
+          status?: JobDiscoveryStatus;
+          discovered_at?: string;
+          last_seen_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<DbJobDiscovery>;
+        Relationships: NoRelationships;
+      };
       sops: {
         Row: { id: string; client_id: string; title: string; category: string; body: string; order_index: number; created_by: string | null; created_at: string; updated_at: string };
         Insert: { id?: string; client_id: string; title: string; category?: string; body?: string; order_index?: number; created_by?: string | null; created_at?: string; updated_at?: string };
@@ -382,6 +524,14 @@ export interface Database {
           p_notes?: string | null;
         };
         Returns: DbJobAd[];
+      };
+      link_job_discovery: {
+        Args: {
+          p_client_id: string;
+          p_canonical_url: string;
+          p_job_ad_id: string;
+        };
+        Returns: undefined;
       };
     };
     Enums: Record<string, never>;

@@ -5,10 +5,18 @@ places the result into a tenant-scoped review queue. Approval is bound to both
 the source-content hash and normalized extraction hash. Any subsequent change
 returns the record to `needs_review`.
 
+Phase 2 adds saved multi-source searches and a deduplicated discovery queue.
+SEEK, Indeed, and LinkedIn searches run through bounded Apify actors. Discovery
+stores only public job/company metadata; each selected result must still pass
+through Phase 1 extraction and human review before later CRM use.
+Each run is limited to 50 results and a default maximum Apify charge of USD 1.
+`APIFY_DISCOVERY_MAX_CHARGE_USD` may be set from 0.1 to 5.
+
 ## Release order
 
-1. Apply `db/migrations/019_job_ad_review_hardening.sql` after migrations 001–018.
-2. Deploy the `job-ad-ingest` Supabase Edge Function to project
+1. Apply `db/migrations/019_job_ad_review_hardening.sql` after migrations 001–018,
+   then apply `db/migrations/020_job_discovery.sql`.
+2. Deploy the `job-ad-ingest` and `job-ad-discover` Supabase Edge Functions to project
    `uerbrkxowbrqadkwbqea`.
 3. Configure `APIFY_API_KEY` and `OPENAI_API_KEY` as Supabase Function secrets.
    `OPENAI_EXTRACTION_MODEL` is optional. The scraper defaults to Apify's
@@ -24,6 +32,7 @@ supabase link --project-ref uerbrkxowbrqadkwbqea
 supabase db push
 supabase secrets set APIFY_API_KEY=... OPENAI_API_KEY=...
 supabase functions deploy job-ad-ingest --project-ref uerbrkxowbrqadkwbqea
+supabase functions deploy job-ad-discover --project-ref uerbrkxowbrqadkwbqea
 ```
 
 Never place provider secrets in `NEXT_PUBLIC_*` variables.
@@ -40,6 +49,10 @@ Never place provider secrets in `NEXT_PUBLIC_*` variables.
 - Confirm direct authenticated `UPDATE` access to `job_ads` is denied.
 - Confirm failed provider calls produce completed `failed` scrape-run records.
 - Confirm the Apify run is stopped when the ingestion deadline is exceeded.
+- Run one discovery for each enabled source and confirm duplicate URLs are not
+  duplicated in `job_discoveries`.
+- Import a discovery and confirm it becomes `imported` only after Phase 1 saves
+  the matching `job_ads` record.
 
 Useful checks:
 

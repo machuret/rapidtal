@@ -631,6 +631,15 @@ Deno.serve(async (req: Request) => {
       );
     }
 
+    const { error: linkError } = await admin.rpc("link_job_discovery", {
+      p_client_id: clientId,
+      p_canonical_url: parsedUrl.canonicalUrl,
+      p_job_ad_id: saved.id,
+    });
+    if (linkError && linkError.code !== "42883") {
+      console.error("job-ad-ingest discovery link:", linkError);
+    }
+
     const { error: completionError } = await admin
       .from("job_scrape_runs")
       .update({
