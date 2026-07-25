@@ -14,6 +14,7 @@ import type {
   DbJobScrapeRun,
   DbJobSearch,
   DbLeadCompany,
+  DbCompanyEnrichmentRun,
 } from "@/types/database";
 
 export const dynamic = "force-dynamic";
@@ -33,6 +34,11 @@ type JobLeadListItem = Pick<
 type FailedRunListItem = Pick<
   DbJobScrapeRun,
   "id" | "requested_url" | "error_code" | "error_message" | "started_at"
+>;
+
+type FailedCompanyRunListItem = Pick<
+  DbCompanyEnrichmentRun,
+  "id" | "job_ad_id" | "domain" | "error_code" | "error_message" | "started_at"
 >;
 
 type DiscoveryListItem = Pick<
@@ -97,7 +103,13 @@ export default async function JobLeadsPage() {
   const clientId = ctx.user.client_id;
 
   const admin = createAdminClient();
-  const [jobResult, failedRunResult, discoveryResult, searchResult] = await Promise.all([
+  const [
+    jobResult,
+    failedRunResult,
+    discoveryResult,
+    searchResult,
+    failedCompanyRunResult,
+  ] = await Promise.all([
     admin
       .from("job_ads")
       .select(`
@@ -134,6 +146,13 @@ export default async function JobLeadsPage() {
       .eq("is_active", true)
       .order("last_run_at", { ascending: false, nullsFirst: false })
       .limit(5),
+    admin
+      .from("company_enrichment_runs")
+      .select("id, job_ad_id, domain, error_code, error_message, started_at")
+      .eq("client_id", clientId)
+      .eq("status", "failed")
+      .order("started_at", { ascending: false })
+      .limit(10),
   ]);
 
   const jobs = (jobResult.data ?? []) as JobLeadListItem[];
@@ -154,6 +173,7 @@ export default async function JobLeadsPage() {
         : ["00000000-0000-0000-0000-000000000000"],
     );
   const failedRuns = (failedRunResult.data ?? []) as FailedRunListItem[];
+  const failedCompanyRuns = (failedCompanyRunResult.data ?? []) as FailedCompanyRunListItem[];
   const discoveries = (discoveryResult.data ?? []) as DiscoveryListItem[];
   const savedSearches = (searchResult.data ?? []) as SavedSearchListItem[];
   const companies = (companyResult.data ?? []) as CompanyListItem[];
@@ -439,7 +459,7 @@ export default async function JobLeadsPage() {
                     jobAdId={job.id}
                     companyId={company?.id ?? null}
                     companyStatus={company?.status ?? null}
-                    hasOfficialWebsite={Boolean(job.company_website)}
+                    canResolveCompany={Boolean(job.company_website || job.company_name)}
                   />
                 </div>
               )}
@@ -460,7 +480,7 @@ export default async function JobLeadsPage() {
         })}
       </div>
 
-      {failedRuns.length > 0 && (
+      {(failedRuns.length > 0 || failedCompanyRuns.length > 0) && (
         <section className="mt-10">
           <div className="flex items-center gap-2 mb-3">
             <AlertTriangle className="w-4 h-4 text-red-400" />
@@ -480,6 +500,24 @@ export default async function JobLeadsPage() {
                 </p>
               </div>
             ))}
+            {failedCompanyRuns.map((run) => {
+              const job = jobs.find((item) => item.id === run.job_ad_id);
+              return (
+                <div key={run.id} className="bg-zinc-900 px-4 py-3">
+                  <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
+                    <p className="truncate text-sm text-zinc-300">
+                      Company enrichment · {job?.company_name ?? run.domain ?? "Unresolved employer"}
+                    </p>
+                    <p className="shrink-0 text-xs text-zinc-600">
+                      {formatDistanceToNow(new Date(run.started_at), { addSuffix: true })}
+                    </p>
+                  </div>
+                  <p className="mt-1 text-xs text-red-300">
+                    {run.error_message ?? run.error_code ?? "Unknown company enrichment failure"}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </section>
       )}

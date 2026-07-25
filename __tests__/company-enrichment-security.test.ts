@@ -7,12 +7,20 @@ const migration = readFileSync(
   join(process.cwd(), "db/migrations/022_company_enrichment.sql"),
   "utf8",
 );
+const hardening = readFileSync(
+  join(process.cwd(), "db/migrations/023_company_enrichment_hardening.sql"),
+  "utf8",
+);
 const edge = readFileSync(
   join(process.cwd(), "supabase/functions/company-enrich/index.ts"),
   "utf8",
 );
 const legacy = readFileSync(
   join(process.cwd(), "supabase/functions/engine-jobs-scrape/index.ts"),
+  "utf8",
+);
+const legacyEnrich = readFileSync(
+  join(process.cwd(), "supabase/functions/engine-jobs-enrich/index.ts"),
   "utf8",
 );
 const enrichRoute = readFileSync(
@@ -74,6 +82,39 @@ describe("Phase 3 company security contract", () => {
     expect(migration).toContain("FOR UPDATE");
     expect(migration).toContain("INSERT INTO lead_company_review_events");
     expect(migration).toContain("v_enrichment_hash");
+    expect(hardening).toMatch(
+      /REVOKE INSERT, UPDATE, DELETE ON lead_company_facts, lead_company_review_events[\s\S]*FROM service_role/,
+    );
+    expect(hardening).toContain(
+      "REVOKE INSERT, UPDATE, DELETE ON lead_companies FROM service_role",
+    );
+    expect(hardening).toContain(
+      "REVOKE DELETE ON company_enrichment_runs FROM service_role",
+    );
+  });
+
+  test("starts one atomic, recoverable enrichment run per advertisement", () => {
+    expect(hardening).toContain("begin_company_enrichment_run");
+    expect(hardening).toContain("company_enrichment_runs_one_running_job_idx");
+    expect(hardening).toContain("stale_run_recovered");
+    expect(hardening).toContain("pg_advisory_xact_lock");
+    expect(edge).toContain('.rpc("begin_company_enrichment_run"');
+  });
+
+  test("records resolver, model, prompt, and input provenance", () => {
+    for (const field of [
+      "resolution_method",
+      "resolution_confidence",
+      "resolution_evidence",
+      "search_provider_run_id",
+      "model",
+      "prompt_version",
+      "input_hash",
+      "ai_estimated_cost_usd",
+    ]) {
+      expect(hardening).toContain(field);
+      expect(edge).toContain(field);
+    }
   });
 
   test("does not create or mutate a CRM contact", () => {
@@ -84,7 +125,12 @@ describe("Phase 3 company security contract", () => {
 
   test("has provider item and billing ceilings", () => {
     expect(edge).toContain("maxItems=4&maxTotalChargeUsd=");
-    expect(edge).toContain('Deno.env.get("APIFY_COMPANY_MAX_CHARGE_USD")');
+    expect(edge).toContain('"APIFY_COMPANY_MAX_CHARGE_USD"');
+    expect(edge).toContain("maxItems=1&maxTotalChargeUsd=");
+    expect(edge).toContain('"APIFY_COMPANY_RESOLVE_MAX_CHARGE_USD"');
+    expect(edge).toContain("abortApifyRun");
+    expect(edge).toContain("provider_timeout");
+    expect(edge).toContain("resolver_timeout");
   });
 
   test("protects both application endpoints with user and tenant authorization", () => {
@@ -96,9 +142,11 @@ describe("Phase 3 company security contract", () => {
   });
 
   test("retires the legacy scraper behind authentication", () => {
-    expect(legacy).toContain('authorization?.startsWith("Bearer ")');
-    expect(legacy).toContain("auth.getUser()");
-    expect(legacy).toContain("status: 410");
-    expect(legacy).toContain("endpoint_retired");
+    for (const endpoint of [legacy, legacyEnrich]) {
+      expect(endpoint).toContain('authorization?.startsWith("Bearer ")');
+      expect(endpoint).toContain("auth.getUser()");
+      expect(endpoint).toContain("status: 410");
+      expect(endpoint).toContain("endpoint_retired");
+    }
   });
 });

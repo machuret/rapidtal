@@ -12,7 +12,7 @@ interface CompanyEnrichmentActionsProps {
   jobAdId: string;
   companyId: string | null;
   companyStatus: LeadCompanyStatus | null;
-  hasOfficialWebsite: boolean;
+  canResolveCompany: boolean;
 }
 
 type PendingAction = "enrich" | "approve" | "reject" | "reopen" | null;
@@ -22,7 +22,7 @@ export function CompanyEnrichmentActions({
   jobAdId,
   companyId,
   companyStatus,
-  hasOfficialWebsite,
+  canResolveCompany,
 }: CompanyEnrichmentActionsProps) {
   const router = useRouter();
   const [pending, setPending] = useState<PendingAction>(null);
@@ -85,10 +85,12 @@ export function CompanyEnrichmentActions({
         type="button"
         size="sm"
         variant={companyId ? "outline" : "default"}
-        disabled={pending !== null || !hasOfficialWebsite}
+        disabled={pending !== null || !canResolveCompany}
         onClick={enrich}
         className="gap-1.5"
-        title={hasOfficialWebsite ? undefined : "No verified official company website was extracted."}
+        title={canResolveCompany
+          ? undefined
+          : "A company name or verified official website is required."}
       >
         {pending === "enrich"
           ? <Loader2 className="h-3.5 w-3.5 animate-spin" />

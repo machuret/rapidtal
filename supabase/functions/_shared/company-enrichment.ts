@@ -49,6 +49,15 @@ const BLOCKED_COMPANY_HOSTS = [
   /(^|\.)workable\.com$/i,
   /(^|\.)ashbyhq\.com$/i,
   /(^|\.)jobvite\.com$/i,
+  /(^|\.)facebook\.com$/i,
+  /(^|\.)instagram\.com$/i,
+  /(^|\.)x\.com$/i,
+  /(^|\.)twitter\.com$/i,
+  /(^|\.)youtube\.com$/i,
+  /(^|\.)crunchbase\.com$/i,
+  /(^|\.)glassdoor\.(com|com\.au)$/i,
+  /(^|\.)yellowpages\.com\.au$/i,
+  /(^|\.)yelp\.(com|com\.au)$/i,
 ];
 
 const PRIVATE_HOST_PATTERNS = [
@@ -123,16 +132,24 @@ function sameCompanyHost(hostname: string, domain: string): boolean {
 
 export function buildCompanyCrawlerInput(websiteUrl: string): Record<string, unknown> {
   const origin = new URL(websiteUrl).origin;
+  const usefulPaths = [
+    "about",
+    "about-us",
+    "company",
+    "services",
+    "what-we-do",
+    "contact",
+    "contact-us",
+  ];
   return {
-    startUrls: [
-      { url: `${origin}/` },
-      { url: `${origin}/about` },
-      { url: `${origin}/services` },
-      { url: `${origin}/contact` },
-    ],
+    startUrls: [{ url: `${origin}/` }],
+    includeUrlGlobs: usefulPaths.flatMap((path) => [
+      { glob: `${origin}/${path}` },
+      { glob: `${origin}/${path}/**` },
+    ]),
     crawlerType: "playwright:adaptive",
     maxCrawlPages: 4,
-    maxCrawlDepth: 0,
+    maxCrawlDepth: 1,
     useSitemaps: false,
     useLlmsTxt: false,
     dynamicContentWaitSecs: 3,
@@ -157,7 +174,7 @@ export function parseCompanyDataset(value: unknown, domain: string): CompanyPage
   for (const raw of value.slice(0, 10)) {
     const item = record(raw);
     if (!item) continue;
-    const rawUrl = [item.url, item.loadedUrl, item.requestedUrl]
+    const rawUrl = [item.loadedUrl, item.url, item.requestedUrl]
       .find((candidate) => typeof candidate === "string");
     const markdown = [item.markdown, item.text, item.content]
       .find((candidate) => typeof candidate === "string");
@@ -188,7 +205,7 @@ export function parseCompanyDataset(value: unknown, domain: string): CompanyPage
 
 export function normalizeCompanyExtraction(
   raw: unknown,
-  allowedSourceUrls: Set<string>,
+  sourcePages: Map<string, string>,
 ): NormalizedCompanyExtraction {
   const root = record(raw);
   const backed = record(root?.source_backed) ?? {};
@@ -215,7 +232,7 @@ export function normalizeCompanyExtraction(
     const value = text(item?.value, scalarLimits[field]);
     const sourceUrl = text(item?.source_url, 2048);
     const excerpt = text(item?.excerpt, 500);
-    if (!value || !sourceUrl || !excerpt || !allowedSourceUrls.has(sourceUrl)) continue;
+    if (!value || !sourceUrl || !excerpt || !excerptAppearsOnPage(sourceUrl, excerpt, sourcePages)) continue;
     sourceBacked[field] = value;
     const itemConfidence = confidence(item?.confidence);
     evidence[field] = { source_url: sourceUrl, excerpt, confidence: itemConfidence };
@@ -237,7 +254,7 @@ export function normalizeCompanyExtraction(
     const value = text(item?.value, 300);
     const sourceUrl = text(item?.source_url, 2048);
     const excerpt = text(item?.excerpt, 500);
-    if (!value || !sourceUrl || !excerpt || !allowedSourceUrls.has(sourceUrl)) continue;
+    if (!value || !sourceUrl || !excerpt || !excerptAppearsOnPage(sourceUrl, excerpt, sourcePages)) continue;
     if (sourceBacked.services.includes(value)) continue;
     sourceBacked.services.push(value);
     const itemConfidence = confidence(item?.confidence);
@@ -278,4 +295,134 @@ export function normalizeCompanyExtraction(
   }
 
   return { sourceBacked, inferredData, evidence, facts };
+}
+
+function normalizedEvidenceText(value: string): string {
+  return value.normalize("NFKC").toLocaleLowerCase("en").replace(/\s+/g, " ").trim();
+}
+
+function excerptAppearsOnPage(
+  sourceUrl: string,
+  excerpt: string,
+  sourcePages: Map<string, string>,
+): boolean {
+  const page = sourcePages.get(sourceUrl);
+  if (!page) return false;
+  const normalizedExcerpt = normalizedEvidenceText(excerpt);
+  return normalizedExcerpt.length >= 8
+    && normalizedEvidenceText(page).includes(normalizedExcerpt);
+}
+
+const LEGAL_NAME_WORDS = new Set([
+  "pty", "ltd", "limited", "inc", "incorporated", "llc", "plc", "corp",
+  "corporation", "company", "co", "group", "holdings", "australia", "australian",
+]);
+
+function companyNameTokens(value: string): string[] {
+  return value
+    .normalize("NFKD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLocaleLowerCase("en")
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .split(/\s+/)
+    .filter((part) => part.length > 1 && !LEGAL_NAME_WORDS.has(part));
+}
+
+export function companyNamesMatch(left: unknown, right: unknown): boolean {
+  if (typeof left !== "string" || typeof right !== "string") return false;
+  const leftTokens = companyNameTokens(left);
+  const rightTokens = companyNameTokens(right);
+  if (!leftTokens.length || !rightTokens.length) return false;
+  const shorter = leftTokens.length <= rightTokens.length ? leftTokens : rightTokens;
+  const longer = new Set(leftTokens.length <= rightTokens.length ? rightTokens : leftTokens);
+  return shorter.every((token) => longer.has(token));
+}
+
+export interface CompanySearchCandidate {
+  domain: string;
+  websiteUrl: string;
+  url: string;
+  title: string;
+  description: string;
+  position: number;
+  score: number;
+}
+
+function searchRows(value: unknown): Record<string, unknown>[] {
+  if (!Array.isArray(value)) return [];
+  const rows: Record<string, unknown>[] = [];
+  for (const raw of value.slice(0, 10)) {
+    const item = record(raw);
+    if (!item) continue;
+    if (Array.isArray(item.organicResults)) {
+      for (const result of item.organicResults.slice(0, 10)) {
+        const resultRecord = record(result);
+        if (resultRecord) rows.push(resultRecord);
+      }
+    } else {
+      rows.push(item);
+    }
+  }
+  return rows;
+}
+
+function scoreCandidate(
+  companyName: string,
+  official: NonNullable<ReturnType<typeof parseOfficialCompanyUrl>>,
+  title: string,
+  description: string,
+  position: number,
+): number {
+  const tokens = companyNameTokens(companyName);
+  if (!tokens.length) return 0;
+  const domainLabel = official.domain.split(".")[0].replace(/[^a-z0-9]/g, "");
+  const compactName = tokens.join("");
+  const normalizedTitle = companyNameTokens(title);
+  const normalizedDescription = companyNameTokens(description);
+  const allInTitle = tokens.every((token) => normalizedTitle.includes(token));
+  const allInDescription = tokens.every((token) => normalizedDescription.includes(token));
+  let score = 0;
+  if (domainLabel === compactName) score += 0.5;
+  else if (compactName.length >= 5 && (domainLabel.includes(compactName) || compactName.includes(domainLabel))) score += 0.38;
+  if (allInTitle) score += 0.35;
+  if (allInDescription) score += 0.1;
+  if (position > 0 && position <= 3) score += 0.05;
+  return Math.min(1, Number(score.toFixed(2)));
+}
+
+export function selectOfficialCompanyCandidate(
+  value: unknown,
+  companyName: string,
+): { selected: CompanySearchCandidate | null; candidates: CompanySearchCandidate[] } {
+  const byDomain = new Map<string, CompanySearchCandidate>();
+  for (const [index, item] of searchRows(value).entries()) {
+    const url = text(item.url, 2048);
+    if (!url) continue;
+    const official = parseOfficialCompanyUrl(url);
+    if (!official) continue;
+    const title = text(item.title, 500) ?? "";
+    const description = text(item.description, 1_000) ?? "";
+    const position = Math.max(1, Number(item.position) || index + 1);
+    const candidate: CompanySearchCandidate = {
+      ...official,
+      url,
+      title,
+      description,
+      position,
+      score: scoreCandidate(companyName, official, title, description, position),
+    };
+    const previous = byDomain.get(candidate.domain);
+    if (!previous || candidate.score > previous.score) byDomain.set(candidate.domain, candidate);
+  }
+  const candidates = [...byDomain.values()]
+    .sort((left, right) => right.score - left.score || left.position - right.position)
+    .slice(0, 5);
+  const top = candidates[0];
+  const runnerUp = candidates[1];
+  const selected = top && top.score >= 0.7 && (!runnerUp || top.score - runnerUp.score >= 0.15)
+    ? top
+    : null;
+  return { selected, candidates };
 }

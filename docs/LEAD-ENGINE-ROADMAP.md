@@ -19,19 +19,24 @@ authenticated `410 Gone` tombstone. New callers use Phase 2 followed by Phase 1.
 
 After a job advertisement is approved:
 
-1. Accept only its extracted official public HTTPS company website. Job-board
-   and applicant-tracking domains are rejected; the system does not guess a
-   domain from a company name.
+1. Prefer its extracted official public HTTPS company website. When absent,
+   search for an official domain and proceed only when one candidate clears a
+   strict deterministic threshold and margin. Ambiguous results stop for review.
 2. Reuse `lead_companies` when the tenant and normalized domain already exist.
-3. Inspect at most the official home, About, Services, and Contact pages.
+3. Inspect the official home page and discover up to three same-domain About,
+   Company, Services, What We Do, or Contact pages.
 4. Store company name, industry, location, services, description, and website.
 5. Store source-backed facts and machine inferences separately.
-6. Preserve the URL, excerpt, confidence, run, provider cost, and model-token
-   count for each fact.
+6. Preserve the URL, verified page excerpt, confidence, resolver candidates,
+   provider run IDs and cost, model, prompt version, input hash, and token count.
 7. Require explicit company approval before Phase 4.
 
 Phase 3 never creates or updates `crm_contacts`. A company name is not evidence
 that a particular human exists.
+
+Only one enrichment can run for a tenant and job at a time. Runs older than ten
+minutes are closed before retry, facts and review events are append-only to the
+service role, and failed company enrichment attempts are visible in Job Leads.
 
 ## Phase 4 — Transparent lead scoring
 

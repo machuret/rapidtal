@@ -17,9 +17,11 @@ Phase 1 ingestion has the same default USD 1 ceiling through
 ## Release order
 
 1. Apply `db/migrations/019_job_ad_review_hardening.sql` after migrations 001–018,
-   then apply migrations 020 through `db/migrations/022_company_enrichment.sql`.
+   then apply migrations 020 through
+   `db/migrations/023_company_enrichment_hardening.sql`.
 2. Deploy `job-ad-ingest`, `job-ad-discover`, `company-enrich`, and the retired
-   `engine-jobs-scrape` tombstone to project `uerbrkxowbrqadkwbqea`.
+   `engine-jobs-scrape` and `engine-jobs-enrich` tombstones to project
+   `uerbrkxowbrqadkwbqea`.
 3. Configure `APIFY_API_KEY` and `OPENAI_API_KEY` as Supabase Function secrets.
    `OPENAI_EXTRACTION_MODEL` is optional. The scraper defaults to Apify's
    official `apify/website-content-crawler`; `APIFY_WEBSITE_CONTENT_ACTOR` may
@@ -37,10 +39,12 @@ supabase functions deploy job-ad-ingest --project-ref uerbrkxowbrqadkwbqea
 supabase functions deploy job-ad-discover --project-ref uerbrkxowbrqadkwbqea
 supabase functions deploy company-enrich --project-ref uerbrkxowbrqadkwbqea
 supabase functions deploy engine-jobs-scrape --project-ref uerbrkxowbrqadkwbqea
+supabase functions deploy engine-jobs-enrich --project-ref uerbrkxowbrqadkwbqea
 ```
 
 Never place provider secrets in `NEXT_PUBLIC_*` variables.
 Phase 3 uses `APIFY_COMPANY_MAX_CHARGE_USD` with a default USD 1 ceiling and
+`APIFY_COMPANY_RESOLVE_MAX_CHARGE_USD` with a default USD 0.25 ceiling. It
 never writes to `crm_contacts`. See `docs/LEAD-ENGINE-ROADMAP.md`.
 
 ## Release verification

@@ -189,8 +189,16 @@ export type DbCompanyEnrichmentRun = {
   status: CompanyEnrichmentRunStatus;
   provider: string;
   provider_run_id: string | null;
+  search_provider_run_id: string | null;
+  resolution_method: "job_ad" | "web_search" | null;
+  resolution_confidence: number | null;
+  resolution_evidence: Record<string, unknown>;
+  model: string | null;
+  prompt_version: string | null;
+  input_hash: string | null;
   page_count: number;
   cost_usd: number;
+  ai_estimated_cost_usd: number;
   tokens_used: number;
   duration_ms: number | null;
   error_code: string | null;
@@ -466,8 +474,16 @@ export interface Database {
           status?: CompanyEnrichmentRunStatus;
           provider?: string;
           provider_run_id?: string | null;
+          search_provider_run_id?: string | null;
+          resolution_method?: "job_ad" | "web_search" | null;
+          resolution_confidence?: number | null;
+          resolution_evidence?: Record<string, unknown>;
+          model?: string | null;
+          prompt_version?: string | null;
+          input_hash?: string | null;
           page_count?: number;
           cost_usd?: number;
+          ai_estimated_cost_usd?: number;
           tokens_used?: number;
           duration_ms?: number | null;
           error_code?: string | null;
@@ -716,6 +732,17 @@ export interface Database {
           p_payload: Record<string, unknown>;
         };
         Returns: DbLeadCompany[];
+      };
+      begin_company_enrichment_run: {
+        Args: {
+          p_actor_id: string;
+          p_client_id: string;
+          p_job_ad_id: string;
+          p_input_hash: string;
+          p_model: string;
+          p_prompt_version: string;
+        };
+        Returns: DbCompanyEnrichmentRun[];
       };
       reuse_lead_company: {
         Args: {
