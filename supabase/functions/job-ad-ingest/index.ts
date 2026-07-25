@@ -15,7 +15,6 @@ import {
 } from "../_shared/apify.ts";
 import {
   canonicalizePublicJobUrl,
-  determineReviewStatus,
   mergeJobExtractions,
   normalizeAiExtraction,
   parseJobPostingJsonLd,
@@ -59,7 +58,8 @@ Return one JSON object with exactly these fields:
   "field_evidence": {
     "title": "short supporting source excerpt",
     "company_name": "short supporting source excerpt",
-    "location": "short supporting source excerpt"
+    "location": "short supporting source excerpt",
+    "description": "short supporting source excerpt"
   }
 }
 
@@ -342,17 +342,20 @@ Deno.serve(async (req: Request) => {
 
     const { data: existing } = await admin
       .from("job_ads")
-      .select(`
-        id, status, created_by, raw_content_hash, extraction_hash,
-        reviewed_by, reviewed_at, reviewed_content_hash, reviewed_extraction_hash
-      `)
+      .select("id")
       .eq("client_id", clientId)
       .eq("canonical_url", parsedUrl.canonicalUrl)
       .maybeSingle();
 
+    const configuredChargeCap = Number(Deno.env.get("APIFY_INGEST_MAX_CHARGE_USD") ?? 1);
+    const maxChargeUsd = Number.isFinite(configuredChargeCap)
+        && configuredChargeCap >= 0.1
+        && configuredChargeCap <= 5
+      ? configuredChargeCap
+      : 1;
     const apifyAuthorization = `Bearer ${apifyKey}`;
     const startRes = await fetchWithRetry(
-      `https://api.apify.com/v2/acts/${apifyActor}/runs?memory=512&timeout=90`,
+      `https://api.apify.com/v2/acts/${apifyActor}/runs?memory=512&timeout=90&maxItems=1&maxTotalChargeUsd=${maxChargeUsd}`,
       {
         method: "POST",
         headers: {
@@ -561,56 +564,39 @@ Deno.serve(async (req: Request) => {
       expires_at: merged.data.expires_at,
       apply_url: merged.data.apply_url,
     }));
-    const preservedStatus = determineReviewStatus({
-      existingStatus: existing ? String(existing.status) : null,
-      currentContentHash: contentHash,
-      currentExtractionHash: extractionHash,
-      previousContentHash: existing?.raw_content_hash ?? null,
-      previousExtractionHash: existing?.extraction_hash ?? null,
-      reviewedContentHash: existing?.reviewed_content_hash ?? null,
-      reviewedExtractionHash: existing?.reviewed_extraction_hash ?? null,
-    });
-    const reviewStillValid = preservedStatus === "approved" || preservedStatus === "rejected";
-
     const { data: saved, error: saveError } = await admin
-      .from("job_ads")
-      .upsert({
-        client_id: clientId,
-        source_url: requestedUrl,
-        canonical_url: parsedUrl.canonicalUrl,
-        source_host: parsedUrl.hostname,
-        source_job_id: merged.data.source_job_id,
-        title: merged.data.title,
-        company_name: merged.data.company_name,
-        company_website: merged.data.company_website,
-        location: merged.data.location,
-        remote_type: merged.data.remote_type,
-        employment_type: merged.data.employment_type,
-        salary_min: merged.data.salary_min,
-        salary_max: merged.data.salary_max,
-        salary_currency: merged.data.salary_currency,
-        salary_period: merged.data.salary_period,
-        description: merged.data.description,
-        responsibilities: merged.data.responsibilities,
-        skills: merged.data.skills,
-        posted_at: merged.data.posted_at,
-        expires_at: merged.data.expires_at,
-        apply_url: merged.data.apply_url ?? parsedUrl.canonicalUrl,
-        raw_content: rawContent,
-        raw_content_hash: contentHash,
-        extraction_hash: extractionHash,
-        extraction_method: merged.method,
-        extraction_confidence: merged.data.confidence,
-        field_evidence: merged.data.field_evidence,
-        status: preservedStatus,
-        reviewed_by: reviewStillValid ? existing?.reviewed_by ?? null : null,
-        reviewed_at: reviewStillValid ? existing?.reviewed_at ?? null : null,
-        reviewed_content_hash: reviewStillValid ? existing?.reviewed_content_hash ?? null : null,
-        reviewed_extraction_hash: reviewStillValid ? existing?.reviewed_extraction_hash ?? null : null,
-        created_by: existing?.created_by ?? authUser.id,
-        updated_at: new Date().toISOString(),
-        last_seen_at: new Date().toISOString(),
-      }, { onConflict: "client_id,canonical_url" })
+      .rpc("upsert_job_ad_extraction", {
+        p_actor_id: authUser.id,
+        p_client_id: clientId,
+        p_payload: {
+          source_url: requestedUrl,
+          canonical_url: parsedUrl.canonicalUrl,
+          source_host: parsedUrl.hostname,
+          source_job_id: merged.data.source_job_id,
+          title: merged.data.title,
+          company_name: merged.data.company_name,
+          company_website: merged.data.company_website,
+          location: merged.data.location,
+          remote_type: merged.data.remote_type,
+          employment_type: merged.data.employment_type,
+          salary_min: merged.data.salary_min,
+          salary_max: merged.data.salary_max,
+          salary_currency: merged.data.salary_currency,
+          salary_period: merged.data.salary_period,
+          description: merged.data.description,
+          responsibilities: merged.data.responsibilities,
+          skills: merged.data.skills,
+          posted_at: merged.data.posted_at,
+          expires_at: merged.data.expires_at,
+          apply_url: merged.data.apply_url ?? parsedUrl.canonicalUrl,
+          raw_content: rawContent,
+          raw_content_hash: contentHash,
+          extraction_hash: extractionHash,
+          extraction_method: merged.method,
+          extraction_confidence: merged.data.confidence,
+          field_evidence: merged.data.field_evidence,
+        },
+      })
       .select(`
         id, client_id, source_url, canonical_url, source_host, source_job_id,
         title, company_name, company_website, location, remote_type,

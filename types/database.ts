@@ -533,6 +533,22 @@ export interface Database {
         };
         Returns: undefined;
       };
+      upsert_job_ad_extraction: {
+        Args: {
+          p_actor_id: string;
+          p_client_id: string;
+          p_payload: Record<string, unknown>;
+        };
+        Returns: DbJobAd[];
+      };
+      upsert_job_discoveries: {
+        Args: {
+          p_client_id: string;
+          p_run_id: string;
+          p_items: Record<string, unknown>[];
+        };
+        Returns: { result_count: number; new_count: number }[];
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;

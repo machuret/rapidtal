@@ -286,43 +286,24 @@ Deno.serve(async (req: Request) => {
       return await fail(502, "The job search results could not be read.", "dataset_failed");
     }
     const discoveries = normalizeDiscoveryDataset(source, dataset, country, maxResults);
-    const canonicalUrls = discoveries.map((item) => item.canonical_url);
-    const { data: existingRows } = canonicalUrls.length
-      ? await admin.from("job_discoveries")
-        .select("canonical_url, status, job_ad_id")
-        .eq("client_id", clientId)
-        .in("canonical_url", canonicalUrls)
-      : { data: [] };
-    const existing = new Map(
-      (existingRows ?? []).map((item: Record<string, unknown>) => [String(item.canonical_url), item]),
-    );
-    const now = new Date().toISOString();
-    const rows = discoveries.map((item) => {
-      const previous = existing.get(item.canonical_url) as Record<string, unknown> | undefined;
-      return {
-        ...item,
-        client_id: clientId,
-        discovery_run_id: runId,
-        status: previous?.status ?? "new",
-        job_ad_id: previous?.job_ad_id ?? null,
-        last_seen_at: now,
-        updated_at: now,
-      };
-    });
-    if (rows.length) {
-      const { error: saveError } = await admin.from("job_discoveries").upsert(rows, {
-        onConflict: "client_id,canonical_url",
-      });
-      if (saveError) {
-        console.error("job-ad-discover save:", saveError);
-        return await fail(500, "The discovered jobs could not be saved.", "save_failed");
-      }
+    const { data: savedCounts, error: saveError } = await admin
+      .rpc("upsert_job_discoveries", {
+        p_client_id: clientId,
+        p_run_id: runId,
+        p_items: discoveries,
+      })
+      .single();
+    if (saveError || !savedCounts) {
+      console.error("job-ad-discover save:", saveError);
+      return await fail(500, "The discovered jobs could not be saved.", "save_failed");
     }
 
-    const newCount = discoveries.filter((item) => !existing.has(item.canonical_url)).length;
+    const resultCount = Number(savedCounts.result_count ?? 0);
+    const newCount = Number(savedCounts.new_count ?? 0);
+    const now = new Date().toISOString();
     const { error: completeError } = await admin.from("job_discovery_runs").update({
       status: "completed",
-      result_count: discoveries.length,
+      result_count: resultCount,
       new_count: newCount,
       cost_usd: providerRun.usageTotalUsd,
       duration_ms: Date.now() - startedAt,
@@ -333,7 +314,7 @@ Deno.serve(async (req: Request) => {
 
     return response({
       success: true,
-      count: discoveries.length,
+      count: resultCount,
       newCount,
       searchId: search.id,
       discoveryRunId: runId,

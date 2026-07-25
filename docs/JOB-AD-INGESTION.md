@@ -11,11 +11,14 @@ stores only public job/company metadata; each selected result must still pass
 through Phase 1 extraction and human review before later CRM use.
 Each run is limited to 50 results and a default maximum Apify charge of USD 1.
 `APIFY_DISCOVERY_MAX_CHARGE_USD` may be set from 0.1 to 5.
+Phase 1 ingestion has the same default USD 1 ceiling through
+`APIFY_INGEST_MAX_CHARGE_USD`.
 
 ## Release order
 
 1. Apply `db/migrations/019_job_ad_review_hardening.sql` after migrations 001–018,
-   then apply `db/migrations/020_job_discovery.sql`.
+   then apply `db/migrations/020_job_discovery.sql` and
+   `db/migrations/021_job_pipeline_atomicity.sql`.
 2. Deploy the `job-ad-ingest` and `job-ad-discover` Supabase Edge Functions to project
    `uerbrkxowbrqadkwbqea`.
 3. Configure `APIFY_API_KEY` and `OPENAI_API_KEY` as Supabase Function secrets.
@@ -53,6 +56,10 @@ Never place provider secrets in `NEXT_PUBLIC_*` variables.
   duplicated in `job_discoveries`.
 - Import a discovery and confirm it becomes `imported` only after Phase 1 saves
   the matching `job_ads` record.
+- Approve a job while a refresh is running and confirm the refresh does not
+  overwrite a review that matches the newly extracted hashes.
+- Dismiss or import a discovery during a repeated search and confirm its status
+  and `job_ad_id` are preserved.
 
 Useful checks:
 
