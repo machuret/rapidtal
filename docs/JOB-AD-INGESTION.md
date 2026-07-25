@@ -10,8 +10,10 @@ returns the record to `needs_review`.
 1. Apply `db/migrations/019_job_ad_review_hardening.sql` after migrations 001–018.
 2. Deploy the `job-ad-ingest` Supabase Edge Function to project
    `uerbrkxowbrqadkwbqea`.
-3. Configure `FIRECRAWL_API_KEY` and `OPENAI_API_KEY` as Supabase Function
-   secrets. `OPENAI_EXTRACTION_MODEL` is optional.
+3. Configure `APIFY_API_KEY` and `OPENAI_API_KEY` as Supabase Function secrets.
+   `OPENAI_EXTRACTION_MODEL` is optional. The scraper defaults to Apify's
+   official `apify/website-content-crawler`; `APIFY_WEBSITE_CONTENT_ACTOR` may
+   override the actor when required.
 4. Deploy the Next.js application only after the database migration and Edge
    Function are available.
 
@@ -20,7 +22,7 @@ Example CLI commands:
 ```bash
 supabase link --project-ref uerbrkxowbrqadkwbqea
 supabase db push
-supabase secrets set FIRECRAWL_API_KEY=... OPENAI_API_KEY=...
+supabase secrets set APIFY_API_KEY=... OPENAI_API_KEY=...
 supabase functions deploy job-ad-ingest --project-ref uerbrkxowbrqadkwbqea
 ```
 
@@ -37,6 +39,7 @@ Never place provider secrets in `NEXT_PUBLIC_*` variables.
 - Attempt to review another tenant's job and confirm the API returns `403`.
 - Confirm direct authenticated `UPDATE` access to `job_ads` is denied.
 - Confirm failed provider calls produce completed `failed` scrape-run records.
+- Confirm the Apify run is stopped when the ingestion deadline is exceeded.
 
 Useful checks:
 

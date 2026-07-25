@@ -2,11 +2,17 @@
  * job-ad-ingest
  *
  * Phase 1 single-URL job-ad ingestion:
- * authenticated URL -> Firecrawl -> JSON-LD + AI extraction -> validation ->
+ * authenticated URL -> Apify -> JSON-LD + AI extraction -> validation ->
  * tenant-scoped idempotent upsert with scrape-run history.
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.105.1";
+import {
+  buildApifyWebsiteContentInput,
+  isApifyRunPending,
+  parseApifyDatasetItems,
+  parseApifyRun,
+} from "../_shared/apify.ts";
 import {
   canonicalizePublicJobUrl,
   determineReviewStatus,
@@ -165,6 +171,19 @@ function needsAi(structured: JobAdExtraction | null): boolean {
     || structured.responsibilities.length === 0;
 }
 
+async function abortApifyRun(runId: string, authorization: string): Promise<void> {
+  try {
+    await fetchWithRetry(
+      `https://api.apify.com/v2/actor-runs/${runId}/abort`,
+      { method: "POST", headers: { Authorization: authorization } },
+      10_000,
+      1,
+    );
+  } catch (error) {
+    console.error("job-ad-ingest Apify abort:", error);
+  }
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return response({ error: "Method not allowed." }, 405);
@@ -207,12 +226,17 @@ Deno.serve(async (req: Request) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
-    const firecrawlKey = Deno.env.get("FIRECRAWL_API_KEY");
+    const apifyKey = Deno.env.get("APIFY_API_KEY");
+    const apifyActor = Deno.env.get("APIFY_WEBSITE_CONTENT_ACTOR")
+      ?? "apify~website-content-crawler";
     if (!supabaseUrl || !serviceKey || !anonKey) {
       return response({ error: "Supabase function environment is incomplete." }, 503);
     }
-    if (!firecrawlKey) {
+    if (!apifyKey) {
       return response({ error: "Job-ad scraping is not configured." }, 503);
+    }
+    if (!/^[a-zA-Z0-9_-]+~[a-zA-Z0-9_-]+$/.test(apifyActor)) {
+      return response({ error: "Job-ad scraping provider is misconfigured." }, 503);
     }
 
     const userClient = createClient(supabaseUrl, anonKey, {
@@ -305,7 +329,7 @@ Deno.serve(async (req: Request) => {
         requested_url: requestedUrl,
         canonical_url: parsedUrl.canonicalUrl,
         status: "running",
-        provider: "firecrawl",
+        provider: "apify",
         created_by: authUser.id,
       })
       .select("id")
@@ -326,49 +350,106 @@ Deno.serve(async (req: Request) => {
       .eq("canonical_url", parsedUrl.canonicalUrl)
       .maybeSingle();
 
-    const crawlRes = await fetchWithRetry("https://api.firecrawl.dev/v2/scrape", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${firecrawlKey}`,
-        "Content-Type": "application/json",
+    const apifyAuthorization = `Bearer ${apifyKey}`;
+    const startRes = await fetchWithRetry(
+      `https://api.apify.com/v2/acts/${apifyActor}/runs?memory=512&timeout=90`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": apifyAuthorization,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(buildApifyWebsiteContentInput(parsedUrl.fetchUrl)),
       },
-      body: JSON.stringify({
-        url: parsedUrl.fetchUrl,
-        formats: ["markdown", "rawHtml"],
-        onlyMainContent: true,
-        maxAge: 3_600_000,
-        timeout: 35_000,
-      }),
-    }, 40_000);
-    const crawlJson = await crawlRes.json().catch(() => null);
-    if (!crawlRes.ok || !crawlJson?.data) {
-      const providerMessage = typeof crawlJson?.error === "string"
-        ? crawlJson.error
-        : `Firecrawl returned HTTP ${crawlRes.status}`;
+      20_000,
+    );
+    const startJson = await startRes.json().catch(() => null);
+    let apifyRun = parseApifyRun(startJson);
+    if (!startRes.ok || !apifyRun) {
+      const providerMessage = typeof startJson?.error?.message === "string"
+        ? startJson.error.message
+        : `Apify returned HTTP ${startRes.status} while starting the crawl`;
+      return await fail(
+        422,
+        "The job-ad page could not be fetched.",
+        "provider_start_failed",
+        providerMessage,
+        startRes.status,
+      );
+    }
+
+    const pollDeadline = Date.now() + 75_000;
+    while (isApifyRunPending(apifyRun.status) && Date.now() < pollDeadline) {
+      await new Promise((resolve) => setTimeout(resolve, 2_000));
+      const statusRes = await fetchWithRetry(
+        `https://api.apify.com/v2/actor-runs/${apifyRun.id}`,
+        { headers: { "Authorization": apifyAuthorization } },
+        10_000,
+      );
+      const statusJson = await statusRes.json().catch(() => null);
+      const nextState = parseApifyRun(statusJson);
+      if (!statusRes.ok || !nextState) {
+        await abortApifyRun(apifyRun.id, apifyAuthorization);
+        return await fail(
+          502,
+          "The job-ad page could not be fetched.",
+          "provider_status_failed",
+          `Apify run status returned HTTP ${statusRes.status}`,
+          statusRes.status,
+        );
+      }
+      apifyRun = nextState;
+    }
+
+    if (isApifyRunPending(apifyRun.status)) {
+      await abortApifyRun(apifyRun.id, apifyAuthorization);
+      return await fail(
+        504,
+        "The job-ad page took too long to fetch.",
+        "provider_timeout",
+        `Apify run ${apifyRun.id} exceeded the ingestion deadline.`,
+      );
+    }
+    if (apifyRun.status !== "SUCCEEDED" || !apifyRun.defaultDatasetId) {
+      return await fail(
+        422,
+        "The job-ad page could not be fetched.",
+        "provider_run_failed",
+        `Apify run ${apifyRun.id} finished with status ${apifyRun.status}.`,
+      );
+    }
+
+    const datasetRes = await fetchWithRetry(
+      `https://api.apify.com/v2/datasets/${apifyRun.defaultDatasetId}/items?clean=true&limit=1`,
+      {
+        headers: { "Authorization": apifyAuthorization },
+      },
+      15_000,
+    );
+    const datasetJson = await datasetRes.json().catch(() => null);
+    const pageContent = parseApifyDatasetItems(datasetJson);
+    if (!datasetRes.ok || !pageContent) {
+      const providerMessage = typeof datasetJson?.error?.message === "string"
+        ? datasetJson.error.message
+        : `Apify dataset returned HTTP ${datasetRes.status}`;
       return await fail(
         422,
         "The job-ad page could not be fetched.",
         "fetch_failed",
         providerMessage,
-        crawlRes.status,
+        datasetRes.status,
       );
     }
 
-    const markdown = typeof crawlJson.data.markdown === "string"
-      ? crawlJson.data.markdown.trim().slice(0, 150_000)
-      : "";
-    const html = typeof crawlJson.data.rawHtml === "string"
-      ? crawlJson.data.rawHtml.slice(0, 2_000_000)
-      : typeof crawlJson.data.html === "string"
-        ? crawlJson.data.html.slice(0, 2_000_000)
-        : "";
+    const providerHttpStatus = datasetRes.status;
+    const { markdown, html } = pageContent;
     if (markdown.length < 80 && html.length < 200) {
       return await fail(
         422,
         "The fetched page did not contain enough readable content.",
         "content_too_short",
-        "Firecrawl returned insufficient page content.",
-        crawlRes.status,
+        "Apify returned insufficient page content.",
+        providerHttpStatus,
       );
     }
 
@@ -450,7 +531,13 @@ Deno.serve(async (req: Request) => {
     const merged = mergeJobExtractions(structured, ai);
     const validationError = validateJobExtraction(merged.data);
     if (validationError) {
-      return await fail(422, validationError, "not_a_valid_job_ad", validationError, crawlRes.status);
+      return await fail(
+        422,
+        validationError,
+        "not_a_valid_job_ad",
+        validationError,
+        providerHttpStatus,
+      );
     }
 
     const rawContent = (markdown || merged.data.description || "").slice(0, 100_000);
@@ -540,7 +627,7 @@ Deno.serve(async (req: Request) => {
         "The extracted job advertisement could not be saved.",
         "save_failed",
         saveError?.message ?? "Missing saved row.",
-        crawlRes.status,
+        providerHttpStatus,
       );
     }
 
@@ -550,7 +637,7 @@ Deno.serve(async (req: Request) => {
         job_ad_id: saved.id,
         status: "completed",
         extraction_method: merged.method,
-        http_status: crawlRes.status,
+        http_status: providerHttpStatus,
         tokens_used: tokensUsed,
         duration_ms: Date.now() - startedAt,
         completed_at: new Date().toISOString(),
@@ -571,6 +658,8 @@ Deno.serve(async (req: Request) => {
       data: saved,
       scrapeRunId: runId,
       tokensUsed,
+      providerRunId: apifyRun.id,
+      providerCostUsd: apifyRun.usageTotalUsd,
     }, 200);
   } catch (error) {
     console.error("job-ad-ingest:", error);
