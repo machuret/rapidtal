@@ -15,7 +15,7 @@ export interface CurrentUserAndClient {
  */
 export const getCurrentUserAndClient = cache(
   async (): Promise<CurrentUserAndClient | null> => {
-    const supabase = createClient();
+    const supabase = await createClient();
     const {
       data: { user: authUser },
       error: authError,

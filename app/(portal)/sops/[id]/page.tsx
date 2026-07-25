@@ -6,7 +6,8 @@ import type { Sop } from "@/app/(portal)/sops/page";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-export default async function SopDetailPage({ params }: { params: { id: string } }) {
+export default async function SopDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const ctx = await getCurrentUserAndClient();
   if (!ctx) redirect("/login");
 
@@ -15,7 +16,7 @@ export default async function SopDetailPage({ params }: { params: { id: string }
 
   const admin = createAdminClient();
   const [{ data: sop }, { data: allSops }] = await Promise.all([
-    admin.from("sops").select("*").eq("id", params.id).eq("client_id", user.client_id).single(),
+    admin.from("sops").select("*").eq("id", id).eq("client_id", user.client_id).single(),
     admin.from("sops").select("category").eq("client_id", user.client_id),
   ]);
 

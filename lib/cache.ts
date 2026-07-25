@@ -15,6 +15,7 @@ class SimpleCache {
     this.cleanupInterval = setInterval(() => {
       this.cleanup();
     }, 5 * 60 * 1000);
+    this.cleanupInterval.unref?.();
   }
 
   set<T>(key: string, data: T, ttlMs: number = 5 * 60 * 1000): void {
@@ -104,8 +105,8 @@ export interface KbGenerationData {
 
 export class CacheManager {
   // Cache website content for 1 hour
-  static cacheWebsiteContent(url: string, content: string): void {
-    cache.set(cacheKeys.websiteContent(url), content, 60 * 60 * 1000);
+  static cacheWebsiteContent(url: string, content: string, ttlMs = 60 * 60 * 1000): void {
+    cache.set(cacheKeys.websiteContent(url), content, ttlMs);
   }
 
   static getWebsiteContent(url: string): string | null {

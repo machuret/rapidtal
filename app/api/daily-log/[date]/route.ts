@@ -4,14 +4,14 @@ import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { date: string } }
+  { params }: { params: Promise<{ date: string }> }
 ) {
   const auth = await requireApiAuth();
   if ("error" in auth) return auth.error;
   const { user } = auth;
   if (!user.client_id) return NextResponse.json({ error: "No client." }, { status: 403 });
 
-  const { date } = params;
+  const { date } = await params;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     return NextResponse.json({ error: "Invalid date format" }, { status: 400 });
   }

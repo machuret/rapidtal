@@ -7,29 +7,29 @@ const STATUSES = ["lead", "prospect", "active", "inactive", "closed"] as const;
 
 const createSchema = z.object({
   clientId:   z.string().uuid(),
-  first_name: z.string().min(1).max(100),
-  last_name:  z.string().max(100).optional().nullable(),
-  email:      z.string().email().max(255).optional().nullable(),
-  phone:      z.string().max(50).optional().nullable(),
-  company:    z.string().max(200).optional().nullable(),
-  job_title:  z.string().max(200).optional().nullable(),
+  first_name: z.string().trim().min(1).max(100),
+  last_name:  z.string().trim().max(100).optional().nullable(),
+  email:      z.string().trim().email().max(255).optional().nullable(),
+  phone:      z.string().trim().max(50).optional().nullable(),
+  company:    z.string().trim().max(200).optional().nullable(),
+  job_title:  z.string().trim().max(200).optional().nullable(),
   status:     z.enum(STATUSES).optional().default("lead"),
-  source:     z.string().max(200).optional().nullable(),
-  notes:      z.string().max(10000).optional().nullable(),
+  source:     z.string().trim().max(200).optional().nullable(),
+  notes:      z.string().trim().max(10000).optional().nullable(),
 });
 
 const updateSchema = z.object({
   id:         z.string().uuid(),
   clientId:   z.string().uuid(),
-  first_name: z.string().min(1).max(100).optional(),
-  last_name:  z.string().max(100).optional().nullable(),
-  email:      z.string().email().max(255).optional().nullable(),
-  phone:      z.string().max(50).optional().nullable(),
-  company:    z.string().max(200).optional().nullable(),
-  job_title:  z.string().max(200).optional().nullable(),
+  first_name: z.string().trim().min(1).max(100).optional(),
+  last_name:  z.string().trim().max(100).optional().nullable(),
+  email:      z.string().trim().email().max(255).optional().nullable(),
+  phone:      z.string().trim().max(50).optional().nullable(),
+  company:    z.string().trim().max(200).optional().nullable(),
+  job_title:  z.string().trim().max(200).optional().nullable(),
   status:     z.enum(STATUSES).optional(),
-  source:     z.string().max(200).optional().nullable(),
-  notes:      z.string().max(10000).optional().nullable(),
+  source:     z.string().trim().max(200).optional().nullable(),
+  notes:      z.string().trim().max(10000).optional().nullable(),
 });
 
 const deleteSchema = z.object({
@@ -53,21 +53,38 @@ export async function POST(req: NextRequest) {
   if (accessError) return accessError;
 
   const admin = createAdminClient();
+  const normalizedEmail = parsed.data.email?.toLowerCase() || null;
+  if (normalizedEmail) {
+    const { data: duplicate } = await admin
+      .from("crm_contacts")
+      .select("id")
+      .eq("client_id", parsed.data.clientId)
+      .ilike("email", normalizedEmail)
+      .limit(1)
+      .maybeSingle();
+    if (duplicate) {
+      return NextResponse.json(
+        { error: "A contact with this email already exists." },
+        { status: 409 },
+      );
+    }
+  }
+
   const { data, error } = await admin
     .from("crm_contacts")
     .insert({
       client_id:  parsed.data.clientId,
       created_by: user.id,
-      first_name: parsed.data.first_name.trim(),
-      last_name:  parsed.data.last_name?.trim() ?? null,
-      email:      parsed.data.email?.trim() ?? null,
-      phone:      parsed.data.phone?.trim() ?? null,
-      company:    parsed.data.company?.trim() ?? null,
-      job_title:  parsed.data.job_title?.trim() ?? null,
+      first_name: parsed.data.first_name,
+      last_name:  parsed.data.last_name || null,
+      email:      normalizedEmail,
+      phone:      parsed.data.phone || null,
+      company:    parsed.data.company || null,
+      job_title:  parsed.data.job_title || null,
       status:     parsed.data.status,
-      source:     parsed.data.source?.trim() ?? null,
+      source:     parsed.data.source || null,
       tags:       [],
-      notes:      parsed.data.notes?.trim() ?? null,
+      notes:      parsed.data.notes || null,
     })
     .select("id, client_id, first_name, last_name, email, phone, company, job_title, status, source, tags, notes, created_at, updated_at")
     .single();
@@ -103,11 +120,30 @@ export async function PATCH(req: NextRequest) {
 
   if (!existing) return NextResponse.json({ error: "Contact not found." }, { status: 404 });
 
+  const normalizedEmail = parsed.data.email?.toLowerCase() || null;
+  if (normalizedEmail) {
+    const { data: duplicate } = await admin
+      .from("crm_contacts")
+      .select("id")
+      .eq("client_id", parsed.data.clientId)
+      .ilike("email", normalizedEmail)
+      .neq("id", parsed.data.id)
+      .limit(1)
+      .maybeSingle();
+    if (duplicate) {
+      return NextResponse.json(
+        { error: "A contact with this email already exists." },
+        { status: 409 },
+      );
+    }
+  }
+
   const { id, clientId, ...fields } = parsed.data;
   const updates: Record<string, unknown> = { updated_at: new Date().toISOString() };
   for (const [k, v] of Object.entries(fields)) {
     if (v !== undefined) updates[k] = typeof v === "string" ? v.trim() || null : v;
   }
+  if (parsed.data.email !== undefined) updates.email = normalizedEmail;
   // first_name must not be nullified
   if (updates.first_name === null) delete updates.first_name;
 

@@ -28,8 +28,9 @@ const patchSchema = z.object({
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const result = await requireApiAuth();
   if ("error" in result) return result.error;
   const { user } = result;
@@ -44,7 +45,7 @@ export async function PATCH(
   const { data: targetUser } = await admin
     .from("users")
     .select("id, client_id, role")
-    .eq("id", params.id)
+    .eq("id", id)
     .single();
 
   if (!targetUser) {
@@ -69,7 +70,7 @@ export async function PATCH(
   const { data, error } = await admin
     .from("users")
     .update(parsed.data)
-    .eq("id", params.id)
+    .eq("id", id)
     .select("id, full_name, phone, birthday, salary, payment_terms, payment_details, whatsapp, personal_email, address, timezone, skills")
     .single();
 

@@ -22,6 +22,7 @@ import {
   UserCircle,
   UsersRound,
   MessageSquare,
+  BriefcaseBusiness,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -48,6 +49,7 @@ const clientAdminLinks = [
   { href: "/daily-log",      label: "Daily Log",      icon: NotebookPen },
   { href: "/knowledge-base", label: "Knowledge Base", icon: BookOpen },
   { href: "/crm",            label: "CRM",            icon: ContactRound },
+  { href: "/job-leads",      label: "Job Leads",      icon: BriefcaseBusiness },
   { href: "/content",        label: "Content",        icon: PenLine },
   { href: "/sops",           label: "SOPs",           icon: ListChecks },
   { href: "/company-dna",    label: "Company DNA",    icon: Dna },

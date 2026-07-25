@@ -20,16 +20,20 @@ CREATE INDEX IF NOT EXISTS daily_logs_client_date_idx
 CREATE OR REPLACE FUNCTION get_contact_status_counts(p_client_id UUID)
 RETURNS TABLE(status TEXT, count BIGINT)
 LANGUAGE sql STABLE SECURITY DEFINER
+SET search_path = public
 AS $$
   SELECT status::TEXT, COUNT(*)::BIGINT
   FROM crm_contacts
   WHERE client_id = p_client_id
+    AND (
+      p_client_id = current_user_client_id()
+      OR current_user_role() = 'super_admin'
+      OR auth.role() = 'service_role'
+    )
   GROUP BY status;
 $$;
 
--- Grant execute to authenticated users (RLS on crm_contacts still applies
--- via SECURITY INVOKER; SECURITY DEFINER bypasses RLS so we restrict by
--- matching against the caller's own client_id inside the function)
+-- SECURITY DEFINER bypasses RLS, so the function itself enforces tenant access.
 REVOKE ALL ON FUNCTION get_contact_status_counts(UUID) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION get_contact_status_counts(UUID) TO authenticated;
 

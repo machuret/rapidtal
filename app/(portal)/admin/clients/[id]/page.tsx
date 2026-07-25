@@ -7,10 +7,11 @@ import type { UserRole } from "@/types/database";
 export const dynamic = "force-dynamic";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function AdminClientDetailPage({ params }: Props) {
+  const { id } = await params;
   const ctx = await getCurrentUserAndClient();
   if (!ctx) redirect("/login");
   if (ctx.user.role !== "super_admin") redirect("/dashboard");
@@ -22,12 +23,12 @@ export default async function AdminClientDetailPage({ params }: Props) {
       admin
         .from("clients")
         .select("id, name, slug, created_at")
-        .eq("id", params.id)
+        .eq("id", id)
         .single(),
       admin
         .from("users")
         .select("id, email, full_name, role, created_at")
-        .eq("client_id", params.id)
+        .eq("client_id", id)
         .order("created_at", { ascending: true }),
       admin
         .from("users")

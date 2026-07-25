@@ -6,7 +6,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 const createSchema = z.object({
   contactId: z.string().uuid(),
   clientId:  z.string().uuid(),
-  body:      z.string().min(1).max(5000),
+  body:      z.string().trim().min(1).max(5000),
 });
 
 const deleteSchema = z.object({
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     .insert({
       contact_id: parsed.data.contactId,
       client_id:  parsed.data.clientId,
-      body:       parsed.data.body.trim(),
+      body:       parsed.data.body,
       created_by: user.id,
     })
     .select("id, body, created_at")
@@ -82,7 +82,10 @@ export async function DELETE(req: NextRequest) {
     .eq("client_id", parsed.data.clientId);
 
   // VAs can only delete their own notes — chain filter BEFORE awaiting
-  const { error } = await (isAdmin ? baseQuery : baseQuery.eq("created_by", user.id));
+  const { data: deleted, error } = await (isAdmin ? baseQuery : baseQuery.eq("created_by", user.id))
+    .select("id")
+    .maybeSingle();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (!deleted) return NextResponse.json({ error: "Note not found." }, { status: 404 });
   return NextResponse.json({ ok: true });
 }

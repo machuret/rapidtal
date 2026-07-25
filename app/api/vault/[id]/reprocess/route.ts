@@ -13,8 +13,9 @@ const schema = z.object({ clientId: z.string().uuid() });
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const auth = await requireApiAuth();
   if ("error" in auth) return auth.error;
   const { user } = auth;
@@ -29,7 +30,7 @@ export async function POST(
   if (accessError) return accessError;
 
   return proxyToEdgeFunction("vault-process", {
-    itemId: params.id,
+    itemId: id,
     clientId: parsed.data.clientId,
   });
 }

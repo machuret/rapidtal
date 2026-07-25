@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Lint runs as an explicit CI step via `pnpm lint`.
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
   // Enable compression for better performance
   compress: true,
   
@@ -25,7 +30,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=300, stale-while-revalidate=600',
+            value: 'private, no-store',
           },
         ],
       },
@@ -43,7 +48,7 @@ const nextConfig = {
   
   // Webpack optimizations
   webpack: (config, { dev, isServer }) => {
-    // canvas is an optional native dep of pdfjs-dist — not needed in serverless
+    // Native canvas bindings are not needed by the serverless application.
     config.resolve.alias = {
       ...config.resolve.alias,
       canvas: false,

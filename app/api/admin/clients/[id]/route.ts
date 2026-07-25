@@ -18,8 +18,9 @@ function requireSuperAdmin(role: string) {
 // PATCH /api/admin/clients/[id] — update client name/slug
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const result = await requireApiAuth();
   if ("error" in result) return result.error;
   const denied = requireSuperAdmin(result.user.role);
@@ -42,7 +43,7 @@ export async function PATCH(
   const { data, error } = await (admin as any)
     .from("clients")
     .update(parsed.data)
-    .eq("id", params.id)
+    .eq("id", id)
     .select("id, name, slug, created_at")
     .single();
 
@@ -60,8 +61,9 @@ export async function PATCH(
 // DELETE /api/admin/clients/[id] — delete client (cascades users)
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const result = await requireApiAuth();
   if ("error" in result) return result.error;
   const denied = requireSuperAdmin(result.user.role);
@@ -73,7 +75,7 @@ export async function DELETE(
   const { error } = await (admin as any)
     .from("clients")
     .delete()
-    .eq("id", params.id);
+    .eq("id", id);
 
   if (error) {
     console.error("[admin/clients DELETE]", error.code, error.message);

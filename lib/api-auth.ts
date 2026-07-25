@@ -16,7 +16,7 @@ export interface ApiUser {
  * Never trusts clientId/userId from the request body for auth purposes.
  */
 export async function requireApiAuth(): Promise<{ user: ApiUser } | { error: NextResponse }> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

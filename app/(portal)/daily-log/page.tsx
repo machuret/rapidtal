@@ -13,8 +13,9 @@ export const metadata = { title: "Daily Log — RapidTal" };
 export default async function DailyLogPage({
   searchParams,
 }: {
-  searchParams: { employee?: string };
+  searchParams: Promise<{ employee?: string }>;
 }) {
+  const resolvedSearchParams = await searchParams;
   const ctx = await getCurrentUserAndClient();
   if (!ctx) redirect("/login");
   const { user } = ctx;
@@ -34,7 +35,7 @@ export default async function DailyLogPage({
     const vaUsers = (employees ?? []) as { id: string; full_name: string | null; email: string }[];
 
     // Which employee to view — defaults to first VA
-    const selectedId = searchParams.employee ?? vaUsers[0]?.id ?? null;
+    const selectedId = resolvedSearchParams.employee ?? vaUsers[0]?.id ?? null;
 
     let selectedLog: DailyLog | null = null;
     let selectedNotes: DailyLogNote[] = [];

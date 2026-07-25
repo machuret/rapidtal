@@ -26,8 +26,9 @@ const patchSchema = z.object({
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const auth = await requireApiAuth();
   if ("error" in auth) return auth.error;
   const { user } = auth;
@@ -48,7 +49,7 @@ export async function PATCH(
   const { data: existing } = await supabase
     .from("vault_items")
     .select("id, client_id, created_by")
-    .eq("id", params.id)
+    .eq("id", id)
     .eq("client_id", clientId)
     .maybeSingle();
 
@@ -69,7 +70,7 @@ export async function PATCH(
       updated_at: new Date().toISOString(),
       updated_by: user.id,
     })
-    .eq("id", params.id);
+    .eq("id", id);
 
   if (updateErr) {
     return NextResponse.json({ error: updateErr.message }, { status: 500 });
@@ -79,7 +80,7 @@ export async function PATCH(
   // The client sees the save immediately; Realtime pushes the AI metadata
   // update when vault-process writes its results back to vault_items.
   if (updates.raw_content) {
-    void proxyToEdgeFunction("vault-process", { itemId: params.id, clientId })
+    void proxyToEdgeFunction("vault-process", { itemId: id, clientId })
       .catch(err => console.error("[vault/[id]] vault-process background error:", err));
   }
 

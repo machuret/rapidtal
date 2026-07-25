@@ -1,3 +1,5 @@
+/** @jest-environment node */
+
 import { CacheManager, RetryManager, ContentValidator, cache } from '@/lib/cache';
 
 describe('Cache Manager', () => {
@@ -27,7 +29,7 @@ describe('Cache Manager', () => {
       const content = 'Test content';
       
       // Cache with very short TTL
-      CacheManager.cacheWebsiteContent(url, content);
+      CacheManager.cacheWebsiteContent(url, content, 10);
       
       // Should be available immediately
       expect(CacheManager.getWebsiteContent(url)).toBe(content);
@@ -163,7 +165,7 @@ describe('Content Validator', () => {
     });
 
     test('should reject content that is mostly HTML tags', () => {
-      const htmlContent = '<div><p><span>Text</span></p></div>';
+      const htmlContent = '<div><p><span>x</span></p></div>'.repeat(5);
       const result = ContentValidator.validateWebsiteContent(htmlContent);
       expect(result.isValid).toBe(false);
       expect(result.error).toBe('Content appears to be mostly HTML tags');

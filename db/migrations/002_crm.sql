@@ -51,7 +51,23 @@ CREATE POLICY "crm_notes_super_admin_all"
   USING (current_user_role() = 'super_admin')
   WITH CHECK (current_user_role() = 'super_admin');
 
-CREATE POLICY "crm_notes_own_client_all"
-  ON crm_notes FOR ALL
-  USING (client_id = current_user_client_id())
-  WITH CHECK (client_id = current_user_client_id());
+CREATE POLICY "crm_notes_own_client_select"
+  ON crm_notes FOR SELECT
+  USING (client_id = current_user_client_id());
+
+CREATE POLICY "crm_notes_own_client_insert"
+  ON crm_notes FOR INSERT
+  WITH CHECK (
+    client_id = current_user_client_id()
+    AND created_by = auth.uid()
+  );
+
+CREATE POLICY "crm_notes_author_or_admin_delete"
+  ON crm_notes FOR DELETE
+  USING (
+    client_id = current_user_client_id()
+    AND (
+      created_by = auth.uid()
+      OR current_user_role() = 'client_admin'
+    )
+  );

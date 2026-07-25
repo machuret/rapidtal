@@ -4,6 +4,10 @@ export type VaultSourceType = "pdf" | "docx" | "text" | "url";
 export type VaultStatus = "pending" | "processing" | "ready" | "error";
 export type KbRunStatus = "running" | "completed" | "failed";
 export type TimeEntryPhase = "work" | "break";
+export type JobAdStatus = "discovered" | "extracted" | "needs_review" | "approved" | "rejected" | "expired" | "error";
+export type JobRemoteType = "onsite" | "hybrid" | "remote" | "unknown";
+export type JobExtractionMethod = "json_ld" | "ai" | "json_ld+ai";
+export type JobScrapeRunStatus = "running" | "completed" | "failed";
 
 export interface DbClient {
   id: string;
@@ -108,6 +112,78 @@ export interface DbKbGenerationRun {
   completed_at: string | null;
 }
 
+export type DbJobAd = {
+  id: string;
+  client_id: string;
+  source_url: string;
+  canonical_url: string;
+  source_host: string;
+  source_job_id: string | null;
+  title: string;
+  company_name: string | null;
+  company_website: string | null;
+  location: string | null;
+  remote_type: JobRemoteType;
+  employment_type: string | null;
+  salary_min: number | null;
+  salary_max: number | null;
+  salary_currency: string | null;
+  salary_period: string | null;
+  description: string;
+  responsibilities: string[];
+  skills: string[];
+  posted_at: string | null;
+  expires_at: string | null;
+  apply_url: string | null;
+  raw_content: string;
+  raw_content_hash: string;
+  extraction_hash: string | null;
+  extraction_method: JobExtractionMethod;
+  extraction_confidence: number;
+  field_evidence: Record<string, string>;
+  status: JobAdStatus;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  reviewed_content_hash: string | null;
+  reviewed_extraction_hash: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+  last_seen_at: string;
+};
+
+export type DbJobAdReviewEvent = {
+  id: string;
+  client_id: string;
+  job_ad_id: string;
+  from_status: string;
+  to_status: "needs_review" | "approved" | "rejected";
+  notes: string | null;
+  content_hash: string;
+  extraction_hash: string | null;
+  reviewed_by: string;
+  created_at: string;
+};
+
+export type DbJobScrapeRun = {
+  id: string;
+  client_id: string;
+  job_ad_id: string | null;
+  requested_url: string;
+  canonical_url: string | null;
+  status: JobScrapeRunStatus;
+  provider: string;
+  extraction_method: JobExtractionMethod | null;
+  http_status: number | null;
+  tokens_used: number;
+  duration_ms: number | null;
+  error_code: string | null;
+  error_message: string | null;
+  created_by: string | null;
+  started_at: string;
+  completed_at: string | null;
+};
+
 type NoRelationships = {
   foreignKeyName: string;
   columns: string[];
@@ -169,6 +245,90 @@ export interface Database {
         Update: { id?: string; contact_id?: string; client_id?: string; body?: string; created_by?: string | null; created_at?: string };
         Relationships: NoRelationships;
       };
+      job_ads: {
+        Row: DbJobAd;
+        Insert: {
+          id?: string;
+          client_id: string;
+          source_url: string;
+          canonical_url: string;
+          source_host: string;
+          source_job_id?: string | null;
+          title: string;
+          company_name?: string | null;
+          company_website?: string | null;
+          location?: string | null;
+          remote_type?: JobRemoteType;
+          employment_type?: string | null;
+          salary_min?: number | null;
+          salary_max?: number | null;
+          salary_currency?: string | null;
+          salary_period?: string | null;
+          description: string;
+          responsibilities?: string[];
+          skills?: string[];
+          posted_at?: string | null;
+          expires_at?: string | null;
+          apply_url?: string | null;
+          raw_content: string;
+          raw_content_hash: string;
+          extraction_hash?: string | null;
+          extraction_method: JobExtractionMethod;
+          extraction_confidence?: number;
+          field_evidence?: Record<string, string>;
+          status?: JobAdStatus;
+          reviewed_by?: string | null;
+          reviewed_at?: string | null;
+          reviewed_content_hash?: string | null;
+          reviewed_extraction_hash?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          last_seen_at?: string;
+        };
+        Update: Partial<DbJobAd>;
+        Relationships: NoRelationships;
+      };
+      job_ad_review_events: {
+        Row: DbJobAdReviewEvent;
+        Insert: {
+          id?: string;
+          client_id: string;
+          job_ad_id: string;
+          from_status: string;
+          to_status: "needs_review" | "approved" | "rejected";
+          notes?: string | null;
+          content_hash: string;
+          extraction_hash?: string | null;
+          reviewed_by: string;
+          created_at?: string;
+        };
+        Update: Partial<DbJobAdReviewEvent>;
+        Relationships: NoRelationships;
+      };
+      job_scrape_runs: {
+        Row: DbJobScrapeRun;
+        Insert: {
+          id?: string;
+          client_id: string;
+          job_ad_id?: string | null;
+          requested_url: string;
+          canonical_url?: string | null;
+          status?: JobScrapeRunStatus;
+          provider?: string;
+          extraction_method?: JobExtractionMethod | null;
+          http_status?: number | null;
+          tokens_used?: number;
+          duration_ms?: number | null;
+          error_code?: string | null;
+          error_message?: string | null;
+          created_by?: string | null;
+          started_at?: string;
+          completed_at?: string | null;
+        };
+        Update: Partial<DbJobScrapeRun>;
+        Relationships: NoRelationships;
+      };
       sops: {
         Row: { id: string; client_id: string; title: string; category: string; body: string; order_index: number; created_by: string | null; created_at: string; updated_at: string };
         Insert: { id?: string; client_id: string; title: string; category?: string; body?: string; order_index?: number; created_by?: string | null; created_at?: string; updated_at?: string };
@@ -208,6 +368,20 @@ export interface Database {
       get_contact_status_counts: {
         Args: { p_client_id: string };
         Returns: { status: string; count: number }[];
+      };
+      consume_api_rate_limit: {
+        Args: { p_key: string; p_limit: number; p_window_seconds: number };
+        Returns: boolean;
+      };
+      review_job_ad: {
+        Args: {
+          p_actor_id: string;
+          p_client_id: string;
+          p_job_ad_id: string;
+          p_status: "needs_review" | "approved" | "rejected";
+          p_notes?: string | null;
+        };
+        Returns: DbJobAd[];
       };
     };
     Enums: Record<string, never>;

@@ -1,3 +1,5 @@
+/** @jest-environment node */
+
 import { validateScrapingUrl, checkUrlAccessibility, dnaScrapeRateLimiter } from '@/lib/url-validation';
 
 // Mock fetch for URL accessibility tests
@@ -35,10 +37,10 @@ describe('URL Validation', () => {
       expect(result.error).toBe('File type not allowed for scraping');
     });
 
-    test('should sanitize dangerous query parameters', () => {
+    test('should reject dangerous query parameters containing paths', () => {
       const result = validateScrapingUrl('https://example.com?file=/etc/passwd&path=admin');
-      expect(result.isValid).toBe(true);
-      expect(result.sanitizedUrl).toBe('https://example.com/');
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe('Suspicious URL parameters detected');
     });
 
     test('should allow valid HTTPS URLs', () => {

@@ -8,8 +8,9 @@ import type { AnalyticsEntry } from "@/types/daily-log";
 export default async function DailyLogAnalyticsPage({
   searchParams,
 }: {
-  searchParams: { employee?: string };
+  searchParams: Promise<{ employee?: string }>;
 }) {
+  const resolvedSearchParams = await searchParams;
   const ctx = await getCurrentUserAndClient();
   if (!ctx) redirect("/login");
   const { user } = ctx;
@@ -24,7 +25,7 @@ export default async function DailyLogAnalyticsPage({
   if (isAdmin && user.client_id) {
     // Admin: show a specific VA's analytics if ?employee= is set,
     // otherwise show aggregated entries for all VAs in the client.
-    const targetId = searchParams.employee;
+    const targetId = resolvedSearchParams.employee;
 
     if (targetId) {
       // Fetch the VA's name for the heading

@@ -14,8 +14,9 @@ const deleteSchema = z.object({ clientId: z.string().uuid() });
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const auth = await requireApiAuth();
   if ("error" in auth) return auth.error;
   const { user } = auth;
@@ -42,7 +43,7 @@ export async function PATCH(
   const { error } = await admin
     .from("kb_entries")
     .update(updates)
-    .eq("id", params.id)
+    .eq("id", id)
     .eq("client_id", clientId);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -52,8 +53,9 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const auth = await requireApiAuth();
   if ("error" in auth) return auth.error;
   const { user } = auth;
@@ -78,7 +80,7 @@ export async function DELETE(
   const { error } = await admin
     .from("kb_entries")
     .delete()
-    .eq("id", params.id)
+    .eq("id", id)
     .eq("client_id", parsed.data.clientId);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

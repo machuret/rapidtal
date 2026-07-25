@@ -5,24 +5,28 @@ import { createAdminClient } from "@/lib/supabase/admin";
 
 const bodySchema = z.object({
   client_id:          z.string().uuid(),
-  company_name:       z.string().max(200).optional().nullable(),
-  founders:           z.string().max(500).optional().nullable(),
-  location:           z.string().max(200).optional().nullable(),
-  phone:              z.string().max(50).optional().nullable(),
-  email:              z.string().max(200).optional().nullable(),
-  website:            z.string().max(300).optional().nullable(),
-  client_type:        z.string().max(100).optional().nullable(),
-  target_demographic: z.string().max(500).optional().nullable(),
-  values:             z.string().max(2000).optional().nullable(),
-  services:           z.string().max(2000).optional().nullable(),
+  company_name:       z.string().trim().max(200).optional().nullable(),
+  founders:           z.string().trim().max(500).optional().nullable(),
+  location:           z.string().trim().max(200).optional().nullable(),
+  phone:              z.string().trim().max(50).optional().nullable(),
+  email:              z.union([z.literal(""), z.string().trim().email().max(200)]).optional().nullable(),
+  website:            z.union([z.literal(""), z.string().trim().url().max(300)]).optional().nullable(),
+  client_type:        z.string().trim().max(100).optional().nullable(),
+  target_demographic: z.string().trim().max(500).optional().nullable(),
+  values:             z.string().trim().max(2000).optional().nullable(),
+  services:           z.string().trim().max(2000).optional().nullable(),
   // extra is a NOT NULL JSONB column — must be present on first INSERT
-  extra:              z.record(z.string(), z.unknown()).optional().default({}),
+  extra:              z.record(z.string(), z.unknown()).optional(),
 });
 
 export async function POST(req: NextRequest) {
   const result = await requireApiAuth();
   if ("error" in result) return result.error;
   const { user } = result;
+
+  if (user.role !== "client_admin" && user.role !== "super_admin") {
+    return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+  }
 
   let body: unknown;
   try { body = await req.json(); }

@@ -26,7 +26,8 @@ const MOOD_SCORE: Record<string, number> = {
   great: 5, good: 4, neutral: 3, difficult: 2, overwhelmed: 1,
 };
 
-export default async function VaDetailPage({ params }: { params: { id: string } }) {
+export default async function VaDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const ctx = await getCurrentUserAndClient();
   if (!ctx) redirect("/login");
   const { user } = ctx;
@@ -40,7 +41,7 @@ export default async function VaDetailPage({ params }: { params: { id: string } 
   const { data: va } = await admin
     .from("users")
     .select("id, full_name, email, phone, birthday, avatar_url, created_at, salary, payment_terms, payment_details, whatsapp, personal_email, address, timezone, skills")
-    .eq("id", params.id)
+    .eq("id", id)
     .eq("client_id", user.client_id)
     .eq("role", "va")
     .single();

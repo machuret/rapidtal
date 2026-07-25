@@ -8,7 +8,7 @@ if (!global.AbortSignal) {
       removeEventListener: jest.fn(),
       aborted: false,
     }),
-  } as any;
+  };
 }
 
 // Mock fetch for tests

@@ -68,7 +68,7 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ error: "Password must be at least 8 characters." }, { status: 422 });
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error: pwErr } = await supabase.auth.updateUser({
     password: parsed.data.new_password,
   });
