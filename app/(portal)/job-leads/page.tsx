@@ -7,7 +7,14 @@ import { JobLeadIngest } from "@/components/job-leads/JobLeadIngest";
 import { JobLeadReviewActions } from "@/components/job-leads/JobLeadReviewActions";
 import { JobDiscoverySearch } from "@/components/job-leads/JobDiscoverySearch";
 import { JobDiscoveryActions } from "@/components/job-leads/JobDiscoveryActions";
-import type { DbJobAd, DbJobDiscovery, DbJobScrapeRun, DbJobSearch } from "@/types/database";
+import { CompanyEnrichmentActions } from "@/components/job-leads/CompanyEnrichmentActions";
+import type {
+  DbJobAd,
+  DbJobDiscovery,
+  DbJobScrapeRun,
+  DbJobSearch,
+  DbLeadCompany,
+} from "@/types/database";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Job Leads — RapidTal" };
@@ -15,6 +22,7 @@ export const metadata = { title: "Job Leads — RapidTal" };
 type JobLeadListItem = Pick<
   DbJobAd,
   "id" | "canonical_url" | "title" | "company_name" | "location"
+    | "company_website" | "company_id"
     | "remote_type" | "employment_type" | "salary_min" | "salary_max"
     | "salary_currency" | "salary_period" | "skills" | "status"
     | "description" | "responsibilities" | "field_evidence" | "posted_at"
@@ -39,6 +47,13 @@ type SavedSearchListItem = Pick<
   "id" | "source" | "search_term" | "location"
 >;
 
+type CompanyListItem = Pick<
+  DbLeadCompany,
+  "id" | "domain" | "website_url" | "name" | "industry" | "location"
+    | "services" | "description" | "inferred_data" | "evidence" | "status"
+    | "last_enriched_at"
+>;
+
 function salaryLabel(job: JobLeadListItem): string | null {
   if (job.salary_min === null && job.salary_max === null) return null;
   const currency = job.salary_currency ? `${job.salary_currency} ` : "";
@@ -46,6 +61,33 @@ function salaryLabel(job: JobLeadListItem): string | null {
   const max = job.salary_max === null ? "" : Number(job.salary_max).toLocaleString();
   const range = min && max ? `${min}–${max}` : min || max;
   return `${currency}${range}${job.salary_period ? ` / ${job.salary_period}` : ""}`;
+}
+
+function companyEvidenceItems(evidence: Record<string, unknown>) {
+  const items: { key: string; url: string; excerpt: string; confidence: number }[] = [];
+  for (const [field, raw] of Object.entries(evidence)) {
+    const values = Array.isArray(raw) ? raw : [raw];
+    for (const [index, value] of values.entries()) {
+      if (!value || typeof value !== "object" || Array.isArray(value)) continue;
+      const record = value as Record<string, unknown>;
+      if (typeof record.source_url !== "string" || typeof record.excerpt !== "string") continue;
+      items.push({
+        key: `${field}-${index}`,
+        url: record.source_url,
+        excerpt: record.excerpt,
+        confidence: Number(record.confidence) || 0,
+      });
+    }
+  }
+  return items;
+}
+
+function sourceHostname(url: string): string {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return "Source page";
+  }
 }
 
 export default async function JobLeadsPage() {
@@ -59,7 +101,8 @@ export default async function JobLeadsPage() {
     admin
       .from("job_ads")
       .select(`
-        id, canonical_url, title, company_name, location, remote_type,
+        id, canonical_url, title, company_name, company_website, company_id,
+        location, remote_type,
         employment_type, salary_min, salary_max, salary_currency, salary_period,
         description, responsibilities, skills, field_evidence, posted_at, expires_at,
         extraction_method, extraction_confidence, status, reviewed_at, last_seen_at
@@ -94,9 +137,27 @@ export default async function JobLeadsPage() {
   ]);
 
   const jobs = (jobResult.data ?? []) as JobLeadListItem[];
+  const linkedCompanyIds = [
+    ...new Set(jobs.flatMap((job) => job.company_id ? [job.company_id] : [])),
+  ];
+  const companyResult = await admin
+    .from("lead_companies")
+    .select(`
+      id, domain, website_url, name, industry, location, services,
+      description, inferred_data, evidence, status, last_enriched_at
+    `)
+    .eq("client_id", clientId)
+    .in(
+      "id",
+      linkedCompanyIds.length
+        ? linkedCompanyIds
+        : ["00000000-0000-0000-0000-000000000000"],
+    );
   const failedRuns = (failedRunResult.data ?? []) as FailedRunListItem[];
   const discoveries = (discoveryResult.data ?? []) as DiscoveryListItem[];
   const savedSearches = (searchResult.data ?? []) as SavedSearchListItem[];
+  const companies = (companyResult.data ?? []) as CompanyListItem[];
+  const companiesById = new Map(companies.map((company) => [company.id, company]));
 
   return (
     <div>
@@ -168,6 +229,11 @@ export default async function JobLeadsPage() {
           Job leads could not be loaded: {jobResult.error.message}
         </div>
       )}
+      {companyResult.error && (
+        <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/5 p-4 text-sm text-red-300">
+          Company enrichment data could not be loaded: {companyResult.error.message}
+        </div>
+      )}
 
       {!jobResult.error && jobs.length === 0 && (
         <div className="rounded-xl border border-dashed border-zinc-800 p-10 text-center">
@@ -181,6 +247,8 @@ export default async function JobLeadsPage() {
       <div className="grid grid-cols-1 gap-4">
         {jobs.map((job) => {
           const salary = salaryLabel(job);
+          const company = job.company_id ? companiesById.get(job.company_id) ?? null : null;
+          const companyEvidence = company ? companyEvidenceItems(company.evidence) : [];
           return (
             <article key={job.id} className="rounded-xl border border-zinc-800 bg-zinc-900 p-5">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
@@ -278,6 +346,103 @@ export default async function JobLeadsPage() {
                 jobAdId={job.id}
                 status={job.status}
               />
+
+              {job.status === "approved" && (
+                <div className="mt-4 rounded-lg border border-violet-500/20 bg-violet-500/5 p-4">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <h3 className="text-sm font-semibold text-violet-200">Employer company</h3>
+                      <p className="mt-1 text-xs text-zinc-400">
+                        Source-backed company facts remain separate from machine inferences.
+                      </p>
+                    </div>
+                    {company && (
+                      <span className="w-fit rounded-full border border-violet-500/30 px-2 py-0.5 text-xs text-violet-300">
+                        {company.status.replaceAll("_", " ")}
+                      </span>
+                    )}
+                  </div>
+
+                  {company && (
+                    <div className="mt-3 space-y-3">
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-zinc-300">
+                        <a
+                          href={company.website_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-blue-400 hover:text-blue-300"
+                        >
+                          {company.name ?? company.domain}
+                        </a>
+                        {company.industry && <span>{company.industry}</span>}
+                        {company.location && <span>{company.location}</span>}
+                      </div>
+                      {company.services.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5">
+                          {company.services.map((service) => (
+                            <span key={service} className="rounded bg-zinc-800 px-2 py-1 text-xs text-zinc-300">
+                              {service}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      {company.description && (
+                        <p className="text-sm text-zinc-400">{company.description}</p>
+                      )}
+                      {companyEvidence.length > 0 && (
+                        <details className="rounded border border-zinc-700 bg-zinc-950/50">
+                          <summary className="cursor-pointer px-3 py-2 text-xs font-medium text-zinc-300">
+                            Source-backed company evidence
+                          </summary>
+                          <div className="space-y-3 border-t border-zinc-700 px-3 py-3">
+                            {companyEvidence.map((item) => (
+                              <div key={item.key}>
+                                <a
+                                  href={item.url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-xs text-blue-400 hover:text-blue-300"
+                                >
+                                  {sourceHostname(item.url)}
+                                </a>
+                                <p className="mt-1 text-sm text-zinc-300">{item.excerpt}</p>
+                                <p className="mt-1 text-xs text-zinc-600">
+                                  {Math.round(item.confidence * 100)}% confidence
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </details>
+                      )}
+                      {Object.keys(company.inferred_data).length > 0 && (
+                        <details className="rounded border border-amber-500/20 bg-amber-500/5">
+                          <summary className="cursor-pointer px-3 py-2 text-xs font-medium text-amber-300">
+                            Inferred information — not source-backed
+                          </summary>
+                          <dl className="space-y-2 border-t border-amber-500/20 px-3 py-3">
+                            {Object.entries(company.inferred_data).map(([field, value]) => (
+                              <div key={field}>
+                                <dt className="text-xs text-zinc-500">{field.replaceAll("_", " ")}</dt>
+                                <dd className="text-sm text-zinc-300">
+                                  {Array.isArray(value) ? value.join(", ") : String(value)}
+                                </dd>
+                              </div>
+                            ))}
+                          </dl>
+                        </details>
+                      )}
+                    </div>
+                  )}
+
+                  <CompanyEnrichmentActions
+                    clientId={clientId}
+                    jobAdId={job.id}
+                    companyId={company?.id ?? null}
+                    companyStatus={company?.status ?? null}
+                    hasOfficialWebsite={Boolean(job.company_website)}
+                  />
+                </div>
+              )}
 
               <p className="text-xs text-zinc-600 mt-4">
                 Last checked {formatDistanceToNow(new Date(job.last_seen_at), { addSuffix: true })}

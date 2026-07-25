@@ -10,6 +10,8 @@ export type JobExtractionMethod = "json_ld" | "ai" | "json_ld+ai";
 export type JobScrapeRunStatus = "running" | "completed" | "failed";
 export type JobDiscoverySource = "seek" | "indeed" | "linkedin";
 export type JobDiscoveryStatus = "new" | "imported" | "dismissed" | "error";
+export type LeadCompanyStatus = "needs_review" | "approved" | "rejected" | "error";
+export type CompanyEnrichmentRunStatus = "running" | "completed" | "failed" | "reused";
 
 export interface DbClient {
   id: string;
@@ -124,6 +126,7 @@ export type DbJobAd = {
   title: string;
   company_name: string | null;
   company_website: string | null;
+  company_id: string | null;
   location: string | null;
   remote_type: JobRemoteType;
   employment_type: string | null;
@@ -152,6 +155,75 @@ export type DbJobAd = {
   created_at: string;
   updated_at: string;
   last_seen_at: string;
+};
+
+export type DbLeadCompany = {
+  id: string;
+  client_id: string;
+  domain: string;
+  website_url: string;
+  name: string | null;
+  industry: string | null;
+  location: string | null;
+  services: string[];
+  description: string | null;
+  source_backed_data: Record<string, unknown>;
+  inferred_data: Record<string, unknown>;
+  evidence: Record<string, unknown>;
+  enrichment_hash: string;
+  status: LeadCompanyStatus;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+  last_enriched_at: string;
+};
+
+export type DbCompanyEnrichmentRun = {
+  id: string;
+  client_id: string;
+  company_id: string | null;
+  job_ad_id: string;
+  domain: string | null;
+  status: CompanyEnrichmentRunStatus;
+  provider: string;
+  provider_run_id: string | null;
+  page_count: number;
+  cost_usd: number;
+  tokens_used: number;
+  duration_ms: number | null;
+  error_code: string | null;
+  error_message: string | null;
+  created_by: string | null;
+  started_at: string;
+  completed_at: string | null;
+};
+
+export type DbLeadCompanyFact = {
+  id: string;
+  client_id: string;
+  company_id: string;
+  enrichment_run_id: string;
+  field_name: "name" | "industry" | "location" | "services" | "description";
+  value: unknown;
+  fact_type: "source_backed" | "inferred";
+  source_url: string | null;
+  source_excerpt: string | null;
+  rationale: string | null;
+  confidence: number;
+  created_at: string;
+};
+
+export type DbLeadCompanyReviewEvent = {
+  id: string;
+  client_id: string;
+  company_id: string;
+  from_status: string;
+  to_status: "needs_review" | "approved" | "rejected";
+  enrichment_hash: string;
+  reviewed_by: string;
+  created_at: string;
 };
 
 export type DbJobAdReviewEvent = {
@@ -323,6 +395,7 @@ export interface Database {
           title: string;
           company_name?: string | null;
           company_website?: string | null;
+          company_id?: string | null;
           location?: string | null;
           remote_type?: JobRemoteType;
           employment_type?: string | null;
@@ -353,6 +426,91 @@ export interface Database {
           last_seen_at?: string;
         };
         Update: Partial<DbJobAd>;
+        Relationships: NoRelationships;
+      };
+      lead_companies: {
+        Row: DbLeadCompany;
+        Insert: {
+          id?: string;
+          client_id: string;
+          domain: string;
+          website_url: string;
+          name?: string | null;
+          industry?: string | null;
+          location?: string | null;
+          services?: string[];
+          description?: string | null;
+          source_backed_data?: Record<string, unknown>;
+          inferred_data?: Record<string, unknown>;
+          evidence?: Record<string, unknown>;
+          enrichment_hash: string;
+          status?: LeadCompanyStatus;
+          reviewed_by?: string | null;
+          reviewed_at?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          last_enriched_at?: string;
+        };
+        Update: Partial<DbLeadCompany>;
+        Relationships: NoRelationships;
+      };
+      company_enrichment_runs: {
+        Row: DbCompanyEnrichmentRun;
+        Insert: {
+          id?: string;
+          client_id: string;
+          company_id?: string | null;
+          job_ad_id: string;
+          domain?: string | null;
+          status?: CompanyEnrichmentRunStatus;
+          provider?: string;
+          provider_run_id?: string | null;
+          page_count?: number;
+          cost_usd?: number;
+          tokens_used?: number;
+          duration_ms?: number | null;
+          error_code?: string | null;
+          error_message?: string | null;
+          created_by?: string | null;
+          started_at?: string;
+          completed_at?: string | null;
+        };
+        Update: Partial<DbCompanyEnrichmentRun>;
+        Relationships: NoRelationships;
+      };
+      lead_company_facts: {
+        Row: DbLeadCompanyFact;
+        Insert: {
+          id?: string;
+          client_id: string;
+          company_id: string;
+          enrichment_run_id: string;
+          field_name: DbLeadCompanyFact["field_name"];
+          value: unknown;
+          fact_type: DbLeadCompanyFact["fact_type"];
+          source_url?: string | null;
+          source_excerpt?: string | null;
+          rationale?: string | null;
+          confidence: number;
+          created_at?: string;
+        };
+        Update: Partial<DbLeadCompanyFact>;
+        Relationships: NoRelationships;
+      };
+      lead_company_review_events: {
+        Row: DbLeadCompanyReviewEvent;
+        Insert: {
+          id?: string;
+          client_id: string;
+          company_id: string;
+          from_status: string;
+          to_status: "needs_review" | "approved" | "rejected";
+          enrichment_hash: string;
+          reviewed_by: string;
+          created_at?: string;
+        };
+        Update: Partial<DbLeadCompanyReviewEvent>;
         Relationships: NoRelationships;
       };
       job_ad_review_events: {
@@ -548,6 +706,35 @@ export interface Database {
           p_items: Record<string, unknown>[];
         };
         Returns: { result_count: number; new_count: number }[];
+      };
+      upsert_lead_company_enrichment: {
+        Args: {
+          p_actor_id: string;
+          p_client_id: string;
+          p_job_ad_id: string;
+          p_run_id: string;
+          p_payload: Record<string, unknown>;
+        };
+        Returns: DbLeadCompany[];
+      };
+      reuse_lead_company: {
+        Args: {
+          p_actor_id: string;
+          p_client_id: string;
+          p_job_ad_id: string;
+          p_run_id: string;
+          p_company_id: string;
+        };
+        Returns: DbLeadCompany[];
+      };
+      review_lead_company: {
+        Args: {
+          p_actor_id: string;
+          p_client_id: string;
+          p_company_id: string;
+          p_status: "needs_review" | "approved" | "rejected";
+        };
+        Returns: DbLeadCompany[];
       };
     };
     Enums: Record<string, never>;
