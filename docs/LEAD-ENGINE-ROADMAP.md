@@ -40,18 +40,22 @@ service role, and failed company enrichment attempts are visible in Job Leads.
 
 ## Phase 4 — Transparent lead scoring
 
-Phase 4 is not yet implemented. It will score only approved companies using
-versioned, reproducible components:
+Phase 4 scores only approved advertisements linked to approved companies using
+the deterministic `phase4-v1` ruleset:
 
-- target-role match;
-- target geography;
-- advertisement recency;
-- hiring urgency;
-- company fit;
-- outsourcing or placement suitability;
-- data completeness;
-- evidence confidence.
+- target-role match — 25 points;
+- target geography — 15 points;
+- advertisement recency — 15 points;
+- hiring urgency — 15 points;
+- company fit — 10 points;
+- outsourcing or placement suitability — 10 points;
+- data completeness and confidence — 10 points.
 
-Every component must expose its rule, input facts, points, and explanation.
-There will be no unexplained AI-generated total and no automatic creation of a
-human CRM contact.
+Target roles, geographies, preferred industries, and company-fit keywords are
+stored in a tenant-scoped, versioned profile. Every score stores the exact job
+extraction hash, company enrichment hash, profile version, ruleset version,
+component inputs, points, maximums, and plain-language reasons. Changed inputs
+mark the displayed score for recalculation.
+
+There is no model call, unexplained AI-generated total, or automatic creation
+of a human CRM contact.

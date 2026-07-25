@@ -18,7 +18,7 @@ Phase 1 ingestion has the same default USD 1 ceiling through
 
 1. Apply `db/migrations/019_job_ad_review_hardening.sql` after migrations 001–018,
    then apply migrations 020 through
-   `db/migrations/023_company_enrichment_hardening.sql`.
+   `db/migrations/024_transparent_lead_scoring.sql`.
 2. Deploy `job-ad-ingest`, `job-ad-discover`, `company-enrich`, and the retired
    `engine-jobs-scrape` and `engine-jobs-enrich` tombstones to project
    `uerbrkxowbrqadkwbqea`.
@@ -67,6 +67,11 @@ never writes to `crm_contacts`. See `docs/LEAD-ENGINE-ROADMAP.md`.
   overwrite a review that matches the newly extracted hashes.
 - Dismiss or import a discovery during a repeated search and confirm its status
   and `job_ad_id` are preserved.
+- Approve a company, calculate its lead score, and confirm all seven components
+  show points, maximums, and reasons totalling exactly 100 possible points; confirm
+  the corresponding component rows also retain their exact rule inputs.
+- Change the scoring profile and confirm the previous score is marked for
+  recalculation rather than silently rewritten.
 
 Useful checks:
 

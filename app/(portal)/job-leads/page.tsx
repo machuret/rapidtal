@@ -8,7 +8,12 @@ import { JobLeadReviewActions } from "@/components/job-leads/JobLeadReviewAction
 import { JobDiscoverySearch } from "@/components/job-leads/JobDiscoverySearch";
 import { JobDiscoveryActions } from "@/components/job-leads/JobDiscoveryActions";
 import { CompanyEnrichmentActions } from "@/components/job-leads/CompanyEnrichmentActions";
+import { LeadScoreActions } from "@/components/job-leads/LeadScoreActions";
+import { LeadScoringProfileForm } from "@/components/job-leads/LeadScoringProfileForm";
 import type {
+  DbLeadScore,
+  DbLeadScoreComponent,
+  DbLeadScoringProfile,
   DbJobAd,
   DbJobDiscovery,
   DbJobScrapeRun,
@@ -23,7 +28,7 @@ export const metadata = { title: "Job Leads — RapidTal" };
 type JobLeadListItem = Pick<
   DbJobAd,
   "id" | "canonical_url" | "title" | "company_name" | "location"
-    | "company_website" | "company_id"
+    | "company_website" | "company_id" | "lead_score_id" | "extraction_hash"
     | "remote_type" | "employment_type" | "salary_min" | "salary_max"
     | "salary_currency" | "salary_period" | "skills" | "status"
     | "description" | "responsibilities" | "field_evidence" | "posted_at"
@@ -57,8 +62,36 @@ type CompanyListItem = Pick<
   DbLeadCompany,
   "id" | "domain" | "website_url" | "name" | "industry" | "location"
     | "services" | "description" | "inferred_data" | "evidence" | "status"
-    | "last_enriched_at"
+    | "last_enriched_at" | "enrichment_hash"
 >;
+
+type LeadScoreListItem = Pick<
+  DbLeadScore,
+  "id" | "job_ad_id" | "ruleset_version" | "profile_version" | "total_score"
+    | "score_band" | "summary" | "job_extraction_hash" | "company_enrichment_hash"
+    | "created_at"
+>;
+
+type LeadScoreComponentListItem = Pick<
+  DbLeadScoreComponent,
+  "lead_score_id" | "component" | "points" | "max_points" | "reason"
+>;
+
+const SCORE_COMPONENT_LABELS: Record<DbLeadScoreComponent["component"], string> = {
+  target_role: "Target role",
+  target_geography: "Target geography",
+  advertisement_recency: "Advertisement recency",
+  hiring_urgency: "Hiring urgency",
+  company_fit: "Company fit",
+  outsourcing_suitability: "Outsourcing suitability",
+  data_completeness_confidence: "Data completeness & confidence",
+};
+
+function scoreTone(band: DbLeadScore["score_band"]): string {
+  if (band === "high") return "border-emerald-500/30 bg-emerald-500/10 text-emerald-300";
+  if (band === "medium") return "border-amber-500/30 bg-amber-500/10 text-amber-300";
+  return "border-zinc-600 bg-zinc-800 text-zinc-300";
+}
 
 function salaryLabel(job: JobLeadListItem): string | null {
   if (job.salary_min === null && job.salary_max === null) return null;
@@ -106,6 +139,7 @@ export default async function JobLeadsPage() {
   const [
     jobResult,
     failedRunResult,
+    scoringProfileResult,
     discoveryResult,
     searchResult,
     failedCompanyRunResult,
@@ -114,6 +148,7 @@ export default async function JobLeadsPage() {
       .from("job_ads")
       .select(`
         id, canonical_url, title, company_name, company_website, company_id,
+        lead_score_id, extraction_hash,
         location, remote_type,
         employment_type, salary_min, salary_max, salary_currency, salary_period,
         description, responsibilities, skills, field_evidence, posted_at, expires_at,
@@ -129,6 +164,11 @@ export default async function JobLeadsPage() {
       .eq("status", "failed")
       .order("started_at", { ascending: false })
       .limit(10),
+    admin
+      .from("lead_scoring_profiles")
+      .select("*")
+      .eq("client_id", clientId)
+      .single(),
     admin
       .from("job_discoveries")
       .select(`
@@ -163,7 +203,7 @@ export default async function JobLeadsPage() {
     .from("lead_companies")
     .select(`
       id, domain, website_url, name, industry, location, services,
-      description, inferred_data, evidence, status, last_enriched_at
+      description, inferred_data, evidence, status, last_enriched_at, enrichment_hash
     `)
     .eq("client_id", clientId)
     .in(
@@ -172,12 +212,47 @@ export default async function JobLeadsPage() {
         ? linkedCompanyIds
         : ["00000000-0000-0000-0000-000000000000"],
     );
+  const linkedScoreIds = [
+    ...new Set(jobs.flatMap((job) => job.lead_score_id ? [job.lead_score_id] : [])),
+  ];
+  const scoreResult = await admin
+    .from("lead_scores")
+    .select(`
+      id, job_ad_id, ruleset_version, profile_version, total_score, score_band,
+      summary, job_extraction_hash, company_enrichment_hash, created_at
+    `)
+    .eq("client_id", clientId)
+    .in(
+      "id",
+      linkedScoreIds.length
+        ? linkedScoreIds
+        : ["00000000-0000-0000-0000-000000000000"],
+    );
+  const scores = (scoreResult.data ?? []) as LeadScoreListItem[];
+  const scoreIds = scores.map((score) => score.id);
+  const scoreComponentResult = await admin
+    .from("lead_score_components")
+    .select("lead_score_id, component, points, max_points, reason")
+    .eq("client_id", clientId)
+    .in(
+      "lead_score_id",
+      scoreIds.length ? scoreIds : ["00000000-0000-0000-0000-000000000000"],
+    );
   const failedRuns = (failedRunResult.data ?? []) as FailedRunListItem[];
   const failedCompanyRuns = (failedCompanyRunResult.data ?? []) as FailedCompanyRunListItem[];
   const discoveries = (discoveryResult.data ?? []) as DiscoveryListItem[];
   const savedSearches = (searchResult.data ?? []) as SavedSearchListItem[];
   const companies = (companyResult.data ?? []) as CompanyListItem[];
+  const scoringProfile = scoringProfileResult.data as DbLeadScoringProfile | null;
+  const scoreComponents = (scoreComponentResult.data ?? []) as LeadScoreComponentListItem[];
   const companiesById = new Map(companies.map((company) => [company.id, company]));
+  const scoresById = new Map(scores.map((score) => [score.id, score]));
+  const componentsByScoreId = new Map<string, LeadScoreComponentListItem[]>();
+  for (const component of scoreComponents) {
+    const existing = componentsByScoreId.get(component.lead_score_id) ?? [];
+    existing.push(component);
+    componentsByScoreId.set(component.lead_score_id, existing);
+  }
 
   return (
     <div>
@@ -190,6 +265,9 @@ export default async function JobLeadsPage() {
 
       <JobDiscoverySearch clientId={clientId} savedSearches={savedSearches} />
       <JobLeadIngest clientId={clientId} />
+      {scoringProfile && (
+        <LeadScoringProfileForm clientId={clientId} profile={scoringProfile} />
+      )}
 
       {discoveries.length > 0 && (
         <section className="mb-10">
@@ -269,6 +347,19 @@ export default async function JobLeadsPage() {
           const salary = salaryLabel(job);
           const company = job.company_id ? companiesById.get(job.company_id) ?? null : null;
           const companyEvidence = company ? companyEvidenceItems(company.evidence) : [];
+          const leadScore = job.lead_score_id ? scoresById.get(job.lead_score_id) ?? null : null;
+          const leadScoreComponents = leadScore
+            ? componentsByScoreId.get(leadScore.id) ?? []
+            : [];
+          const scoreIsStale = Boolean(
+            leadScore
+            && scoringProfile
+            && (
+              leadScore.profile_version !== scoringProfile.version
+              || leadScore.job_extraction_hash !== job.extraction_hash
+              || leadScore.company_enrichment_hash !== company?.enrichment_hash
+            )
+          );
           return (
             <article key={job.id} className="rounded-xl border border-zinc-800 bg-zinc-900 p-5">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
@@ -461,6 +552,64 @@ export default async function JobLeadsPage() {
                     companyStatus={company?.status ?? null}
                     canResolveCompany={Boolean(job.company_website || job.company_name)}
                   />
+
+                  {company?.status === "approved" && (
+                    <div className="mt-4 border-t border-violet-500/20 pt-4">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                        <div>
+                          <h3 className="text-sm font-semibold text-cyan-200">Transparent lead score</h3>
+                          <p className="mt-1 text-xs text-zinc-400">
+                            Fixed ruleset with stored points, inputs, and reasons. No AI-generated score.
+                          </p>
+                        </div>
+                        <LeadScoreActions
+                          clientId={clientId}
+                          jobAdId={job.id}
+                          hasScore={Boolean(leadScore)}
+                        />
+                      </div>
+
+                      {leadScore && (
+                        <div className="mt-3 rounded-lg border border-zinc-700 bg-zinc-950/60 p-3">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className={`rounded-full border px-2.5 py-1 text-sm font-semibold ${scoreTone(leadScore.score_band)}`}>
+                              {leadScore.total_score}/100 · {leadScore.score_band}
+                            </span>
+                            <span className="text-xs text-zinc-500">{leadScore.ruleset_version}</span>
+                            {scoreIsStale && (
+                              <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-xs text-amber-300">
+                                recalculation required
+                              </span>
+                            )}
+                          </div>
+                          <p className="mt-2 text-sm text-zinc-200">{leadScore.summary}</p>
+                          <div className="mt-3 grid gap-2 md:grid-cols-2">
+                            {leadScoreComponents
+                              .sort((left, right) => right.max_points - left.max_points)
+                              .map((component) => (
+                                <div key={component.component} className="rounded border border-zinc-800 p-2.5">
+                                  <div className="flex items-center justify-between gap-2">
+                                    <p className="text-xs font-medium text-zinc-300">
+                                      {SCORE_COMPONENT_LABELS[component.component]}
+                                    </p>
+                                    <p className="text-xs font-semibold text-cyan-300">
+                                      {component.points}/{component.max_points}
+                                    </p>
+                                  </div>
+                                  <p className="mt-1 text-xs leading-relaxed text-zinc-500">
+                                    {component.reason}
+                                  </p>
+                                </div>
+                              ))}
+                          </div>
+                          <p className="mt-2 text-xs text-zinc-600">
+                            Calculated {formatDistanceToNow(new Date(leadScore.created_at), { addSuffix: true })}
+                            {" · "}profile version {leadScore.profile_version}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
 

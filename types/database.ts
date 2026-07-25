@@ -12,6 +12,15 @@ export type JobDiscoverySource = "seek" | "indeed" | "linkedin";
 export type JobDiscoveryStatus = "new" | "imported" | "dismissed" | "error";
 export type LeadCompanyStatus = "needs_review" | "approved" | "rejected" | "error";
 export type CompanyEnrichmentRunStatus = "running" | "completed" | "failed" | "reused";
+export type LeadScoreBand = "high" | "medium" | "low";
+export type LeadScoreComponentKey =
+  | "target_role"
+  | "target_geography"
+  | "advertisement_recency"
+  | "hiring_urgency"
+  | "company_fit"
+  | "outsourcing_suitability"
+  | "data_completeness_confidence";
 
 export interface DbClient {
   id: string;
@@ -127,6 +136,7 @@ export type DbJobAd = {
   company_name: string | null;
   company_website: string | null;
   company_id: string | null;
+  lead_score_id: string | null;
   location: string | null;
   remote_type: JobRemoteType;
   employment_type: string | null;
@@ -231,6 +241,49 @@ export type DbLeadCompanyReviewEvent = {
   to_status: "needs_review" | "approved" | "rejected";
   enrichment_hash: string;
   reviewed_by: string;
+  created_at: string;
+};
+
+export type DbLeadScoringProfile = {
+  id: string;
+  client_id: string;
+  target_roles: string[];
+  target_geographies: string[];
+  preferred_industries: string[];
+  company_fit_keywords: string[];
+  version: number;
+  updated_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DbLeadScore = {
+  id: string;
+  client_id: string;
+  job_ad_id: string;
+  company_id: string;
+  scoring_profile_id: string;
+  ruleset_version: string;
+  profile_version: number;
+  input_hash: string;
+  job_extraction_hash: string;
+  company_enrichment_hash: string;
+  total_score: number;
+  score_band: LeadScoreBand;
+  summary: string;
+  created_by: string | null;
+  created_at: string;
+};
+
+export type DbLeadScoreComponent = {
+  id: string;
+  client_id: string;
+  lead_score_id: string;
+  component: LeadScoreComponentKey;
+  points: number;
+  max_points: number;
+  reason: string;
+  inputs: Record<string, unknown>;
   created_at: string;
 };
 
@@ -404,6 +457,7 @@ export interface Database {
           company_name?: string | null;
           company_website?: string | null;
           company_id?: string | null;
+          lead_score_id?: string | null;
           location?: string | null;
           remote_type?: JobRemoteType;
           employment_type?: string | null;
@@ -527,6 +581,61 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<DbLeadCompanyReviewEvent>;
+        Relationships: NoRelationships;
+      };
+      lead_scoring_profiles: {
+        Row: DbLeadScoringProfile;
+        Insert: {
+          id?: string;
+          client_id: string;
+          target_roles?: string[];
+          target_geographies?: string[];
+          preferred_industries?: string[];
+          company_fit_keywords?: string[];
+          version?: number;
+          updated_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<DbLeadScoringProfile>;
+        Relationships: NoRelationships;
+      };
+      lead_scores: {
+        Row: DbLeadScore;
+        Insert: {
+          id?: string;
+          client_id: string;
+          job_ad_id: string;
+          company_id: string;
+          scoring_profile_id: string;
+          ruleset_version: string;
+          profile_version: number;
+          input_hash: string;
+          job_extraction_hash: string;
+          company_enrichment_hash: string;
+          total_score: number;
+          score_band: LeadScoreBand;
+          summary: string;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<DbLeadScore>;
+        Relationships: NoRelationships;
+      };
+      lead_score_components: {
+        Row: DbLeadScoreComponent;
+        Insert: {
+          id?: string;
+          client_id: string;
+          lead_score_id: string;
+          component: LeadScoreComponentKey;
+          points: number;
+          max_points: number;
+          reason: string;
+          inputs?: Record<string, unknown>;
+          created_at?: string;
+        };
+        Update: Partial<DbLeadScoreComponent>;
         Relationships: NoRelationships;
       };
       job_ad_review_events: {
@@ -762,6 +871,26 @@ export interface Database {
           p_status: "needs_review" | "approved" | "rejected";
         };
         Returns: DbLeadCompany[];
+      };
+      update_lead_scoring_profile: {
+        Args: {
+          p_actor_id: string;
+          p_client_id: string;
+          p_target_roles: string[];
+          p_target_geographies: string[];
+          p_preferred_industries: string[];
+          p_company_fit_keywords: string[];
+        };
+        Returns: DbLeadScoringProfile[];
+      };
+      save_transparent_lead_score: {
+        Args: {
+          p_actor_id: string;
+          p_client_id: string;
+          p_job_ad_id: string;
+          p_payload: Record<string, unknown>;
+        };
+        Returns: DbLeadScore[];
       };
     };
     Enums: Record<string, never>;
