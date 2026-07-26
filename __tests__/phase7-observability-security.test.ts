@@ -7,12 +7,28 @@ const migration = readFileSync(
   join(process.cwd(), "db/migrations/028_testing_and_observability.sql"),
   "utf8",
 );
+const hardening = readFileSync(
+  join(process.cwd(), "db/migrations/029_phase_7_hardening.sql"),
+  "utf8",
+);
 const ingestion = readFileSync(
   join(process.cwd(), "supabase/functions/job-ad-ingest/index.ts"),
   "utf8",
 );
 const alertRoute = readFileSync(
   join(process.cwd(), "app/api/job-leads/alerts/route.ts"),
+  "utf8",
+);
+const qualityRoute = readFileSync(
+  join(process.cwd(), "app/api/job-leads/quality-measurements/route.ts"),
+  "utf8",
+);
+const jobLeadsPage = readFileSync(
+  join(process.cwd(), "app/(portal)/job-leads/page.tsx"),
+  "utf8",
+);
+const healthPanel = readFileSync(
+  join(process.cwd(), "components/job-leads/JobPipelineObservability.tsx"),
   "utf8",
 );
 const atomicity = readFileSync(
@@ -31,6 +47,11 @@ describe("Phase 7 observability and release security", () => {
     expect(migration).toContain("matched_fields");
     expect(migration).toContain("measured_fields");
     expect(migration).toContain("save_job_extraction_quality_measurement");
+    expect(qualityRoute).toContain("save_job_extraction_quality_measurement");
+    expect(qualityRoute).toContain("requireApiAuth()");
+    expect(qualityRoute).toContain("assertClientAccess");
+    expect(hardening).toContain("FROM jsonb_object_keys(v_expected)");
+    expect(hardening).toContain("v_actual->expected.field_name = expected.expected_value");
   });
 
   test("persists latency and both provider and estimated AI cost", () => {
@@ -70,6 +91,12 @@ describe("Phase 7 observability and release security", () => {
     expect(migration).toContain("v_actor_client IS DISTINCT FROM p_client_id");
     expect(alertRoute).toContain("requireApiAuth()");
     expect(alertRoute).toContain("assertClientAccess");
+    expect(hardening).toMatch(
+      /FROM job_ads WHERE id = v_job_ad_id AND client_id = p_client_id/,
+    );
+    expect(hardening).toMatch(
+      /FROM job_scrape_runs[\s\S]*id = v_scrape_run_id AND client_id = p_client_id/,
+    );
   });
 
   test("retains database-enforced job and company idempotency", () => {
@@ -79,5 +106,25 @@ describe("Phase 7 observability and release security", () => {
       "CONSTRAINT lead_companies_client_domain_key UNIQUE (client_id, domain)",
     );
     expect(enrichment).toContain("pg_advisory_xact_lock");
+  });
+
+  test("shows an explicit degraded state when observability queries fail", () => {
+    for (const result of [
+      "ingestionHealthResult.error",
+      "discoveryHealthResult.error",
+      "companyHealthResult.error",
+      "qualityResult.error",
+      "alertResult.error",
+    ]) {
+      expect(jobLeadsPage).toContain(result);
+    }
+    expect(healthPanel).toContain("Observability data is incomplete");
+    expect(healthPanel).toContain("must not");
+  });
+
+  test("enforces expired lifecycle in ingestion and review boundaries", () => {
+    expect(hardening).toContain("CREATE TRIGGER job_ads_enforce_expiry");
+    expect(hardening).toContain("NEW.status := 'expired'");
+    expect(hardening).toContain("Expired job advertisements cannot be reviewed");
   });
 });

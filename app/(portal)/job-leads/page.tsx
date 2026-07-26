@@ -386,6 +386,13 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
     }))),
   ];
   const qualitySamples = qualityResult.data ?? [];
+  const unavailableObservabilitySources = [
+    ingestionHealthResult.error ? "ingestion metrics" : null,
+    discoveryHealthResult.error ? "discovery metrics" : null,
+    companyHealthResult.error ? "company-enrichment metrics" : null,
+    qualityResult.error ? "labeled accuracy" : null,
+    alertResult.error ? "pipeline alerts" : null,
+  ].filter((source): source is string => source !== null);
   const measuredFieldCount = qualitySamples.reduce(
     (sum, row) => sum + Number(row.measured_fields),
     0,
@@ -508,6 +515,7 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
         metrics={pipelineMetrics}
         labeledAccuracy={labeledAccuracy}
         labeledSamples={qualitySamples.length}
+        unavailableSources={unavailableObservabilitySources}
         alerts={(alertResult.data ?? []) as Pick<
           DbJobPipelineAlert,
           "id" | "title" | "detail" | "severity" | "occurrence_count" | "last_seen_at"

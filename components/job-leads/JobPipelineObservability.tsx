@@ -21,6 +21,7 @@ type Props = {
   metrics: PipelineMetric[];
   labeledAccuracy: number | null;
   labeledSamples: number;
+  unavailableSources: string[];
   alerts: Pick<
     DbJobPipelineAlert,
     "id" | "title" | "detail" | "severity" | "occurrence_count" | "last_seen_at"
@@ -36,6 +37,7 @@ export function JobPipelineObservability({
   metrics,
   labeledAccuracy,
   labeledSamples,
+  unavailableSources,
   alerts,
 }: Props) {
   const router = useRouter();
@@ -93,6 +95,20 @@ export function JobPipelineObservability({
           </div>
         ))}
       </div>
+      {unavailableSources.length > 0 && (
+        <div className="mt-4 flex gap-2 rounded-lg border border-red-500/30 bg-red-500/10 p-3">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-300" />
+          <div>
+            <div className="text-sm font-medium text-red-200">
+              Observability data is incomplete
+            </div>
+            <div className="text-xs text-red-200/70">
+              Could not load: {unavailableSources.join(", ")}. Empty values above must not
+              be treated as healthy until monitoring recovers.
+            </div>
+          </div>
+        </div>
+      )}
       {alerts.length > 0 && (
         <div className="mt-4 space-y-2">
           {alerts.map((alert) => (

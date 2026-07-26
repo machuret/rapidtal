@@ -56,6 +56,31 @@ FROM upsert_job_ad_extraction(
     "field_evidence":{}
   }'::JSONB
 );
+
+SELECT *
+FROM upsert_job_ad_extraction(
+  '10000000-0000-4000-8000-000000000001',
+  '20000000-0000-4000-8000-000000000001',
+  '{
+    "source_url":"https://jobs.example.com/phase7/expired",
+    "canonical_url":"https://jobs.example.com/phase7/expired",
+    "source_host":"jobs.example.com",
+    "title":"Expired Sales Role",
+    "company_name":"Expired Fixture Pty Ltd",
+    "remote_type":"onsite",
+    "description":"This expired fixture has a complete description and must enter the expired lifecycle automatically.",
+    "responsibilities":["Sell"],
+    "skills":["Sales"],
+    "expires_at":"2025-01-31T00:00:00Z",
+    "apply_url":"https://jobs.example.com/phase7/expired",
+    "raw_content":"expired-fixture-content",
+    "raw_content_hash":"expired-content-hash",
+    "extraction_hash":"expired-extraction-hash",
+    "extraction_method":"json_ld",
+    "extraction_confidence":0.95,
+    "field_evidence":{}
+  }'::JSONB
+);
 SELECT *
 FROM upsert_job_ad_extraction(
   '10000000-0000-4000-8000-000000000001',
@@ -83,7 +108,8 @@ FROM upsert_job_ad_extraction(
 
 UPDATE job_ads
 SET status = 'approved'
-WHERE client_id = '20000000-0000-4000-8000-000000000001';
+WHERE client_id = '20000000-0000-4000-8000-000000000001'
+  AND canonical_url = 'https://jobs.example.com/phase7/idempotent';
 
 INSERT INTO company_enrichment_runs (
   id, client_id, job_ad_id, status, created_by, input_hash, model, prompt_version
@@ -98,13 +124,18 @@ SELECT
   'fixture-model',
   'phase7-fixture-v1'
 FROM job_ads
-WHERE client_id = '20000000-0000-4000-8000-000000000001';
+WHERE client_id = '20000000-0000-4000-8000-000000000001'
+  AND canonical_url = 'https://jobs.example.com/phase7/idempotent';
 
 SELECT *
 FROM upsert_lead_company_enrichment(
   '10000000-0000-4000-8000-000000000001',
   '20000000-0000-4000-8000-000000000001',
-  (SELECT id FROM job_ads WHERE client_id = '20000000-0000-4000-8000-000000000001'),
+  (
+    SELECT id FROM job_ads
+    WHERE client_id = '20000000-0000-4000-8000-000000000001'
+      AND canonical_url = 'https://jobs.example.com/phase7/idempotent'
+  ),
   '30000000-0000-4000-8000-000000000001',
   '{
     "domain":"idempotent.example",
@@ -136,13 +167,18 @@ SELECT
   'fixture-model',
   'phase7-fixture-v1'
 FROM job_ads
-WHERE client_id = '20000000-0000-4000-8000-000000000001';
+WHERE client_id = '20000000-0000-4000-8000-000000000001'
+  AND canonical_url = 'https://jobs.example.com/phase7/idempotent';
 
 SELECT *
 FROM upsert_lead_company_enrichment(
   '10000000-0000-4000-8000-000000000001',
   '20000000-0000-4000-8000-000000000001',
-  (SELECT id FROM job_ads WHERE client_id = '20000000-0000-4000-8000-000000000001'),
+  (
+    SELECT id FROM job_ads
+    WHERE client_id = '20000000-0000-4000-8000-000000000001'
+      AND canonical_url = 'https://jobs.example.com/phase7/idempotent'
+  ),
   '30000000-0000-4000-8000-000000000002',
   '{
     "domain":"idempotent.example",
@@ -184,6 +220,36 @@ SELECT
   now()
 FROM generate_series(2, 3) AS number;
 
+INSERT INTO job_scrape_runs (
+  id, client_id, requested_url, status, provider, completed_at
+) VALUES (
+  '50000000-0000-4000-8000-000000000002',
+  '20000000-0000-4000-8000-000000000002',
+  'https://jobs.example.com/tenant-b/run',
+  'completed',
+  'apify',
+  now()
+);
+
+SELECT *
+FROM save_job_extraction_quality_measurement(
+  '10000000-0000-4000-8000-000000000001',
+  '20000000-0000-4000-8000-000000000001',
+  jsonb_build_object(
+    'job_ad_id', (
+      SELECT id FROM job_ads
+      WHERE client_id = '20000000-0000-4000-8000-000000000001'
+        AND canonical_url = 'https://jobs.example.com/phase7/idempotent'
+    ),
+    'fixture_key', 'phase7-database-quality',
+    'fixture_kind', 'production_sample',
+    'expected_fields', '{"title":"Sales Manager","location":"Sydney"}'::JSONB,
+    'actual_fields', '{"title":"Sales Manager","location":"Melbourne"}'::JSONB,
+    'matched_fields', 2,
+    'measured_fields', 2
+  )
+);
+
 DO $$
 BEGIN
   IF (
@@ -199,6 +265,20 @@ BEGIN
       AND domain = 'idempotent.example'
   ) <> 1 THEN
     RAISE EXCEPTION 'Repeated enrichment created a duplicate company';
+  END IF;
+  IF (
+    SELECT status FROM job_ads
+    WHERE client_id = '20000000-0000-4000-8000-000000000001'
+      AND canonical_url = 'https://jobs.example.com/phase7/expired'
+  ) <> 'expired' THEN
+    RAISE EXCEPTION 'Expired ingestion did not enter the expired lifecycle';
+  END IF;
+  IF (
+    SELECT field_accuracy FROM job_extraction_quality_measurements
+    WHERE client_id = '20000000-0000-4000-8000-000000000001'
+      AND fixture_key = 'phase7-database-quality'
+  ) <> 0.5 THEN
+    RAISE EXCEPTION 'Database did not compute labeled accuracy from field values';
   END IF;
   IF NOT EXISTS (
     SELECT 1 FROM job_pipeline_alerts
@@ -217,6 +297,40 @@ BEGIN
   ) THEN
     RAISE EXCEPTION 'Repeated failure escalation was not created';
   END IF;
+
+  BEGIN
+    PERFORM save_job_extraction_quality_measurement(
+      '10000000-0000-4000-8000-000000000001',
+      '20000000-0000-4000-8000-000000000001',
+      '{
+        "scrape_run_id":"50000000-0000-4000-8000-000000000002",
+        "fixture_key":"cross-tenant",
+        "fixture_kind":"production_sample",
+        "expected_fields":{"title":"Role"},
+        "actual_fields":{"title":"Role"}
+      }'::JSONB
+    );
+    RAISE EXCEPTION 'Cross-tenant quality provenance was accepted';
+  EXCEPTION WHEN SQLSTATE 'P0002' THEN
+    NULL;
+  END;
+
+  BEGIN
+    PERFORM review_job_ad(
+      '10000000-0000-4000-8000-000000000001',
+      '20000000-0000-4000-8000-000000000001',
+      (
+        SELECT id FROM job_ads
+        WHERE client_id = '20000000-0000-4000-8000-000000000001'
+          AND canonical_url = 'https://jobs.example.com/phase7/expired'
+      ),
+      'approved',
+      NULL
+    );
+    RAISE EXCEPTION 'Expired job review was accepted';
+  EXCEPTION WHEN SQLSTATE '22023' THEN
+    NULL;
+  END;
 END;
 $$;
 

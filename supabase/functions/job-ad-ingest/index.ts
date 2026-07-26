@@ -13,7 +13,10 @@ import {
   parseApifyDatasetItems,
   parseApifyRun,
 } from "../_shared/apify.ts";
-import { parseOpenAiJobExtractionResponse } from "../_shared/openai-job.ts";
+import {
+  OpenAiJobRequestError,
+  requestOpenAiJobExtraction,
+} from "../_shared/openai-job.ts";
 import {
   canonicalizePublicJobUrl,
   mergeJobExtractions,
@@ -478,67 +481,39 @@ Deno.serve(async (req: Request) => {
         }
       } else {
         const extractionModel = Deno.env.get("OPENAI_EXTRACTION_MODEL") ?? "gpt-4o-mini";
-        const structuredContext = structured
-          ? `Already parsed structured data:\n${JSON.stringify(structured)}\n\n`
-          : "";
         const pageContent = markdown || html.replace(/<[^>]+>/g, " ");
-        const openaiRes = await fetchWithRetry("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${openaiKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: extractionModel,
-            response_format: {
-              type: "json_schema",
-              json_schema: JOB_EXTRACTION_SCHEMA,
+        const inputRate = Number(Deno.env.get("OPENAI_EXTRACTION_INPUT_USD_PER_MILLION") ?? 0.15);
+        const outputRate = Number(Deno.env.get("OPENAI_EXTRACTION_OUTPUT_USD_PER_MILLION") ?? 0.6);
+        try {
+          const parsedAi = await requestOpenAiJobExtraction(
+            (url, init) => fetchWithRetry(url, init, 45_000),
+            {
+              apiKey: openaiKey,
+              model: extractionModel,
+              schema: JOB_EXTRACTION_SCHEMA,
+              prompt: JOB_EXTRACTION_PROMPT,
+              sourceUrl: parsedUrl.canonicalUrl,
+              pageContent,
+              structuredContext: structured,
+              inputUsdPerMillion: inputRate,
+              outputUsdPerMillion: outputRate,
             },
-            temperature: 0,
-            max_tokens: 5000,
-            messages: [
-              { role: "system", content: JOB_EXTRACTION_PROMPT },
-              {
-                role: "user",
-                content: `${structuredContext}Source URL: ${parsedUrl.canonicalUrl}\n\nWEBPAGE:\n${pageContent.slice(0, 35_000)}`,
-              },
-            ],
-          }),
-        }, 45_000);
-        const openaiJson = await openaiRes.json().catch(() => null);
-        if (!openaiRes.ok) {
+          );
+          ai = parsedAi.extraction;
+          tokensUsed = parsedAi.tokensUsed;
+          aiEstimatedCostUsd = parsedAi.estimatedCostUsd;
+        } catch (error) {
           if (!structured) {
-            const providerMessage = openaiJson?.error?.message ?? `OpenAI returned HTTP ${openaiRes.status}`;
+            const isProviderError = error instanceof OpenAiJobRequestError;
             return await fail(
               502,
-              "The job advertisement could not be extracted.",
-              "ai_failed",
-              String(providerMessage),
-              openaiRes.status,
+              isProviderError
+                ? "The job advertisement could not be extracted."
+                : "The extraction service returned invalid job data.",
+              isProviderError ? "ai_failed" : "invalid_ai_output",
+              error instanceof Error ? error.message : "Invalid AI response.",
+              isProviderError ? error.status : undefined,
             );
-          }
-        } else {
-          const inputRate = Number(Deno.env.get("OPENAI_EXTRACTION_INPUT_USD_PER_MILLION") ?? 0.15);
-          const outputRate = Number(Deno.env.get("OPENAI_EXTRACTION_OUTPUT_USD_PER_MILLION") ?? 0.6);
-          try {
-            const parsedAi = parseOpenAiJobExtractionResponse(
-              openaiJson,
-              inputRate,
-              outputRate,
-            );
-            ai = parsedAi.extraction;
-            tokensUsed = parsedAi.tokensUsed;
-            aiEstimatedCostUsd = parsedAi.estimatedCostUsd;
-          } catch (error) {
-            if (!structured) {
-              return await fail(
-                502,
-                "The extraction service returned invalid job data.",
-                "invalid_ai_output",
-                error instanceof Error ? error.message : "Invalid AI JSON.",
-                openaiRes.status,
-              );
-            }
           }
         }
       }
