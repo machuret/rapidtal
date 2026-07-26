@@ -13,10 +13,10 @@ import {
   parseApifyDatasetItems,
   parseApifyRun,
 } from "../_shared/apify.ts";
+import { parseOpenAiJobExtractionResponse } from "../_shared/openai-job.ts";
 import {
   canonicalizePublicJobUrl,
   mergeJobExtractions,
-  normalizeAiExtraction,
   parseJobPostingJsonLd,
   validateJobExtraction,
   type JobAdExtraction,
@@ -191,6 +191,8 @@ Deno.serve(async (req: Request) => {
   const startedAt = Date.now();
   let runId: string | null = null;
   let admin: ReturnType<typeof createClient> | null = null;
+  let providerCostUsd = 0;
+  let aiEstimatedCostUsd = 0;
 
   async function fail(
     status: number,
@@ -207,6 +209,8 @@ Deno.serve(async (req: Request) => {
           http_status: httpStatus ?? null,
           error_code: errorCode.slice(0, 100),
           error_message: internalMessage.slice(0, 1000),
+          provider_cost_usd: providerCostUsd,
+          ai_estimated_cost_usd: aiEstimatedCostUsd,
           duration_ms: Date.now() - startedAt,
           completed_at: new Date().toISOString(),
         })
@@ -380,6 +384,7 @@ Deno.serve(async (req: Request) => {
         startRes.status,
       );
     }
+    providerCostUsd = apifyRun.usageTotalUsd;
 
     const pollDeadline = Date.now() + 75_000;
     while (isApifyRunPending(apifyRun.status) && Date.now() < pollDeadline) {
@@ -402,6 +407,7 @@ Deno.serve(async (req: Request) => {
         );
       }
       apifyRun = nextState;
+      providerCostUsd = apifyRun.usageTotalUsd;
     }
 
     if (isApifyRunPending(apifyRun.status)) {
@@ -512,10 +518,17 @@ Deno.serve(async (req: Request) => {
             );
           }
         } else {
-          tokensUsed = Number(openaiJson?.usage?.total_tokens ?? 0);
+          const inputRate = Number(Deno.env.get("OPENAI_EXTRACTION_INPUT_USD_PER_MILLION") ?? 0.15);
+          const outputRate = Number(Deno.env.get("OPENAI_EXTRACTION_OUTPUT_USD_PER_MILLION") ?? 0.6);
           try {
-            const content = openaiJson?.choices?.[0]?.message?.content ?? "{}";
-            ai = normalizeAiExtraction(JSON.parse(content));
+            const parsedAi = parseOpenAiJobExtractionResponse(
+              openaiJson,
+              inputRate,
+              outputRate,
+            );
+            ai = parsedAi.extraction;
+            tokensUsed = parsedAi.tokensUsed;
+            aiEstimatedCostUsd = parsedAi.estimatedCostUsd;
           } catch (error) {
             if (!structured) {
               return await fail(
@@ -642,6 +655,8 @@ Deno.serve(async (req: Request) => {
         extraction_method: merged.method,
         http_status: providerHttpStatus,
         tokens_used: tokensUsed,
+        provider_cost_usd: providerCostUsd,
+        ai_estimated_cost_usd: aiEstimatedCostUsd,
         duration_ms: Date.now() - startedAt,
         completed_at: new Date().toISOString(),
       })
@@ -662,7 +677,8 @@ Deno.serve(async (req: Request) => {
       scrapeRunId: runId,
       tokensUsed,
       providerRunId: apifyRun.id,
-      providerCostUsd: apifyRun.usageTotalUsd,
+      providerCostUsd,
+      aiEstimatedCostUsd,
     }, 200);
   } catch (error) {
     console.error("job-ad-ingest:", error);

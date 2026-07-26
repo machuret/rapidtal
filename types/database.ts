@@ -8,6 +8,8 @@ export type JobAdStatus = "discovered" | "extracted" | "needs_review" | "approve
 export type JobRemoteType = "onsite" | "hybrid" | "remote" | "unknown";
 export type JobExtractionMethod = "json_ld" | "ai" | "json_ld+ai";
 export type JobScrapeRunStatus = "running" | "completed" | "failed";
+export type JobPipelineStage = "ingestion" | "discovery" | "company_enrichment";
+export type JobPipelineAlertStatus = "open" | "acknowledged" | "resolved";
 export type JobDiscoverySource = "seek" | "indeed" | "linkedin";
 export type JobDiscoveryStatus = "new" | "imported" | "dismissed" | "error";
 export type JobListingState = "active" | "changed" | "expired";
@@ -404,12 +406,51 @@ export type DbJobScrapeRun = {
   extraction_method: JobExtractionMethod | null;
   http_status: number | null;
   tokens_used: number;
+  provider_cost_usd: number;
+  ai_estimated_cost_usd: number;
   duration_ms: number | null;
   error_code: string | null;
   error_message: string | null;
   created_by: string | null;
   started_at: string;
   completed_at: string | null;
+};
+
+export type DbJobExtractionQualityMeasurement = {
+  id: string;
+  client_id: string;
+  job_ad_id: string | null;
+  scrape_run_id: string | null;
+  fixture_key: string;
+  fixture_kind: "structured" | "dynamic" | "incomplete" | "expired" | "production_sample";
+  expected_fields: Record<string, unknown>;
+  actual_fields: Record<string, unknown>;
+  matched_fields: number;
+  measured_fields: number;
+  field_accuracy: number;
+  measured_by: string | null;
+  measured_at: string;
+};
+
+export type DbJobPipelineAlert = {
+  id: string;
+  client_id: string;
+  stage: JobPipelineStage;
+  provider: string;
+  alert_type: "provider_error" | "repeated_failure";
+  severity: "warning" | "critical";
+  fingerprint: string;
+  title: string;
+  detail: string;
+  context: Record<string, unknown>;
+  occurrence_count: number;
+  first_seen_at: string;
+  last_seen_at: string;
+  status: JobPipelineAlertStatus;
+  acknowledged_by: string | null;
+  acknowledged_at: string | null;
+  resolved_by: string | null;
+  resolved_at: string | null;
 };
 
 export type DbJobSearch = {
@@ -855,6 +896,8 @@ export interface Database {
           extraction_method?: JobExtractionMethod | null;
           http_status?: number | null;
           tokens_used?: number;
+          provider_cost_usd?: number;
+          ai_estimated_cost_usd?: number;
           duration_ms?: number | null;
           error_code?: string | null;
           error_message?: string | null;
@@ -863,6 +906,51 @@ export interface Database {
           completed_at?: string | null;
         };
         Update: Partial<DbJobScrapeRun>;
+        Relationships: NoRelationships;
+      };
+      job_extraction_quality_measurements: {
+        Row: DbJobExtractionQualityMeasurement;
+        Insert: {
+          id?: string;
+          client_id: string;
+          job_ad_id?: string | null;
+          scrape_run_id?: string | null;
+          fixture_key: string;
+          fixture_kind: DbJobExtractionQualityMeasurement["fixture_kind"];
+          expected_fields: Record<string, unknown>;
+          actual_fields: Record<string, unknown>;
+          matched_fields: number;
+          measured_fields: number;
+          field_accuracy: number;
+          measured_by?: string | null;
+          measured_at?: string;
+        };
+        Update: Partial<DbJobExtractionQualityMeasurement>;
+        Relationships: NoRelationships;
+      };
+      job_pipeline_alerts: {
+        Row: DbJobPipelineAlert;
+        Insert: {
+          id?: string;
+          client_id: string;
+          stage: JobPipelineStage;
+          provider: string;
+          alert_type: DbJobPipelineAlert["alert_type"];
+          severity: DbJobPipelineAlert["severity"];
+          fingerprint: string;
+          title: string;
+          detail: string;
+          context?: Record<string, unknown>;
+          occurrence_count?: number;
+          first_seen_at?: string;
+          last_seen_at?: string;
+          status?: JobPipelineAlertStatus;
+          acknowledged_by?: string | null;
+          acknowledged_at?: string | null;
+          resolved_by?: string | null;
+          resolved_at?: string | null;
+        };
+        Update: Partial<DbJobPipelineAlert>;
         Relationships: NoRelationships;
       };
       job_searches: {
@@ -1243,6 +1331,23 @@ export interface Database {
           p_payload: Record<string, unknown>;
         };
         Returns: DbCrmContact[];
+      };
+      save_job_extraction_quality_measurement: {
+        Args: {
+          p_actor_id: string;
+          p_client_id: string;
+          p_payload: Record<string, unknown>;
+        };
+        Returns: DbJobExtractionQualityMeasurement[];
+      };
+      review_job_pipeline_alert: {
+        Args: {
+          p_actor_id: string;
+          p_client_id: string;
+          p_alert_id: string;
+          p_action: "acknowledged" | "resolved";
+        };
+        Returns: DbJobPipelineAlert[];
       };
     };
     Enums: Record<string, never>;

@@ -13,6 +13,10 @@ import { LeadScoreActions } from "@/components/job-leads/LeadScoreActions";
 import { LeadScoringProfileForm } from "@/components/job-leads/LeadScoringProfileForm";
 import { CrmPromotionActions } from "@/components/job-leads/CrmPromotionActions";
 import { RetryScrapeButton } from "@/components/job-leads/RetryScrapeButton";
+import {
+  JobPipelineObservability,
+  type PipelineMetric,
+} from "@/components/job-leads/JobPipelineObservability";
 import { normalizeJobUrl } from "@/lib/job-batch-import";
 import type {
   DbCrmCompany,
@@ -25,6 +29,7 @@ import type {
   DbJobSearch,
   DbLeadCompany,
   DbCompanyEnrichmentRun,
+  DbJobPipelineAlert,
 } from "@/types/database";
 
 export const dynamic = "force-dynamic";
@@ -179,6 +184,8 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
   const clientId = ctx.user.client_id;
 
   const admin = createAdminClient();
+  const observabilityCutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const qualityCutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const needsScoreJoin = ["high", "medium", "low"].includes(scoreFilter)
     || minScore > 0;
   const jobSelect = `
@@ -302,6 +309,91 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
     correctedParams.set("page", String(totalPages));
     redirect(`/job-leads?${correctedParams.toString()}`);
   }
+  const [
+    ingestionHealthResult,
+    discoveryHealthResult,
+    companyHealthResult,
+    qualityResult,
+    alertResult,
+  ] = await Promise.all([
+    admin
+      .from("job_scrape_runs")
+      .select("status, duration_ms, provider_cost_usd, ai_estimated_cost_usd")
+      .eq("client_id", clientId)
+      .gte("started_at", observabilityCutoff),
+    admin
+      .from("job_discovery_runs")
+      .select("status, duration_ms, cost_usd")
+      .eq("client_id", clientId)
+      .gte("started_at", observabilityCutoff),
+    admin
+      .from("company_enrichment_runs")
+      .select("status, duration_ms, cost_usd, ai_estimated_cost_usd")
+      .eq("client_id", clientId)
+      .gte("started_at", observabilityCutoff),
+    admin
+      .from("job_extraction_quality_measurements")
+      .select("matched_fields, measured_fields")
+      .eq("client_id", clientId)
+      .gte("measured_at", qualityCutoff),
+    admin
+      .from("job_pipeline_alerts")
+      .select("id, title, detail, severity, occurrence_count, last_seen_at")
+      .eq("client_id", clientId)
+      .eq("status", "open")
+      .order("last_seen_at", { ascending: false })
+      .limit(10),
+  ]);
+
+  function metric(
+    stage: string,
+    rows: { status: string; duration_ms: number | null; cost: number }[],
+  ): PipelineMetric {
+    const terminal = rows.filter((row) => row.status !== "running");
+    const durations = terminal.flatMap((row) =>
+      row.duration_ms === null ? [] : [Number(row.duration_ms)]
+    );
+    return {
+      stage,
+      attempts: terminal.length,
+      successes: terminal.filter((row) => ["completed", "reused"].includes(row.status)).length,
+      successRate: terminal.length === 0
+        ? null
+        : terminal.filter((row) => ["completed", "reused"].includes(row.status)).length
+          / terminal.length,
+      averageLatencyMs: durations.length === 0
+        ? null
+        : durations.reduce((sum, value) => sum + value, 0) / durations.length,
+      costUsd: terminal.reduce((sum, row) => sum + row.cost, 0),
+    };
+  }
+
+  const pipelineMetrics = [
+    metric("Ingestion", (ingestionHealthResult.data ?? []).map((row) => ({
+      status: row.status,
+      duration_ms: row.duration_ms,
+      cost: Number(row.provider_cost_usd) + Number(row.ai_estimated_cost_usd),
+    }))),
+    metric("Discovery", (discoveryHealthResult.data ?? []).map((row) => ({
+      status: row.status,
+      duration_ms: row.duration_ms,
+      cost: Number(row.cost_usd),
+    }))),
+    metric("Company enrichment", (companyHealthResult.data ?? []).map((row) => ({
+      status: row.status,
+      duration_ms: row.duration_ms,
+      cost: Number(row.cost_usd) + Number(row.ai_estimated_cost_usd),
+    }))),
+  ];
+  const qualitySamples = qualityResult.data ?? [];
+  const measuredFieldCount = qualitySamples.reduce(
+    (sum, row) => sum + Number(row.measured_fields),
+    0,
+  );
+  const labeledAccuracy = measuredFieldCount === 0
+    ? null
+    : qualitySamples.reduce((sum, row) => sum + Number(row.matched_fields), 0)
+      / measuredFieldCount;
   const linkedCompanyIds = [
     ...new Set(jobs.flatMap((job) => job.company_id ? [job.company_id] : [])),
   ];
@@ -411,6 +503,16 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
         </p>
       </div>
 
+      <JobPipelineObservability
+        clientId={clientId}
+        metrics={pipelineMetrics}
+        labeledAccuracy={labeledAccuracy}
+        labeledSamples={qualitySamples.length}
+        alerts={(alertResult.data ?? []) as Pick<
+          DbJobPipelineAlert,
+          "id" | "title" | "detail" | "severity" | "occurrence_count" | "last_seen_at"
+        >[]}
+      />
       <JobDiscoverySearch
         clientId={clientId}
         savedSearches={savedSearches}

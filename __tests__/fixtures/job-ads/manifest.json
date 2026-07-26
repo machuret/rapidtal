@@ -1,0 +1,44 @@
+[
+  {
+    "key": "structured",
+    "kind": "structured",
+    "url": "https://jobs.example.com/fixtures/structured",
+    "expected": {
+      "title": "Senior Account Executive",
+      "company_name": "Fixture Sales Pty Ltd",
+      "location": "Sydney, NSW, AU",
+      "is_job_ad": true
+    }
+  },
+  {
+    "key": "dynamic",
+    "kind": "dynamic",
+    "url": "https://jobs.example.com/fixtures/dynamic",
+    "expected": {
+      "title": "Customer Success Manager",
+      "company_name": "Dynamic Fixture Co",
+      "location": "Melbourne, VIC",
+      "is_job_ad": true
+    }
+  },
+  {
+    "key": "incomplete",
+    "kind": "incomplete",
+    "url": "https://jobs.example.com/fixtures/incomplete",
+    "expected": {
+      "title": "Operations Lead",
+      "company_name": null,
+      "is_job_ad": true
+    }
+  },
+  {
+    "key": "expired",
+    "kind": "expired",
+    "url": "https://jobs.example.com/fixtures/expired",
+    "expected": {
+      "title": "Expired Sales Manager",
+      "expires_at": "2025-01-31T00:00:00.000Z",
+      "is_job_ad": true
+    }
+  }
+]
