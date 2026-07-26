@@ -40,6 +40,7 @@ FROM upsert_job_ad_extraction(
     "source_url":"https://jobs.example.com/phase7/idempotent",
     "canonical_url":"https://jobs.example.com/phase7/idempotent",
     "source_host":"jobs.example.com",
+    "source_job_id":"SOURCE-IDENTITY-42",
     "title":"Sales Manager",
     "company_name":"Idempotent Pty Ltd",
     "company_website":"https://idempotent.example",
@@ -65,6 +66,7 @@ FROM upsert_job_ad_extraction(
     "source_url":"https://jobs.example.com/phase7/expired",
     "canonical_url":"https://jobs.example.com/phase7/expired",
     "source_host":"jobs.example.com",
+    "source_job_id":"EXPIRED-SOURCE-1",
     "title":"Expired Sales Role",
     "company_name":"Expired Fixture Pty Ltd",
     "remote_type":"onsite",
@@ -106,10 +108,59 @@ FROM upsert_job_ad_extraction(
   }'::JSONB
 );
 
-UPDATE job_ads
-SET status = 'approved'
-WHERE client_id = '20000000-0000-4000-8000-000000000001'
-  AND canonical_url = 'https://jobs.example.com/phase7/idempotent';
+-- A changed URL with the same source job ID must resolve to the original job.
+SELECT *
+FROM upsert_job_ad_extraction(
+  '10000000-0000-4000-8000-000000000001',
+  '20000000-0000-4000-8000-000000000001',
+  '{
+    "source_url":"https://jobs.example.com/phase7/alias-by-source-id",
+    "canonical_url":"https://jobs.example.com/phase7/alias-by-source-id",
+    "source_host":"jobs.example.com",
+    "source_job_id":"SOURCE-IDENTITY-42",
+    "title":"Sales Manager",
+    "company_name":"Idempotent Pty Ltd",
+    "company_website":"https://idempotent.example",
+    "remote_type":"onsite",
+    "description":"Lead the national sales team and own sustainable revenue growth across the Australian market.",
+    "responsibilities":["Lead sales"],
+    "skills":["Sales"],
+    "apply_url":"https://jobs.example.com/phase7/alias-by-source-id",
+    "raw_content":"fixture-content-updated",
+    "raw_content_hash":"content-hash-2",
+    "extraction_hash":"extraction-hash-2",
+    "extraction_method":"json_ld",
+    "extraction_confidence":0.95,
+    "field_evidence":{}
+  }'::JSONB
+);
+
+-- A third URL with a previously claimed exact content fingerprint must also
+-- resolve to the original job, even without a source job ID.
+SELECT *
+FROM upsert_job_ad_extraction(
+  '10000000-0000-4000-8000-000000000001',
+  '20000000-0000-4000-8000-000000000001',
+  '{
+    "source_url":"https://mirror.example.com/jobs/sales-manager",
+    "canonical_url":"https://mirror.example.com/jobs/sales-manager",
+    "source_host":"mirror.example.com",
+    "title":"Sales Manager",
+    "company_name":"Idempotent Pty Ltd",
+    "company_website":"https://idempotent.example",
+    "remote_type":"onsite",
+    "description":"Lead the national sales team and own sustainable revenue growth across the Australian market.",
+    "responsibilities":["Lead sales"],
+    "skills":["Sales"],
+    "apply_url":"https://mirror.example.com/jobs/sales-manager",
+    "raw_content":"fixture-content",
+    "raw_content_hash":"content-hash-1",
+    "extraction_hash":"extraction-hash-1",
+    "extraction_method":"json_ld",
+    "extraction_confidence":0.95,
+    "field_evidence":{}
+  }'::JSONB
+);
 
 INSERT INTO company_enrichment_runs (
   id, client_id, job_ad_id, status, created_by, input_hash, model, prompt_version
@@ -196,6 +247,71 @@ FROM upsert_lead_company_enrichment(
     "facts":[]
   }'::JSONB
 );
+
+-- Enrichment and transparent scoring are evidence-building steps and must work
+-- before final approval. CRM promotion must remain blocked at this point.
+SELECT *
+FROM save_transparent_lead_score(
+  '10000000-0000-4000-8000-000000000001',
+  '20000000-0000-4000-8000-000000000001',
+  (
+    SELECT id FROM job_ads
+    WHERE client_id = '20000000-0000-4000-8000-000000000001'
+      AND canonical_url = 'https://jobs.example.com/phase7/idempotent'
+  ),
+  jsonb_build_object(
+    'scoring_profile_id', (
+      SELECT id FROM lead_scoring_profiles
+      WHERE client_id = '20000000-0000-4000-8000-000000000001'
+    ),
+    'profile_version', (
+      SELECT version FROM lead_scoring_profiles
+      WHERE client_id = '20000000-0000-4000-8000-000000000001'
+    ),
+    'ruleset_version', 'phase4-v1',
+    'input_hash', repeat('a', 64),
+    'job_extraction_hash', 'extraction-hash-1',
+    'company_enrichment_hash', 'company-hash-1',
+    'total_score', 70,
+    'score_band', 'medium',
+    'summary', 'Fixture score before final review.',
+    'components', '[
+      {"component":"target_role","points":20,"max_points":25,"reason":"Strong role match.","inputs":{}},
+      {"component":"target_geography","points":10,"max_points":15,"reason":"Target geography.","inputs":{}},
+      {"component":"advertisement_recency","points":10,"max_points":15,"reason":"Recent advertisement.","inputs":{}},
+      {"component":"hiring_urgency","points":10,"max_points":15,"reason":"Hiring signal.","inputs":{}},
+      {"component":"company_fit","points":8,"max_points":10,"reason":"Company fit.","inputs":{}},
+      {"component":"outsourcing_suitability","points":7,"max_points":10,"reason":"Placement fit.","inputs":{}},
+      {"component":"data_completeness_confidence","points":5,"max_points":10,"reason":"Evidence quality.","inputs":{}}
+    ]'::JSONB
+  )
+);
+
+DO $$
+DECLARE
+  v_job job_ads%ROWTYPE;
+BEGIN
+  SELECT * INTO v_job
+  FROM job_ads
+  WHERE client_id = '20000000-0000-4000-8000-000000000001'
+    AND canonical_url = 'https://jobs.example.com/phase7/idempotent';
+  IF v_job.status <> 'needs_review' OR v_job.lead_score_id IS NULL THEN
+    RAISE EXCEPTION 'Pre-review transparent scoring did not complete';
+  END IF;
+
+  BEGIN
+    PERFORM promote_lead_company_to_crm(
+      '10000000-0000-4000-8000-000000000001',
+      '20000000-0000-4000-8000-000000000001',
+      v_job.id,
+      v_job.company_id
+    );
+    RAISE EXCEPTION 'Unreviewed job reached CRM promotion';
+  EXCEPTION WHEN SQLSTATE 'P0002' THEN
+    NULL;
+  END;
+END;
+$$;
 
 INSERT INTO job_scrape_runs (
   client_id, requested_url, status, provider, error_code, completed_at
@@ -258,6 +374,26 @@ BEGIN
       AND canonical_url = 'https://jobs.example.com/phase7/idempotent'
   ) <> 1 THEN
     RAISE EXCEPTION 'Repeated ingestion created a duplicate job';
+  END IF;
+  IF (
+    SELECT count(*) FROM job_ads
+    WHERE client_id = '20000000-0000-4000-8000-000000000001'
+      AND canonical_url <> 'https://jobs.example.com/phase7/expired'
+  ) <> 1 THEN
+    RAISE EXCEPTION 'Source ID or content alias created a duplicate job';
+  END IF;
+  IF (
+    SELECT count(DISTINCT job_ad_id)
+    FROM job_ad_identities
+    WHERE client_id = '20000000-0000-4000-8000-000000000001'
+      AND (
+        identity_value = 'https://jobs.example.com/phase7/alias-by-source-id'
+        OR identity_value = 'jobs.example.com:SOURCE-IDENTITY-42'
+        OR identity_value = 'https://mirror.example.com/jobs/sales-manager'
+        OR identity_value = 'content-hash-1'
+      )
+  ) <> 1 THEN
+    RAISE EXCEPTION 'Job identity aliases did not converge on one record';
   END IF;
   IF (
     SELECT count(*) FROM lead_companies

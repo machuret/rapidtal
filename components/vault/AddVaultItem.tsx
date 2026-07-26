@@ -115,7 +115,7 @@ export function AddVaultItem({ clientId, userId, onAdded }: AddVaultItemProps) {
   async function submitUrl(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    const res = await fetch("/api/vault/url", {
+    const res = await fetch("/api/vault/crawl", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: urlTitle, url: urlValue, clientId, userId, category, tags: parsedTags() }),

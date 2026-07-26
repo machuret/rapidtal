@@ -7,6 +7,10 @@ const migration = readFileSync(
   join(process.cwd(), "db/migrations/021_job_pipeline_atomicity.sql"),
   "utf8",
 );
+const completion = readFileSync(
+  join(process.cwd(), "db/migrations/030_lead_engine_completion.sql"),
+  "utf8",
+);
 const ingest = readFileSync(
   join(process.cwd(), "supabase/functions/job-ad-ingest/index.ts"),
   "utf8",
@@ -18,15 +22,27 @@ const discover = readFileSync(
 
 describe("atomic job pipeline hardening", () => {
   test("serializes extraction upserts and locks the current review row", () => {
-    expect(migration).toContain("pg_advisory_xact_lock");
-    expect(migration).toMatch(
-      /FROM job_ads[\s\S]*client_id = p_client_id[\s\S]*canonical_url = v_canonical_url[\s\S]*FOR UPDATE/,
-    );
-    expect(migration).toContain(
+    expect(completion).toContain("pg_advisory_xact_lock");
+    expect(completion).toContain("job_ad_identities");
+    expect(completion).toContain("'canonical_url'");
+    expect(completion).toContain("'source_job_id'");
+    expect(completion).toContain("'content_fingerprint'");
+    expect(completion).toContain("ORDER BY key");
+    expect(completion).toContain("job identities resolve to conflicting records");
+    expect(completion).toContain(
       "v_existing.reviewed_content_hash = v_content_hash",
     );
-    expect(migration).toContain(
+    expect(completion).toContain(
       "v_existing.reviewed_extraction_hash = v_extraction_hash",
+    );
+  });
+
+  test("closes direct service-role writes around the identity ledger", () => {
+    expect(completion).toContain(
+      "REVOKE INSERT, UPDATE, DELETE ON job_ads FROM service_role",
+    );
+    expect(completion).toContain(
+      "REVOKE INSERT, UPDATE, DELETE ON job_ad_identities FROM authenticated, service_role",
     );
   });
 

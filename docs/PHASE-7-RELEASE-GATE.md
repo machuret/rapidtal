@@ -12,21 +12,30 @@ pnpm lint
 pnpm build
 ```
 
-The fixture suite in `__tests__/fixtures/job-ads` covers:
+The executable fixture suites cover eight representative job pages and four
+multi-page company packs, including:
 
 - complete JSON-LD;
 - JavaScript-rendered content requiring AI extraction;
 - incomplete content that must not be filled with invented facts; and
-- expired advertisements.
+- expired advertisements;
+- remote, salaried, graph-shaped JSON-LD, and multi-location advertisements;
+- company About, Services, Contact, and incomplete pages; and
+- strict separation of sourced company facts from machine inference.
+
+Both fixture suites compute aggregate field accuracy and fail below 95%.
 
 Firecrawl and OpenAI responses are mocked. The live job-ad ingestion path uses
 Apify plus OpenAI; its Apify adapter has a separate bounded-response suite.
 
 The database behavior test is `db/tests/phase7_behavior.sql`. Run it against a
-fresh database after migrations 001–029. It verifies:
+fresh database after migrations 001–030. It verifies:
 
-- repeated ingestion leaves one job per tenant and canonical URL;
+- canonical URL, source job ID, and content-fingerprint aliases resolve
+  atomically to one job per tenant;
 - repeated enrichment leaves one company per tenant and normalized domain;
+- enrichment and scoring can run before final review while CRM promotion
+  remains approval-gated;
 - provider errors and three-failures-per-hour escalation create alerts; and
 - one tenant cannot read another tenant's jobs or alerts;
 - expired advertisements enter and remain in the expired lifecycle; and
@@ -71,3 +80,7 @@ credentials, submitted URLs, or raw error messages.
 If any metrics or alert query fails, Job Leads displays an explicit
 `Observability data is incomplete` warning. Missing monitoring data must never
 be interpreted as a healthy zero.
+
+Each failure class has a direct Job Leads retry action. Ingestion retry reuses
+the failed URL, discovery retry reuses the saved source query, and company retry
+forces a new enrichment attempt for the same job.

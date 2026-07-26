@@ -56,9 +56,15 @@ export async function POST(req: NextRequest) {
     .eq("id", parsed.data.jobAdId)
     .eq("client_id", parsed.data.clientId)
     .single();
-  if (jobError || !job || job.status !== "approved" || !job.company_id || !job.extraction_hash) {
+  if (
+    jobError
+    || !job
+    || !["extracted", "needs_review", "approved"].includes(job.status)
+    || !job.company_id
+    || !job.extraction_hash
+  ) {
     return NextResponse.json(
-      { error: "Approve the advertisement and link an approved company before scoring." },
+      { error: "Extract the advertisement and link an enriched company before scoring." },
       { status: 409 },
     );
   }
@@ -76,8 +82,8 @@ export async function POST(req: NextRequest) {
       .eq("client_id", parsed.data.clientId)
       .single(),
   ]);
-  if (!company || company.status !== "approved") {
-    return NextResponse.json({ error: "Approve the employer company before scoring." }, { status: 409 });
+  if (!company || !["needs_review", "approved"].includes(company.status)) {
+    return NextResponse.json({ error: "Enrich the employer company before scoring." }, { status: 409 });
   }
   if (!profile) {
     return NextResponse.json({ error: "Configure a lead-scoring profile first." }, { status: 409 });
@@ -161,7 +167,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         error: status === 409
-          ? "The approved job, company, or scoring profile changed. Refresh and score again."
+          ? "The job, company, or scoring profile changed. Refresh and score again."
           : "Lead scoring could not be saved.",
       },
       { status },

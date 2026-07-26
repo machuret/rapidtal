@@ -1,0 +1,112 @@
+[
+  {
+    "key": "saas",
+    "pages": {
+      "https://northstar.example/about": "Northstar Software Pty Ltd builds workflow software for Australian service businesses. Our headquarters are in Sydney, NSW.",
+      "https://northstar.example/services": "Our services include workflow automation and implementation support for growing teams."
+    },
+    "extraction": {
+      "source_backed": {
+        "name": {"value": "Northstar Software Pty Ltd", "source_url": "https://northstar.example/about", "excerpt": "Northstar Software Pty Ltd builds workflow software", "confidence": 0.99},
+        "industry": {"value": "Business software", "source_url": "https://northstar.example/about", "excerpt": "builds workflow software for Australian service businesses", "confidence": 0.95},
+        "location": {"value": "Sydney, NSW", "source_url": "https://northstar.example/about", "excerpt": "headquarters are in Sydney, NSW", "confidence": 0.98},
+        "description": {"value": "Workflow software for Australian service businesses.", "source_url": "https://northstar.example/about", "excerpt": "builds workflow software for Australian service businesses", "confidence": 0.96},
+        "services": [
+          {"value": "Workflow automation", "source_url": "https://northstar.example/services", "excerpt": "services include workflow automation", "confidence": 0.98},
+          {"value": "Implementation support", "source_url": "https://northstar.example/services", "excerpt": "implementation support for growing teams", "confidence": 0.97}
+        ]
+      },
+      "inferred": []
+    },
+    "expected": {
+      "name": "Northstar Software Pty Ltd",
+      "industry": "Business software",
+      "location": "Sydney, NSW",
+      "description": "Workflow software for Australian service businesses.",
+      "services": ["Workflow automation", "Implementation support"]
+    }
+  },
+  {
+    "key": "agency",
+    "pages": {
+      "https://harbourcreative.example/about-us": "Harbour Creative is an independent digital marketing agency based in Melbourne, Victoria. We help consumer brands grow online.",
+      "https://harbourcreative.example/what-we-do": "We provide paid media, search engine optimisation, content strategy, and conversion optimisation."
+    },
+    "extraction": {
+      "source_backed": {
+        "name": {"value": "Harbour Creative", "source_url": "https://harbourcreative.example/about-us", "excerpt": "Harbour Creative is an independent digital marketing agency", "confidence": 0.99},
+        "industry": {"value": "Digital marketing", "source_url": "https://harbourcreative.example/about-us", "excerpt": "independent digital marketing agency", "confidence": 0.99},
+        "location": {"value": "Melbourne, Victoria", "source_url": "https://harbourcreative.example/about-us", "excerpt": "based in Melbourne, Victoria", "confidence": 0.99},
+        "description": {"value": "An independent agency helping consumer brands grow online.", "source_url": "https://harbourcreative.example/about-us", "excerpt": "independent digital marketing agency based in Melbourne", "confidence": 0.94},
+        "services": [
+          {"value": "Paid media", "source_url": "https://harbourcreative.example/what-we-do", "excerpt": "provide paid media", "confidence": 0.98},
+          {"value": "Search engine optimisation", "source_url": "https://harbourcreative.example/what-we-do", "excerpt": "search engine optimisation", "confidence": 0.98}
+        ]
+      },
+      "inferred": []
+    },
+    "expected": {
+      "name": "Harbour Creative",
+      "industry": "Digital marketing",
+      "location": "Melbourne, Victoria",
+      "description": "An independent agency helping consumer brands grow online.",
+      "services": ["Paid media", "Search engine optimisation"]
+    }
+  },
+  {
+    "key": "logistics",
+    "pages": {
+      "https://swiftfreight.example/company": "Swift Freight Australia operates national freight and warehouse services from Brisbane, Queensland.",
+      "https://swiftfreight.example/services": "Customers use our road freight, warehousing, and last-mile delivery services."
+    },
+    "extraction": {
+      "source_backed": {
+        "name": {"value": "Swift Freight Australia", "source_url": "https://swiftfreight.example/company", "excerpt": "Swift Freight Australia operates national freight", "confidence": 0.99},
+        "industry": {"value": "Logistics", "source_url": "https://swiftfreight.example/company", "excerpt": "national freight and warehouse services", "confidence": 0.96},
+        "location": {"value": "Brisbane, Queensland", "source_url": "https://swiftfreight.example/company", "excerpt": "from Brisbane, Queensland", "confidence": 0.99},
+        "description": {"value": "National freight and warehouse operator.", "source_url": "https://swiftfreight.example/company", "excerpt": "operates national freight and warehouse services", "confidence": 0.97},
+        "services": [
+          {"value": "Road freight", "source_url": "https://swiftfreight.example/services", "excerpt": "road freight, warehousing", "confidence": 0.98},
+          {"value": "Last-mile delivery", "source_url": "https://swiftfreight.example/services", "excerpt": "last-mile delivery services", "confidence": 0.98}
+        ]
+      },
+      "inferred": []
+    },
+    "expected": {
+      "name": "Swift Freight Australia",
+      "industry": "Logistics",
+      "location": "Brisbane, Queensland",
+      "description": "National freight and warehouse operator.",
+      "services": ["Road freight", "Last-mile delivery"]
+    }
+  },
+  {
+    "key": "professional-services",
+    "pages": {
+      "https://clearviewadvisory.example/about": "Clearview Advisory Group is a Perth-based professional services firm advising privately owned Australian businesses.",
+      "https://clearviewadvisory.example/services": "Our team provides business advisory, virtual CFO, and financial reporting services."
+    },
+    "extraction": {
+      "source_backed": {
+        "name": {"value": "Clearview Advisory Group", "source_url": "https://clearviewadvisory.example/about", "excerpt": "Clearview Advisory Group is a Perth-based", "confidence": 0.99},
+        "industry": {"value": "Professional services", "source_url": "https://clearviewadvisory.example/about", "excerpt": "professional services firm advising privately owned", "confidence": 0.98},
+        "location": {"value": "Perth", "source_url": "https://clearviewadvisory.example/about", "excerpt": "Perth-based professional services firm", "confidence": 0.98},
+        "description": {"value": "Advisers to privately owned Australian businesses.", "source_url": "https://clearviewadvisory.example/about", "excerpt": "advising privately owned Australian businesses", "confidence": 0.97},
+        "services": [
+          {"value": "Business advisory", "source_url": "https://clearviewadvisory.example/services", "excerpt": "provides business advisory", "confidence": 0.99},
+          {"value": "Virtual CFO", "source_url": "https://clearviewadvisory.example/services", "excerpt": "virtual CFO, and financial reporting", "confidence": 0.99}
+        ]
+      },
+      "inferred": [
+        {"field": "services", "value": ["Finance transformation"], "rationale": "Virtual CFO work commonly includes finance transformation.", "confidence": 0.55}
+      ]
+    },
+    "expected": {
+      "name": "Clearview Advisory Group",
+      "industry": "Professional services",
+      "location": "Perth",
+      "description": "Advisers to privately owned Australian businesses.",
+      "services": ["Business advisory", "Virtual CFO"]
+    }
+  }
+]

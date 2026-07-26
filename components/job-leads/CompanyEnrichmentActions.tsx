@@ -66,7 +66,7 @@ export function CompanyEnrichmentActions({
       }
       toast.success(
         status === "approved"
-          ? "Company approved for lead scoring."
+          ? "Company approved for final CRM promotion."
           : status === "rejected"
             ? "Company rejected."
             : "Company returned to review.",

@@ -405,6 +405,8 @@ export type DbJobScrapeRun = {
   provider: string;
   extraction_method: JobExtractionMethod | null;
   http_status: number | null;
+  final_url: string | null;
+  redirect_history: string[];
   tokens_used: number;
   provider_cost_usd: number;
   ai_estimated_cost_usd: number;
@@ -895,6 +897,8 @@ export interface Database {
           provider?: string;
           extraction_method?: JobExtractionMethod | null;
           http_status?: number | null;
+          final_url?: string | null;
+          redirect_history?: string[];
           tokens_used?: number;
           provider_cost_usd?: number;
           ai_estimated_cost_usd?: number;

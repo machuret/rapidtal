@@ -7,6 +7,10 @@ const migration = readFileSync(
   join(process.cwd(), "db/migrations/024_transparent_lead_scoring.sql"),
   "utf8",
 );
+const completion = readFileSync(
+  join(process.cwd(), "db/migrations/030_lead_engine_completion.sql"),
+  "utf8",
+);
 const engine = readFileSync(join(process.cwd(), "lib/lead-scoring.ts"), "utf8");
 const scoreRoute = readFileSync(
   join(process.cwd(), "app/api/job-leads/score/route.ts"),
@@ -35,10 +39,16 @@ describe("Phase 4 transparent scoring security contract", () => {
     expect(migration).toContain("v_component_total NOT BETWEEN 0 AND 100");
   });
 
-  test("requires approved jobs and approved linked companies at the database boundary", () => {
-    expect(migration).toContain("v_job.status <> 'approved'");
-    expect(migration).toContain("v_company.status <> 'approved'");
+  test("scores reviewable evidence while leaving promotion approval-gated", () => {
+    expect(completion).toContain(
+      "v_job.status NOT IN (''extracted'', ''needs_review'', ''approved'')",
+    );
+    expect(completion).toContain(
+      "v_company.status NOT IN (''needs_review'', ''approved'')",
+    );
     expect(migration).toContain("v_job.company_id");
+    expect(scoreRoute).toContain('"extracted", "needs_review", "approved"');
+    expect(scoreRoute).toContain('"needs_review", "approved"');
   });
 
   test("rejects forged totals, maximums, and score bands", () => {

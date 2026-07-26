@@ -47,16 +47,58 @@ describe("Apify job-content adapter", () => {
     expect(parseApifyDatasetItems([{
       markdown: "  # Senior Engineer\nBuild reliable systems.  ",
       html: "<script type=\"application/ld+json\">{}</script>",
+      requestedUrl: "https://jobs.example.com/old?token=secret",
+      loadedUrl: "https://jobs.example.com/role/42",
+      statusCode: 200,
+      redirectUrls: ["https://jobs.example.com/old?utm_source=test"],
     }])).toEqual({
       markdown: "# Senior Engineer\nBuild reliable systems.",
       html: "<script type=\"application/ld+json\">{}</script>",
+      finalUrl: "https://jobs.example.com/role/42",
+      statusCode: 200,
+      redirectHistory: [
+        "https://jobs.example.com/old",
+        "https://jobs.example.com/role/42",
+      ],
     });
   });
 
   test("accepts fallback output fields and rejects unusable datasets", () => {
     expect(parseApifyDatasetItems([{ text: "Job content", rawHtml: "<main>Job</main>" }]))
-      .toEqual({ markdown: "Job content", html: "<main>Job</main>" });
+      .toEqual({
+        markdown: "Job content",
+        html: "<main>Job</main>",
+        finalUrl: null,
+        statusCode: null,
+        redirectHistory: [],
+      });
     expect(parseApifyDatasetItems([])).toBeNull();
     expect(parseApifyDatasetItems([{ url: "https://example.com" }])).toBeNull();
+  });
+
+  test("reads target telemetry from nested Apify crawler metadata", () => {
+    expect(parseApifyDatasetItems([{
+      content: "Rendered vacancy content",
+      request: {
+        url: "https://jobs.example.com/start?token=secret",
+        loadedUrl: "https://jobs.example.com/final?utm_campaign=hiring",
+      },
+      crawl: {
+        httpStatusCode: 202,
+        redirectChain: [
+          { url: "https://jobs.example.com/start?token=secret" },
+          { url: "https://jobs.example.com/final?utm_campaign=hiring" },
+        ],
+      },
+    }])).toEqual({
+      markdown: "Rendered vacancy content",
+      html: "",
+      finalUrl: "https://jobs.example.com/final",
+      statusCode: 202,
+      redirectHistory: [
+        "https://jobs.example.com/start",
+        "https://jobs.example.com/final",
+      ],
+    });
   });
 });

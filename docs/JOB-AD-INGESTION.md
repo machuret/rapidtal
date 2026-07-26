@@ -16,9 +16,8 @@ Phase 1 ingestion has the same default USD 1 ceiling through
 
 ## Release order
 
-1. Apply `db/migrations/019_job_ad_review_hardening.sql` after migrations 001–018,
-   then apply migrations 020 through
-   `db/migrations/024_transparent_lead_scoring.sql`.
+1. Apply all database migrations through
+   `db/migrations/030_lead_engine_completion.sql` in numeric order.
 2. Deploy `job-ad-ingest`, `job-ad-discover`, `company-enrich`, and the retired
    `engine-jobs-scrape` and `engine-jobs-enrich` tombstones to project
    `uerbrkxowbrqadkwbqea`.
@@ -58,6 +57,8 @@ never writes to `crm_contacts`. See `docs/LEAD-ENGINE-ROADMAP.md`.
 - Attempt to review another tenant's job and confirm the API returns `403`.
 - Confirm direct authenticated `UPDATE` access to `job_ads` is denied.
 - Confirm failed provider calls produce completed `failed` scrape-run records.
+- Confirm a successful redirected page records its target HTTP status, final
+  credential-free URL, and ordered credential-free redirect history.
 - Confirm the Apify run is stopped when the ingestion deadline is exceeded.
 - Run one discovery for each enabled source and confirm duplicate URLs are not
   duplicated in `job_discoveries`.
@@ -67,9 +68,15 @@ never writes to `crm_contacts`. See `docs/LEAD-ENGINE-ROADMAP.md`.
   overwrite a review that matches the newly extracted hashes.
 - Dismiss or import a discovery during a repeated search and confirm its status
   and `job_ad_id` are preserved.
-- Approve a company, calculate its lead score, and confirm all seven components
+- Enrich and score a valid extracted job before final approval, then confirm all
+  seven components
   show points, maximums, and reasons totalling exactly 100 possible points; confirm
   the corresponding component rows also retain their exact rule inputs.
+- Confirm CRM promotion is rejected until both the job and company are approved.
+- Retry one failed discovery and one failed company enrichment directly from
+  Job Leads.
+- Submit alternate URLs with the same source job ID and content fingerprint and
+  confirm all three identity types resolve to the same job.
 - Change the scoring profile and confirm the previous score is marked for
   recalculation rather than silently rewritten.
 
@@ -92,11 +99,14 @@ WHERE status = 'running'
 
 ## Operating targets
 
-- At least 95% of representative individual-job fixtures accepted.
+- At least 95% aggregate field accuracy across the executable job and company
+  fixture suites.
 - No known multi-vacancy listing page accepted as an unambiguous job.
 - No cross-tenant reads or review transitions.
 - Provider failures recorded with an error code and completion time.
 - Any changed approved extraction automatically returned to review.
+- Canonical URL, source job ID, and content fingerprint are tenant-scoped,
+  atomic identities.
 
 ## Recovery
 

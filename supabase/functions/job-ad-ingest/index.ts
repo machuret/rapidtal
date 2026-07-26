@@ -196,6 +196,9 @@ Deno.serve(async (req: Request) => {
   let admin: ReturnType<typeof createClient> | null = null;
   let providerCostUsd = 0;
   let aiEstimatedCostUsd = 0;
+  let targetHttpStatus: number | null = null;
+  let targetFinalUrl: string | null = null;
+  let targetRedirectHistory: string[] = [];
 
   async function fail(
     status: number,
@@ -209,7 +212,9 @@ Deno.serve(async (req: Request) => {
         .from("job_scrape_runs")
         .update({
           status: "failed",
-          http_status: httpStatus ?? null,
+          http_status: targetHttpStatus ?? httpStatus ?? null,
+          final_url: targetFinalUrl,
+          redirect_history: targetRedirectHistory,
           error_code: errorCode.slice(0, 100),
           error_message: internalMessage.slice(0, 1000),
           provider_cost_usd: providerCostUsd,
@@ -453,8 +458,20 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const providerHttpStatus = datasetRes.status;
+    targetHttpStatus = pageContent.statusCode;
+    targetFinalUrl = pageContent.finalUrl;
+    targetRedirectHistory = pageContent.redirectHistory;
+    const providerHttpStatus = targetHttpStatus ?? datasetRes.status;
     const { markdown, html } = pageContent;
+    if (targetHttpStatus !== null && targetHttpStatus >= 400) {
+      return await fail(
+        422,
+        "The job-ad page returned an error response.",
+        "target_http_error",
+        `The target page returned HTTP ${targetHttpStatus}.`,
+        targetHttpStatus,
+      );
+    }
     if (markdown.length < 80 && html.length < 200) {
       return await fail(
         422,
@@ -465,7 +482,8 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const structured = parseJobPostingJsonLd(html, parsedUrl.canonicalUrl);
+    const extractionSourceUrl = targetFinalUrl ?? parsedUrl.canonicalUrl;
+    const structured = parseJobPostingJsonLd(html, extractionSourceUrl);
     let ai: JobAdExtraction | null = null;
     let tokensUsed = 0;
 
@@ -492,7 +510,7 @@ Deno.serve(async (req: Request) => {
               model: extractionModel,
               schema: JOB_EXTRACTION_SCHEMA,
               prompt: JOB_EXTRACTION_PROMPT,
-              sourceUrl: parsedUrl.canonicalUrl,
+              sourceUrl: extractionSourceUrl,
               pageContent,
               structuredContext: structured,
               inputUsdPerMillion: inputRate,
@@ -629,6 +647,8 @@ Deno.serve(async (req: Request) => {
         status: "completed",
         extraction_method: merged.method,
         http_status: providerHttpStatus,
+        final_url: targetFinalUrl,
+        redirect_history: targetRedirectHistory,
         tokens_used: tokensUsed,
         provider_cost_usd: providerCostUsd,
         ai_estimated_cost_usd: aiEstimatedCostUsd,
@@ -647,7 +667,7 @@ Deno.serve(async (req: Request) => {
 
     return response({
       success: true,
-      duplicate: Boolean(existing),
+      duplicate: Boolean(existing) || saved.canonical_url !== parsedUrl.canonicalUrl,
       data: saved,
       scrapeRunId: runId,
       tokensUsed,

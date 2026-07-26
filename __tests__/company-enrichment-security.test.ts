@@ -11,6 +11,10 @@ const hardening = readFileSync(
   join(process.cwd(), "db/migrations/023_company_enrichment_hardening.sql"),
   "utf8",
 );
+const completion = readFileSync(
+  join(process.cwd(), "db/migrations/030_lead_engine_completion.sql"),
+  "utf8",
+);
 const edge = readFileSync(
   join(process.cwd(), "supabase/functions/company-enrich/index.ts"),
   "utf8",
@@ -33,11 +37,12 @@ const reviewRoute = readFileSync(
 );
 
 describe("Phase 3 company security contract", () => {
-  test("requires approved jobs in both Edge and atomic database boundaries", () => {
-    expect(edge).toContain('job.status !== "approved"');
-    expect(migration).toMatch(
-      /FROM job_ads[\s\S]*id = p_job_ad_id[\s\S]*client_id = p_client_id[\s\S]*status = 'approved'/,
+  test("allows evidence building before review but excludes terminal jobs", () => {
+    expect(edge).toContain('"extracted", "needs_review", "approved"');
+    expect(completion).toContain(
+      "status IN (''extracted'', ''needs_review'', ''approved'')",
     );
+    expect(edge).not.toContain('job.status !== "approved"');
   });
 
   test("deduplicates by tenant and normalized domain", () => {

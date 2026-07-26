@@ -14,6 +14,10 @@ import { LeadScoringProfileForm } from "@/components/job-leads/LeadScoringProfil
 import { CrmPromotionActions } from "@/components/job-leads/CrmPromotionActions";
 import { RetryScrapeButton } from "@/components/job-leads/RetryScrapeButton";
 import {
+  RetryCompanyEnrichmentButton,
+  RetryDiscoveryButton,
+} from "@/components/job-leads/PipelineRetryButtons";
+import {
   JobPipelineObservability,
   type PipelineMetric,
 } from "@/components/job-leads/JobPipelineObservability";
@@ -25,6 +29,7 @@ import type {
   DbLeadScoringProfile,
   DbJobAd,
   DbJobDiscovery,
+  DbJobDiscoveryRun,
   DbJobScrapeRun,
   DbJobSearch,
   DbLeadCompany,
@@ -58,6 +63,17 @@ type FailedCompanyRunListItem = Pick<
   "id" | "job_ad_id" | "domain" | "status" | "error_code" | "error_message"
     | "started_at"
 >;
+
+type FailedDiscoveryRunListItem = Pick<
+  DbJobDiscoveryRun,
+  "id" | "search_id" | "source" | "search_term" | "location" | "status"
+    | "error_code" | "error_message" | "started_at"
+> & {
+  search: Pick<
+    DbJobSearch,
+    "country" | "work_type" | "date_range_days" | "max_results"
+  > | null;
+};
 
 type DiscoveryListItem = Pick<
   DbJobDiscovery,
@@ -233,6 +249,7 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
     discoveryResult,
     searchResult,
     failedCompanyRunResult,
+    failedDiscoveryRunResult,
     allJobCountResult,
     sourcePolicyResult,
     expiredDiscoveryResult,
@@ -275,6 +292,18 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
     admin
       .from("company_enrichment_runs")
       .select("id, job_ad_id, domain, status, error_code, error_message, started_at")
+      .eq("client_id", clientId)
+      .order("started_at", { ascending: false })
+      .limit(100),
+    admin
+      .from("job_discovery_runs")
+      .select(`
+        id, search_id, source, search_term, location, status,
+        error_code, error_message, started_at,
+        search:job_searches!job_discovery_runs_search_id_fkey(
+          country, work_type, date_range_days, max_results
+        )
+      `)
       .eq("client_id", clientId)
       .order("started_at", { ascending: false })
       .limit(100),
@@ -470,6 +499,14 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
   }
   const failedCompanyRuns = [...latestCompanyRuns.values()]
     .filter((run) => run.status === "failed")
+    .slice(0, 10);
+  const latestDiscoveryRuns = new Map<string, FailedDiscoveryRunListItem>();
+  for (const run of (failedDiscoveryRunResult.data ?? []) as unknown as FailedDiscoveryRunListItem[]) {
+    const key = run.search_id ?? `${run.source}:${run.search_term}:${run.location}`;
+    if (!latestDiscoveryRuns.has(key)) latestDiscoveryRuns.set(key, run);
+  }
+  const failedDiscoveryRuns = [...latestDiscoveryRuns.values()]
+    .filter((run) => run.status === "failed" && run.search !== null)
     .slice(0, 10);
   const discoveries = (discoveryResult.data ?? []) as DiscoveryListItem[];
   const savedSearches = (searchResult.data ?? []) as SavedSearchListItem[];
@@ -784,7 +821,7 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
                 status={job.status}
               />
 
-              {job.status === "approved" && (
+              {["extracted", "needs_review", "approved"].includes(job.status) && (
                 <div className="mt-4 rounded-lg border border-violet-500/20 bg-violet-500/5 p-4">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                     <div>
@@ -879,7 +916,7 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
                     canResolveCompany={Boolean(job.company_website || job.company_name)}
                   />
 
-                  {company?.status === "approved" && (
+                  {company && ["needs_review", "approved"].includes(company.status) && (
                     <div className="mt-4 border-t border-violet-500/20 pt-4">
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                         <div>
@@ -934,12 +971,18 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
                           </p>
                         </div>
                       )}
-                      <CrmPromotionActions
-                        clientId={clientId}
-                        jobAdId={job.id}
-                        companyId={company.id}
-                        crmCompanyId={crmCompany?.id ?? null}
-                      />
+                      {job.status === "approved" && company.status === "approved" ? (
+                        <CrmPromotionActions
+                          clientId={clientId}
+                          jobAdId={job.id}
+                          companyId={company.id}
+                          crmCompanyId={crmCompany?.id ?? null}
+                        />
+                      ) : (
+                        <p className="mt-4 border-t border-emerald-500/20 pt-3 text-xs text-zinc-500">
+                          Score is ready for review. Approve both the job and company before CRM promotion.
+                        </p>
+                      )}
                     </div>
                   )}
                 </div>
@@ -977,7 +1020,7 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
         </nav>
       )}
 
-      {(failedRuns.length > 0 || failedCompanyRuns.length > 0) && (
+      {(failedRuns.length > 0 || failedCompanyRuns.length > 0 || failedDiscoveryRuns.length > 0) && (
         <section className="mt-10">
           <div className="flex items-center gap-2 mb-3">
             <AlertTriangle className="w-4 h-4 text-red-400" />
@@ -1000,6 +1043,33 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
                 </div>
               </div>
             ))}
+            {failedDiscoveryRuns.map((run) => (
+              <div key={run.id} className="bg-zinc-900 px-4 py-3">
+                <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
+                  <p className="truncate text-sm text-zinc-300">
+                    Discovery · {run.search_term}{run.location ? ` · ${run.location}` : ""}
+                  </p>
+                  <p className="shrink-0 text-xs text-zinc-600">
+                    {formatDistanceToNow(new Date(run.started_at), { addSuffix: true })}
+                  </p>
+                </div>
+                <p className="mt-1 text-xs text-red-300">
+                  {run.error_message ?? run.error_code ?? "Unknown discovery failure"}
+                </p>
+                <div className="mt-2">
+                  <RetryDiscoveryButton
+                    clientId={clientId}
+                    source={run.source}
+                    searchTerm={run.search_term}
+                    location={run.location}
+                    country={run.search!.country}
+                    workType={run.search!.work_type}
+                    dateRangeDays={run.search!.date_range_days}
+                    maxResults={run.search!.max_results}
+                  />
+                </div>
+              </div>
+            ))}
             {failedCompanyRuns.map((run) => {
               const job = jobs.find((item) => item.id === run.job_ad_id);
               return (
@@ -1015,6 +1085,12 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
                   <p className="mt-1 text-xs text-red-300">
                     {run.error_message ?? run.error_code ?? "Unknown company enrichment failure"}
                   </p>
+                  <div className="mt-2">
+                    <RetryCompanyEnrichmentButton
+                      clientId={clientId}
+                      jobAdId={run.job_ad_id}
+                    />
+                  </div>
                 </div>
               );
             })}

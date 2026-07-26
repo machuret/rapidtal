@@ -17,7 +17,8 @@ authenticated `410 Gone` tombstone. New callers use Phase 2 followed by Phase 1.
 
 ## Phase 3 — Company enrichment
 
-After a job advertisement is approved:
+After a job advertisement has a valid extraction, while it is still awaiting
+final review:
 
 1. Prefer its extracted official public HTTPS company website. When absent,
    search for an official domain and proceed only when one candidate clears a
@@ -29,7 +30,7 @@ After a job advertisement is approved:
 5. Store source-backed facts and machine inferences separately.
 6. Preserve the URL, verified page excerpt, confidence, resolver candidates,
    provider run IDs and cost, model, prompt version, input hash, and token count.
-7. Require explicit company approval before Phase 4.
+7. Keep enrichment review separate from source-backed facts.
 
 Phase 3 never creates or updates `crm_contacts`. A company name is not evidence
 that a particular human exists.
@@ -40,8 +41,8 @@ service role, and failed company enrichment attempts are visible in Job Leads.
 
 ## Phase 4 — Transparent lead scoring
 
-Phase 4 scores only approved advertisements linked to approved companies using
-the deterministic `phase4-v1` ruleset:
+Phase 4 can score extracted advertisements linked to enriched companies before
+final review, using the deterministic `phase4-v1` ruleset:
 
 - target-role match — 25 points;
 - target geography — 15 points;
@@ -63,8 +64,9 @@ of a human CRM contact.
 ## Phase 5 — Review and CRM promotion
 
 Job Leads is the human control surface for single URL, batch URL, and CSV
-imports; extraction preview; duplicate warnings; failed-scrape retry; review
-and score filters; job and company approval; and explicit CRM promotion.
+imports; extraction preview; duplicate warnings; direct ingestion, discovery,
+and company-enrichment retries; review and score filters; job and company
+approval; and explicit CRM promotion.
 
 An approved job and an approved, reviewed company are both required before a
 company can be promoted. Promotion is an atomic, tenant-scoped database action
@@ -75,3 +77,13 @@ A human can be added later only through the verified-contact action. It requires
 a real first name, email or phone, an HTTPS verification source, a verification
 method, and a written evidence note. Verification evidence is immutable, and
 changing an identity field removes the contact's verified state.
+
+## Completion hardening
+
+Job identity is claimed atomically per tenant across canonical URL, source job
+ID, and exact content fingerprint. If those identities already point at
+different records, ingestion stops instead of choosing one silently.
+
+Apify ingestion stores the target page's HTTP status, credential-free final URL,
+and credential-free redirect history. The retired `/api/vault/url` endpoint
+returns `410 Gone`; `/api/vault/crawl` is the single supported Vault crawler.

@@ -253,8 +253,12 @@ Deno.serve(async (req: Request) => {
       .eq("id", jobAdId)
       .eq("client_id", clientId)
       .single();
-    if (jobError || !job || job.status !== "approved") {
-      return response({ error: "An approved job advertisement is required." }, 409);
+    if (
+      jobError
+      || !job
+      || !["extracted", "needs_review", "approved"].includes(String(job.status))
+    ) {
+      return response({ error: "An extracted, reviewable job advertisement is required." }, 409);
     }
 
     const model = Deno.env.get("OPENAI_COMPANY_MODEL") ?? "gpt-4o-mini";

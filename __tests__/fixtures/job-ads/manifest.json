@@ -4,9 +4,18 @@
     "kind": "structured",
     "url": "https://jobs.example.com/fixtures/structured",
     "expected": {
+      "source_job_id": "FIXTURE-STRUCTURED-1",
       "title": "Senior Account Executive",
       "company_name": "Fixture Sales Pty Ltd",
+      "company_website": "https://fixture-sales.example/",
       "location": "Sydney, NSW, AU",
+      "remote_type": "onsite",
+      "employment_type": "FULL_TIME",
+      "description": "Own the complete sales cycle, develop a qualified pipeline, and build durable customer relationships across the Australian market.",
+      "responsibilities": ["Own the sales cycle", "Build pipeline"],
+      "skills": ["B2B sales", "CRM"],
+      "posted_at": "2026-07-20T00:00:00.000Z",
+      "apply_url": "https://jobs.example.com/fixtures/structured",
       "is_job_ad": true
     }
   },
@@ -15,9 +24,17 @@
     "kind": "dynamic",
     "url": "https://jobs.example.com/fixtures/dynamic",
     "expected": {
+      "source_job_id": null,
       "title": "Customer Success Manager",
       "company_name": "Dynamic Fixture Co",
+      "company_website": null,
       "location": "Melbourne, VIC",
+      "remote_type": "hybrid",
+      "employment_type": null,
+      "salary_min": null,
+      "salary_max": null,
+      "responsibilities": ["Lead onboarding", "Improve retention"],
+      "skills": ["Customer success", "CRM"],
       "is_job_ad": true
     }
   },
@@ -26,8 +43,17 @@
     "kind": "incomplete",
     "url": "https://jobs.example.com/fixtures/incomplete",
     "expected": {
+      "source_job_id": null,
       "title": "Operations Lead",
       "company_name": null,
+      "company_website": null,
+      "location": null,
+      "remote_type": "unknown",
+      "employment_type": null,
+      "salary_min": null,
+      "salary_max": null,
+      "responsibilities": [],
+      "skills": [],
       "is_job_ad": true
     }
   },
@@ -36,8 +62,76 @@
     "kind": "expired",
     "url": "https://jobs.example.com/fixtures/expired",
     "expected": {
+      "source_job_id": "FIXTURE-EXPIRED-1",
       "title": "Expired Sales Manager",
+      "company_name": "Fixture Legacy Pty Ltd",
+      "posted_at": "2025-01-01T00:00:00.000Z",
       "expires_at": "2025-01-31T00:00:00.000Z",
+      "apply_url": "https://jobs.example.com/fixtures/expired",
+      "is_job_ad": true
+    }
+  },
+  {
+    "key": "remote",
+    "kind": "structured",
+    "url": "https://jobs.example.com/fixtures/remote",
+    "expected": {
+      "source_job_id": "REMOTE-2026-42",
+      "title": "Remote Marketing Specialist",
+      "company_name": "Cloud Reach Pty Ltd",
+      "company_website": "https://cloud-reach.example/",
+      "location": "AU",
+      "remote_type": "remote",
+      "employment_type": "FULL_TIME",
+      "skills": ["Digital marketing", "Analytics"],
+      "responsibilities": ["Run campaigns", "Report performance"],
+      "is_job_ad": true
+    }
+  },
+  {
+    "key": "salary",
+    "kind": "structured",
+    "url": "https://jobs.example.com/fixtures/salary",
+    "expected": {
+      "source_job_id": "SALARY-77",
+      "title": "Revenue Operations Analyst",
+      "company_name": "Metric Works Ltd",
+      "location": "Melbourne, VIC, AU",
+      "remote_type": "onsite",
+      "employment_type": "CONTRACTOR",
+      "salary_min": 700,
+      "salary_max": 900,
+      "salary_currency": "AUD",
+      "salary_period": "day",
+      "is_job_ad": true
+    }
+  },
+  {
+    "key": "graph",
+    "kind": "structured",
+    "url": "https://jobs.example.com/fixtures/graph",
+    "expected": {
+      "source_job_id": "GRAPH-501",
+      "title": "Customer Support Team Lead",
+      "company_name": "Helpful Systems Australia",
+      "company_website": "https://helpful-systems.example/about",
+      "location": "10 Market Street, Brisbane, QLD, 4000, AU",
+      "remote_type": "onsite",
+      "employment_type": "FULL_TIME, PERMANENT",
+      "is_job_ad": true
+    }
+  },
+  {
+    "key": "multi-location",
+    "kind": "structured",
+    "url": "https://jobs.example.com/fixtures/multi-location",
+    "expected": {
+      "source_job_id": "8123",
+      "title": "Account Manager",
+      "company_name": "National Accounts Co",
+      "location": "Sydney, NSW, AU · Perth, WA, AU",
+      "remote_type": "hybrid",
+      "employment_type": "PART_TIME",
       "is_job_ad": true
     }
   }
