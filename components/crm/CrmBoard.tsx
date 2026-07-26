@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { CrmContact } from "@/app/(portal)/crm/page";
+import type { DbCrmContactVerification } from "@/types/database";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -24,6 +25,10 @@ interface CrmBoardProps {
 }
 
 type Note = { id: string; body: string; created_at: string };
+export type ContactVerification = Pick<
+  DbCrmContactVerification,
+  "id" | "verification_method" | "source_url" | "evidence_note" | "verified_at"
+>;
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export function CrmBoard({ contacts: initial, clientId }: CrmBoardProps) {
@@ -39,8 +44,11 @@ export function CrmBoard({ contacts: initial, clientId }: CrmBoardProps) {
   // Detail panel state
   const [selected, setSelected] = useState<CrmContact | null>(null);
   const [notes, setNotes] = useState<Note[]>([]);
+  const [verifications, setVerifications] = useState<ContactVerification[]>([]);
   const [loadingNotes, setLoadingNotes] = useState(false);
   const notesCacheRef = useRef<Map<string, Note[]>>(new Map());
+  const verificationCacheRef = useRef<Map<string, ContactVerification[]>>(new Map());
+  const detailRequestRef = useRef(0);
 
   // ── Filtering ─────────────────────────────────────────────────────────────
   const filtered = contacts.filter(c => {
@@ -52,20 +60,39 @@ export function CrmBoard({ contacts: initial, clientId }: CrmBoardProps) {
   });
 
   async function openContact(c: CrmContact) {
+    const requestId = ++detailRequestRef.current;
     setSelected(c);
-    if (notesCacheRef.current.has(c.id)) {
+    if (
+      notesCacheRef.current.has(c.id)
+      && verificationCacheRef.current.has(c.id)
+    ) {
       setNotes(notesCacheRef.current.get(c.id)!);
+      setVerifications(verificationCacheRef.current.get(c.id)!);
+      setLoadingNotes(false);
       return;
     }
+    setNotes([]);
+    setVerifications([]);
     setLoadingNotes(true);
-    const { data } = await supabase
-      .from("crm_notes")
-      .select("id, body, created_at")
-      .eq("contact_id", c.id)
-      .order("created_at", { ascending: false });
-    const fetched = (data ?? []) as Note[];
-    notesCacheRef.current.set(c.id, fetched);
-    setNotes(fetched);
+    const [noteResult, verificationResult] = await Promise.all([
+      supabase
+        .from("crm_notes")
+        .select("id, body, created_at")
+        .eq("contact_id", c.id)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("crm_contact_verifications")
+        .select("id, verification_method, source_url, evidence_note, verified_at")
+        .eq("contact_id", c.id)
+        .order("verified_at", { ascending: false }),
+    ]);
+    const fetchedNotes = (noteResult.data ?? []) as Note[];
+    const fetchedVerifications = (verificationResult.data ?? []) as ContactVerification[];
+    notesCacheRef.current.set(c.id, fetchedNotes);
+    verificationCacheRef.current.set(c.id, fetchedVerifications);
+    if (requestId !== detailRequestRef.current) return;
+    setNotes(fetchedNotes);
+    setVerifications(fetchedVerifications);
     setLoadingNotes(false);
   }
 
@@ -168,9 +195,13 @@ export function CrmBoard({ contacts: initial, clientId }: CrmBoardProps) {
         <CrmDetailPanel
           contact={selected}
           notes={notes}
+          verifications={verifications}
           loadingNotes={loadingNotes}
           clientId={clientId}
-          onClose={() => setSelected(null)}
+          onClose={() => {
+            detailRequestRef.current += 1;
+            setSelected(null);
+          }}
           onUpdated={updated => {
             setContacts(cs => cs.map(c => c.id === updated.id ? updated : c));
             setSelected(updated);

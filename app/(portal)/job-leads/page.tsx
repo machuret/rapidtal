@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { AlertTriangle, ExternalLink } from "lucide-react";
 import { getCurrentUserAndClient } from "@/lib/auth";
@@ -12,6 +13,7 @@ import { LeadScoreActions } from "@/components/job-leads/LeadScoreActions";
 import { LeadScoringProfileForm } from "@/components/job-leads/LeadScoringProfileForm";
 import { CrmPromotionActions } from "@/components/job-leads/CrmPromotionActions";
 import { RetryScrapeButton } from "@/components/job-leads/RetryScrapeButton";
+import { normalizeJobUrl } from "@/lib/job-batch-import";
 import type {
   DbCrmCompany,
   DbLeadScore,
@@ -41,12 +43,14 @@ type JobLeadListItem = Pick<
 
 type FailedRunListItem = Pick<
   DbJobScrapeRun,
-  "id" | "requested_url" | "error_code" | "error_message" | "started_at"
+  "id" | "requested_url" | "canonical_url" | "status" | "error_code"
+    | "error_message" | "started_at"
 >;
 
 type FailedCompanyRunListItem = Pick<
   DbCompanyEnrichmentRun,
-  "id" | "job_ad_id" | "domain" | "error_code" | "error_message" | "started_at"
+  "id" | "job_ad_id" | "domain" | "status" | "error_code" | "error_message"
+    | "started_at"
 >;
 
 type DiscoveryListItem = Pick<
@@ -136,20 +140,72 @@ type PageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
+const PAGE_SIZE = 50;
+const JOB_STATUSES = new Set(["all", "needs_review", "approved", "rejected"]);
+const SCORE_FILTERS = new Set(["all", "high", "medium", "low", "unscored"]);
+
 export default async function JobLeadsPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const statusFilter = typeof params.status === "string" ? params.status : "all";
-  const scoreFilter = typeof params.score === "string" ? params.score : "all";
-  const query = typeof params.q === "string" ? params.q.trim().toLowerCase() : "";
+  const requestedStatus = typeof params.status === "string" ? params.status : "all";
+  const requestedScore = typeof params.score === "string" ? params.score : "all";
+  const statusFilter = JOB_STATUSES.has(requestedStatus) ? requestedStatus : "all";
+  const scoreFilter = SCORE_FILTERS.has(requestedScore) ? requestedScore : "all";
+  const query = typeof params.q === "string"
+    ? params.q.trim().slice(0, 200)
+    : "";
+  const safeQuery = query.replace(/[,%_()]/g, " ").replace(/\s+/g, " ").trim();
   const minScore = typeof params.minScore === "string"
     ? Math.min(100, Math.max(0, Number(params.minScore) || 0))
     : 0;
+  const requestedPage = typeof params.page === "string" ? Number(params.page) : 1;
+  const page = Number.isSafeInteger(requestedPage) && requestedPage > 0
+    ? requestedPage
+    : 1;
   const ctx = await getCurrentUserAndClient();
   if (!ctx) redirect("/login");
   if (ctx.user.role !== "client_admin" || !ctx.user.client_id) redirect("/dashboard");
   const clientId = ctx.user.client_id;
 
   const admin = createAdminClient();
+  const needsScoreJoin = ["high", "medium", "low"].includes(scoreFilter)
+    || minScore > 0;
+  const jobSelect = `
+    id, canonical_url, title, company_name, company_website, company_id,
+    lead_score_id, extraction_hash,
+    location, remote_type,
+    employment_type, salary_min, salary_max, salary_currency, salary_period,
+    description, responsibilities, skills, field_evidence, posted_at, expires_at,
+    extraction_method, extraction_confidence, status, reviewed_at, last_seen_at
+    ${needsScoreJoin
+      ? ", score_filter:lead_scores!job_ads_lead_score_id_fkey!inner(id)"
+      : ""}
+  `;
+  let jobQuery = admin
+    .from("job_ads")
+    .select(jobSelect, { count: "exact" })
+    .eq("client_id", clientId);
+  if (statusFilter !== "all") {
+    jobQuery = jobQuery.eq("status", statusFilter as DbJobAd["status"]);
+  }
+  if (scoreFilter === "unscored") jobQuery = jobQuery.is("lead_score_id", null);
+  if (["high", "medium", "low"].includes(scoreFilter)) {
+    jobQuery = jobQuery.eq("score_filter.score_band", scoreFilter);
+  }
+  if (minScore > 0) jobQuery = jobQuery.gte("score_filter.total_score", minScore);
+  if (safeQuery) {
+    jobQuery = jobQuery.or(
+      [
+        `title.ilike.%${safeQuery}%`,
+        `company_name.ilike.%${safeQuery}%`,
+        `location.ilike.%${safeQuery}%`,
+        `canonical_url.ilike.%${safeQuery}%`,
+      ].join(","),
+    );
+  }
+  jobQuery = jobQuery
+    .order("updated_at", { ascending: false })
+    .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+
   const [
     jobResult,
     failedRunResult,
@@ -157,27 +213,15 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
     discoveryResult,
     searchResult,
     failedCompanyRunResult,
+    allJobCountResult,
   ] = await Promise.all([
-    admin
-      .from("job_ads")
-      .select(`
-        id, canonical_url, title, company_name, company_website, company_id,
-        lead_score_id, extraction_hash,
-        location, remote_type,
-        employment_type, salary_min, salary_max, salary_currency, salary_period,
-        description, responsibilities, skills, field_evidence, posted_at, expires_at,
-        extraction_method, extraction_confidence, status, reviewed_at, last_seen_at
-      `)
-      .eq("client_id", clientId)
-      .order("updated_at", { ascending: false })
-      .limit(100),
+    jobQuery,
     admin
       .from("job_scrape_runs")
-      .select("id, requested_url, error_code, error_message, started_at")
+      .select("id, requested_url, canonical_url, status, error_code, error_message, started_at")
       .eq("client_id", clientId)
-      .eq("status", "failed")
       .order("started_at", { ascending: false })
-      .limit(10),
+      .limit(100),
     admin
       .from("lead_scoring_profiles")
       .select("*")
@@ -202,14 +246,29 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
       .limit(5),
     admin
       .from("company_enrichment_runs")
-      .select("id, job_ad_id, domain, error_code, error_message, started_at")
+      .select("id, job_ad_id, domain, status, error_code, error_message, started_at")
       .eq("client_id", clientId)
-      .eq("status", "failed")
       .order("started_at", { ascending: false })
-      .limit(10),
+      .limit(100),
+    admin
+      .from("job_ads")
+      .select("id", { count: "exact", head: true })
+      .eq("client_id", clientId),
   ]);
 
-  const jobs = (jobResult.data ?? []) as JobLeadListItem[];
+  const jobs = (jobResult.data ?? []) as unknown as JobLeadListItem[];
+  const totalJobs = jobResult.count ?? jobs.length;
+  const totalAllJobs = allJobCountResult.count ?? 0;
+  const totalPages = Math.max(1, Math.ceil(totalJobs / PAGE_SIZE));
+  if (totalJobs > 0 && page > totalPages) {
+    const correctedParams = new URLSearchParams();
+    if (query) correctedParams.set("q", query);
+    if (statusFilter !== "all") correctedParams.set("status", statusFilter);
+    if (scoreFilter !== "all") correctedParams.set("score", scoreFilter);
+    if (minScore > 0) correctedParams.set("minScore", String(minScore));
+    correctedParams.set("page", String(totalPages));
+    redirect(`/job-leads?${correctedParams.toString()}`);
+  }
   const linkedCompanyIds = [
     ...new Set(jobs.flatMap((job) => job.company_id ? [job.company_id] : [])),
   ];
@@ -262,8 +321,24 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
       "lead_score_id",
       scoreIds.length ? scoreIds : ["00000000-0000-0000-0000-000000000000"],
     );
-  const failedRuns = (failedRunResult.data ?? []) as FailedRunListItem[];
-  const failedCompanyRuns = (failedCompanyRunResult.data ?? []) as FailedCompanyRunListItem[];
+  const latestScrapeRuns = new Map<string, FailedRunListItem>();
+  for (const run of (failedRunResult.data ?? []) as FailedRunListItem[]) {
+    const key = normalizeJobUrl(run.canonical_url ?? run.requested_url)
+      ?? run.canonical_url
+      ?? run.requested_url;
+    if (!latestScrapeRuns.has(key)) latestScrapeRuns.set(key, run);
+  }
+  const failedRuns = [...latestScrapeRuns.values()]
+    .filter((run) => run.status === "failed")
+    .slice(0, 10);
+  const latestCompanyRuns = new Map<string, FailedCompanyRunListItem>();
+  for (const run of (failedCompanyRunResult.data ?? []) as FailedCompanyRunListItem[]) {
+    const key = run.job_ad_id ?? run.domain ?? run.id;
+    if (!latestCompanyRuns.has(key)) latestCompanyRuns.set(key, run);
+  }
+  const failedCompanyRuns = [...latestCompanyRuns.values()]
+    .filter((run) => run.status === "failed")
+    .slice(0, 10);
   const discoveries = (discoveryResult.data ?? []) as DiscoveryListItem[];
   const savedSearches = (searchResult.data ?? []) as SavedSearchListItem[];
   const companies = (companyResult.data ?? []) as CompanyListItem[];
@@ -281,21 +356,17 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
     existing.push(component);
     componentsByScoreId.set(component.lead_score_id, existing);
   }
-  const displayedJobs = jobs.filter((job) => {
-    const score = job.lead_score_id ? scoresById.get(job.lead_score_id) : null;
-    if (statusFilter !== "all" && job.status !== statusFilter) return false;
-    if (scoreFilter === "unscored" && score) return false;
-    if (["high", "medium", "low"].includes(scoreFilter) && score?.score_band !== scoreFilter) return false;
-    if (score && score.total_score < minScore) return false;
-    if (!score && minScore > 0) return false;
-    if (query && ![
-      job.title,
-      job.company_name,
-      job.location,
-      job.canonical_url,
-    ].some((value) => value?.toLowerCase().includes(query))) return false;
-    return true;
-  });
+  const displayedJobs = jobs;
+  const paginationParams = new URLSearchParams();
+  if (query) paginationParams.set("q", query);
+  if (statusFilter !== "all") paginationParams.set("status", statusFilter);
+  if (scoreFilter !== "all") paginationParams.set("score", scoreFilter);
+  if (minScore > 0) paginationParams.set("minScore", String(minScore));
+  const pageHref = (targetPage: number) => {
+    const next = new URLSearchParams(paginationParams);
+    next.set("page", String(targetPage));
+    return `/job-leads?${next.toString()}`;
+  };
 
   return (
     <div>
@@ -307,7 +378,7 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
       </div>
 
       <JobDiscoverySearch clientId={clientId} savedSearches={savedSearches} />
-      <JobLeadIngest clientId={clientId} existingUrls={jobs.map((job) => job.canonical_url)} />
+      <JobLeadIngest clientId={clientId} />
       {scoringProfile && (
         <LeadScoringProfileForm clientId={clientId} profile={scoringProfile} />
       )}
@@ -381,7 +452,7 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
         </div>
       )}
 
-      {!jobResult.error && jobs.length === 0 && (
+      {!jobResult.error && totalAllJobs === 0 && (
         <div className="rounded-xl border border-dashed border-zinc-800 p-10 text-center">
           <p className="text-zinc-300 font-medium">No job advertisements yet</p>
           <p className="text-zinc-500 text-sm mt-1">
@@ -390,7 +461,7 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
         </div>
       )}
 
-      {jobs.length > 0 && (
+      {(totalAllJobs > 0 || statusFilter !== "all" || scoreFilter !== "all" || query || minScore > 0) && (
         <form className="mb-4 grid gap-3 rounded-xl border border-zinc-800 bg-zinc-900 p-4 sm:grid-cols-2 lg:grid-cols-5">
           <input
             name="q"
@@ -416,12 +487,12 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
             <button className="h-9 rounded-md bg-zinc-100 px-3 text-sm font-medium text-zinc-900">Filter</button>
           </div>
           <p className="text-xs text-zinc-500 sm:col-span-2 lg:col-span-5">
-            Showing {displayedJobs.length} of {jobs.length} job leads.
+            Showing {displayedJobs.length} of {totalJobs} matching job leads.
           </p>
         </form>
       )}
 
-      {jobs.length > 0 && displayedJobs.length === 0 && (
+      {totalAllJobs > 0 && displayedJobs.length === 0 && (
         <div className="mb-4 rounded-xl border border-dashed border-zinc-800 p-8 text-center text-sm text-zinc-400">
           No job leads match these filters.
         </div>
@@ -722,6 +793,22 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
           );
         })}
       </div>
+
+      {totalPages > 1 && (
+        <nav className="mt-6 flex items-center justify-between gap-3 text-sm" aria-label="Job lead pages">
+          {page > 1 ? (
+            <Link href={pageHref(page - 1)} className="rounded-md border border-zinc-700 px-3 py-2 text-zinc-300 hover:bg-zinc-800">
+              Previous
+            </Link>
+          ) : <span />}
+          <span className="text-zinc-500">Page {page} of {totalPages}</span>
+          {page < totalPages ? (
+            <Link href={pageHref(page + 1)} className="rounded-md border border-zinc-700 px-3 py-2 text-zinc-300 hover:bg-zinc-800">
+              Next
+            </Link>
+          ) : <span />}
+        </nav>
+      )}
 
       {(failedRuns.length > 0 || failedCompanyRuns.length > 0) && (
         <section className="mt-10">

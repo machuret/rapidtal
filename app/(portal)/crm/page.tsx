@@ -66,7 +66,10 @@ export default async function CrmPage() {
         ) : (
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {crmCompanies.map((company) => {
-              const contactCount = crmContacts.filter((contact) => contact.crm_company_id === company.id).length;
+              const contactCount = crmContacts.filter(
+                (contact) => contact.crm_company_id === company.id
+                  && contact.verification_status === "verified",
+              ).length;
               return (
                 <article key={company.id} className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
                   <div className="flex items-start justify-between gap-3">

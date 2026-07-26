@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { CrmContact } from "@/app/(portal)/crm/page";
+import type { ContactVerification } from "./CrmBoard";
 import { CRM_STATUS_META, CRM_STATUSES } from "@/lib/crm-config";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import {
   X, Pencil, Trash2, Save, Mail, Phone, Building2,
-  CalendarDays, Tag, Loader2,
+  CalendarDays, Tag, Loader2, BadgeCheck, ExternalLink,
 } from "lucide-react";
 
 type Note = { id: string; body: string; created_at: string };
@@ -19,6 +20,7 @@ type Note = { id: string; body: string; created_at: string };
 interface CrmDetailPanelProps {
   contact: CrmContact;
   notes: Note[];
+  verifications: ContactVerification[];
   loadingNotes: boolean;
   clientId: string;
   onClose: () => void;
@@ -43,7 +45,7 @@ const EDIT_FIELDS = [
 ] as const;
 
 export function CrmDetailPanel({
-  contact, notes, loadingNotes, clientId,
+  contact, notes, verifications, loadingNotes, clientId,
   onClose, onUpdated, onDeleted, onNoteAdded, onNoteDeleted,
 }: CrmDetailPanelProps) {
   const [editing, setEditing] = useState(false);
@@ -250,6 +252,35 @@ export function CrmDetailPanel({
                 </span>
               )}
             </div>
+            {contact.verification_status === "verified" && (
+              <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-3">
+                <p className="flex items-center gap-1.5 text-xs font-medium text-emerald-300">
+                  <BadgeCheck className="h-3.5 w-3.5" />
+                  Verified real contact
+                </p>
+                {verifications.length > 0 && (
+                  <div className="mt-2 space-y-2">
+                    {verifications.map((verification) => (
+                      <div key={verification.id} className="text-xs">
+                        <a
+                          href={verification.source_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 text-blue-400 hover:text-blue-300"
+                        >
+                          {verification.verification_method.replaceAll("_", " ")}
+                          <ExternalLink className="h-3 w-3" />
+                        </a>
+                        <p className="mt-1 text-zinc-400">{verification.evidence_note}</p>
+                        <p className="mt-1 text-zinc-600">
+                          Verified {new Date(verification.verified_at).toLocaleDateString()}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
             {contact.tags?.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 <Tag className="w-3.5 h-3.5 text-zinc-600 mt-0.5 shrink-0" />

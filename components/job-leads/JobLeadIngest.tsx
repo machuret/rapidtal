@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertTriangle, BriefcaseBusiness, FileUp, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -11,20 +11,51 @@ import { MAX_JOB_IMPORT_URLS, normalizeJobUrl, parseJobImportText } from "@/lib/
 
 interface JobLeadIngestProps {
   clientId: string;
-  existingUrls: string[];
 }
 
-export function JobLeadIngest({ clientId, existingUrls }: JobLeadIngestProps) {
+export function JobLeadIngest({ clientId }: JobLeadIngestProps) {
   const router = useRouter();
   const [url, setUrl] = useState("");
   const [batchText, setBatchText] = useState("");
   const [loading, setLoading] = useState(false);
-  const existing = useMemo(
-    () => new Set(existingUrls.flatMap((value) => normalizeJobUrl(value) ?? [])),
-    [existingUrls],
-  );
+  const [existing, setExisting] = useState<Set<string>>(new Set());
   const batch = useMemo(() => parseJobImportText(batchText), [batchText]);
+  const normalizedSingleUrl = normalizeJobUrl(url);
+  const duplicateCandidates = useMemo(
+    () => [...new Set([
+      ...(normalizedSingleUrl ? [normalizedSingleUrl] : []),
+      ...batch.urls,
+    ])],
+    [normalizedSingleUrl, batch.urls],
+  );
   const existingBatchCount = batch.urls.filter((value) => existing.has(value)).length;
+
+  useEffect(() => {
+    if (duplicateCandidates.length === 0) {
+      setExisting(new Set());
+      return;
+    }
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      try {
+        const response = await fetch("/api/job-leads/duplicates", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ clientId, urls: duplicateCandidates }),
+          signal: controller.signal,
+        });
+        if (!response.ok) return;
+        const body = await response.json() as { existingUrls?: string[] };
+        setExisting(new Set(body.existingUrls ?? []));
+      } catch (error) {
+        if ((error as Error).name !== "AbortError") setExisting(new Set());
+      }
+    }, 250);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [clientId, duplicateCandidates]);
 
   async function ingest(targetUrl: string) {
     const res = await fetch("/api/job-leads/ingest", {
@@ -128,7 +159,7 @@ export function JobLeadIngest({ clientId, existingUrls }: JobLeadIngestProps) {
         </Button>
       </form>
 
-      {normalizeJobUrl(url) && existing.has(normalizeJobUrl(url)!) && (
+      {normalizedSingleUrl && existing.has(normalizedSingleUrl) && (
         <p className="mt-3 flex items-center gap-2 text-xs text-amber-300">
           <AlertTriangle className="h-3.5 w-3.5" />
           Duplicate warning: this URL is already a job lead and will be refreshed.

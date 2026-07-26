@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { assertClientAccess, requireApiAuth } from "@/lib/api-auth";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { canonicalizePublicJobUrl } from "@/supabase/functions/_shared/job-url";
 
 const optionalText = (max: number) => z.string().trim().max(max).optional().nullable();
 const schema = z.object({
@@ -13,7 +14,14 @@ const schema = z.object({
   phone: optionalText(50),
   jobTitle: optionalText(200),
   verificationMethod: z.enum(["company_website", "linkedin", "email", "phone", "manual_research"]),
-  sourceUrl: z.string().url().max(2048).refine((value) => value.startsWith("https://"), "HTTPS required"),
+  sourceUrl: z.string().url().max(2048).refine((value) => {
+    try {
+      const parsed = new URL(value);
+      return parsed.protocol === "https:" && !parsed.username && !parsed.password;
+    } catch {
+      return false;
+    }
+  }, "Public credential-free HTTPS URL required"),
   evidenceNote: z.string().trim().min(1).max(2000),
 }).strict().refine((value) => Boolean(value.email?.trim() || value.phone?.trim()), {
   message: "Email or phone required.",
@@ -29,6 +37,13 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) return NextResponse.json({ error: "Enter a real person, contact method, and verification evidence." }, { status: 400 });
   const accessError = assertClientAccess(auth.user, parsed.data.clientId);
   if (accessError) return accessError;
+  const evidenceUrl = canonicalizePublicJobUrl(parsed.data.sourceUrl);
+  if (!evidenceUrl) {
+    return NextResponse.json(
+      { error: "Verification evidence must use a public HTTPS page." },
+      { status: 400 },
+    );
+  }
 
   const admin = createAdminClient();
   const { data: allowed, error: rateError } = await admin.rpc("consume_api_rate_limit", {
@@ -50,7 +65,7 @@ export async function POST(req: NextRequest) {
       phone: parsed.data.phone || null,
       job_title: parsed.data.jobTitle || null,
       verification_method: parsed.data.verificationMethod,
-      source_url: parsed.data.sourceUrl,
+      source_url: evidenceUrl.canonicalUrl,
       evidence_note: parsed.data.evidenceNote,
     },
   });

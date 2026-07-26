@@ -4,6 +4,7 @@ import { requireApiAuth, assertClientAccess } from "@/lib/api-auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 const STATUSES = ["lead", "prospect", "active", "inactive", "closed"] as const;
+const CONTACT_SELECT = "id, client_id, first_name, last_name, email, phone, company, job_title, status, source, tags, notes, created_by, crm_company_id, verification_status, verified_by, verified_at, created_at, updated_at";
 
 const createSchema = z.object({
   clientId:   z.string().uuid(),
@@ -86,10 +87,17 @@ export async function POST(req: NextRequest) {
       tags:       [],
       notes:      parsed.data.notes || null,
     })
-    .select("id, client_id, first_name, last_name, email, phone, company, job_title, status, source, tags, notes, created_at, updated_at")
+    .select(CONTACT_SELECT)
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    const status = error.code === "23505" ? 409 : 500;
+    return NextResponse.json({
+      error: status === 409
+        ? "A contact with this email or phone already exists."
+        : error.message,
+    }, { status });
+  }
   return NextResponse.json(data, { status: 201 });
 }
 
@@ -153,10 +161,17 @@ export async function PATCH(req: NextRequest) {
     .update(updates as any)
     .eq("id", id)
     .eq("client_id", clientId)
-    .select("id, client_id, first_name, last_name, email, phone, company, job_title, status, source, tags, notes, created_at, updated_at")
+    .select(CONTACT_SELECT)
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    const status = error.code === "23505" ? 409 : 500;
+    return NextResponse.json({
+      error: status === 409
+        ? "A contact with this email or phone already exists."
+        : error.message,
+    }, { status });
+  }
   return NextResponse.json(data);
 }
 
