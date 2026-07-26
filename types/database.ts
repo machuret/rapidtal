@@ -10,6 +10,12 @@ export type JobExtractionMethod = "json_ld" | "ai" | "json_ld+ai";
 export type JobScrapeRunStatus = "running" | "completed" | "failed";
 export type JobDiscoverySource = "seek" | "indeed" | "linkedin";
 export type JobDiscoveryStatus = "new" | "imported" | "dismissed" | "error";
+export type JobListingState = "active" | "changed" | "expired";
+export type JobDiscoveryTriggerType = "manual" | "scheduled";
+export type JobSourceAuthorizationBasis =
+  | "written_permission"
+  | "official_api"
+  | "robots_permitted";
 export type LeadCompanyStatus = "needs_review" | "approved" | "rejected" | "error";
 export type CompanyEnrichmentRunStatus = "running" | "completed" | "failed" | "reused";
 export type LeadScoreBand = "high" | "medium" | "low";
@@ -247,6 +253,11 @@ export type DbJobAd = {
   created_at: string;
   updated_at: string;
   last_seen_at: string;
+  source_listing_state: JobListingState;
+  source_changed_at: string | null;
+  source_expired_at: string | null;
+  recrawl_required: boolean;
+  last_recrawled_at: string | null;
 };
 
 export type DbLeadCompany = {
@@ -416,6 +427,19 @@ export type DbJobSearch = {
   created_at: string;
   updated_at: string;
   last_run_at: string | null;
+  schedule_enabled: boolean;
+  schedule_interval_minutes: number;
+  next_run_at: string | null;
+  backoff_until: string | null;
+  consecutive_failures: number;
+  last_success_at: string | null;
+  last_scheduled_run_at: string | null;
+  schedule_approved_by: string | null;
+  schedule_approved_at: string | null;
+  compliance_policy_version: string | null;
+  lease_owner: string | null;
+  lease_token: string | null;
+  lease_expires_at: string | null;
 };
 
 export type DbJobDiscoveryRun = {
@@ -437,6 +461,13 @@ export type DbJobDiscoveryRun = {
   created_by: string | null;
   started_at: string;
   completed_at: string | null;
+  trigger_type: JobDiscoveryTriggerType;
+  lease_token: string | null;
+  adapter_version: string | null;
+  compliance_policy_version: string | null;
+  changed_count: number;
+  expired_count: number;
+  complete_snapshot: boolean;
 };
 
 export type DbJobDiscovery = {
@@ -463,6 +494,57 @@ export type DbJobDiscovery = {
   discovered_at: string;
   last_seen_at: string;
   updated_at: string;
+  listing_state: JobListingState;
+  content_fingerprint: string | null;
+  changed_at: string | null;
+  expired_at: string | null;
+};
+
+export type DbJobSourceAccessPolicy = {
+  source: JobDiscoverySource;
+  adapter_version: string;
+  policy_version: string;
+  terms_url: string;
+  allowed_hosts: string[];
+  blocked_path_prefixes: string[];
+  scheduled_access_enabled: boolean;
+  authorization_basis: JobSourceAuthorizationBasis | null;
+  authorization_reference: string | null;
+  max_results_per_run: number;
+  min_interval_minutes: number;
+  approved_by: string | null;
+  approved_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DbJobDiscoverySearchSighting = {
+  search_id: string;
+  discovery_id: string;
+  client_id: string;
+  first_seen_at: string;
+  last_seen_at: string;
+  missed_run_count: number;
+  is_expired: boolean;
+  expired_at: string | null;
+};
+
+export type DbJobDiscoveryLifecycleEvent = {
+  id: string;
+  client_id: string;
+  discovery_id: string;
+  discovery_run_id: string | null;
+  from_state: JobListingState;
+  to_state: JobListingState;
+  previous_fingerprint: string | null;
+  new_fingerprint: string | null;
+  reason:
+    | "content_changed"
+    | "explicit_expiry"
+    | "missing_from_three_complete_runs"
+    | "recrawl_acknowledged"
+    | "listing_reappeared";
+  detected_at: string;
 };
 
 type NoRelationships = {
@@ -586,6 +668,11 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
           last_seen_at?: string;
+          source_listing_state?: JobListingState;
+          source_changed_at?: string | null;
+          source_expired_at?: string | null;
+          recrawl_required?: boolean;
+          last_recrawled_at?: string | null;
         };
         Update: Partial<DbJobAd>;
         Relationships: NoRelationships;
@@ -795,6 +882,19 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
           last_run_at?: string | null;
+          schedule_enabled?: boolean;
+          schedule_interval_minutes?: number;
+          next_run_at?: string | null;
+          backoff_until?: string | null;
+          consecutive_failures?: number;
+          last_success_at?: string | null;
+          last_scheduled_run_at?: string | null;
+          schedule_approved_by?: string | null;
+          schedule_approved_at?: string | null;
+          compliance_policy_version?: string | null;
+          lease_owner?: string | null;
+          lease_token?: string | null;
+          lease_expires_at?: string | null;
         };
         Update: Partial<DbJobSearch>;
         Relationships: NoRelationships;
@@ -820,6 +920,13 @@ export interface Database {
           created_by?: string | null;
           started_at?: string;
           completed_at?: string | null;
+          trigger_type?: JobDiscoveryTriggerType;
+          lease_token?: string | null;
+          adapter_version?: string | null;
+          compliance_policy_version?: string | null;
+          changed_count?: number;
+          expired_count?: number;
+          complete_snapshot?: boolean;
         };
         Update: Partial<DbJobDiscoveryRun>;
         Relationships: NoRelationships;
@@ -850,8 +957,66 @@ export interface Database {
           discovered_at?: string;
           last_seen_at?: string;
           updated_at?: string;
+          listing_state?: JobListingState;
+          content_fingerprint?: string | null;
+          changed_at?: string | null;
+          expired_at?: string | null;
         };
         Update: Partial<DbJobDiscovery>;
+        Relationships: NoRelationships;
+      };
+      job_source_access_policies: {
+        Row: DbJobSourceAccessPolicy;
+        Insert: {
+          source: JobDiscoverySource;
+          adapter_version: string;
+          policy_version: string;
+          terms_url: string;
+          allowed_hosts: string[];
+          blocked_path_prefixes?: string[];
+          scheduled_access_enabled?: boolean;
+          authorization_basis?: JobSourceAuthorizationBasis | null;
+          authorization_reference?: string | null;
+          max_results_per_run?: number;
+          min_interval_minutes?: number;
+          approved_by?: string | null;
+          approved_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<DbJobSourceAccessPolicy>;
+        Relationships: NoRelationships;
+      };
+      job_discovery_search_sightings: {
+        Row: DbJobDiscoverySearchSighting;
+        Insert: {
+          search_id: string;
+          discovery_id: string;
+          client_id: string;
+          first_seen_at?: string;
+          last_seen_at?: string;
+          missed_run_count?: number;
+          is_expired?: boolean;
+          expired_at?: string | null;
+        };
+        Update: Partial<DbJobDiscoverySearchSighting>;
+        Relationships: NoRelationships;
+      };
+      job_discovery_lifecycle_events: {
+        Row: DbJobDiscoveryLifecycleEvent;
+        Insert: {
+          id?: string;
+          client_id: string;
+          discovery_id: string;
+          discovery_run_id?: string | null;
+          from_state: JobListingState;
+          to_state: JobListingState;
+          previous_fingerprint?: string | null;
+          new_fingerprint?: string | null;
+          reason: DbJobDiscoveryLifecycleEvent["reason"];
+          detected_at?: string;
+        };
+        Update: Partial<DbJobDiscoveryLifecycleEvent>;
         Relationships: NoRelationships;
       };
       sops: {
@@ -931,6 +1096,75 @@ export interface Database {
           p_items: Record<string, unknown>[];
         };
         Returns: { result_count: number; new_count: number }[];
+      };
+      approve_job_source_access: {
+        Args: {
+          p_actor_id: string;
+          p_source: JobDiscoverySource;
+          p_enabled: boolean;
+          p_authorization_basis: JobSourceAuthorizationBasis | null;
+          p_authorization_reference: string | null;
+          p_policy_version: string;
+        };
+        Returns: DbJobSourceAccessPolicy[];
+      };
+      configure_job_search_schedule: {
+        Args: {
+          p_actor_id: string;
+          p_client_id: string;
+          p_search_id: string;
+          p_enabled: boolean;
+          p_interval_minutes: number;
+        };
+        Returns: DbJobSearch[];
+      };
+      claim_due_job_searches: {
+        Args: {
+          p_worker_id: string;
+          p_limit?: number;
+        };
+        Returns: {
+          search_id: string;
+          client_id: string;
+          lease_token: string;
+        }[];
+      };
+      begin_scheduled_job_discovery: {
+        Args: {
+          p_search_id: string;
+          p_lease_token: string;
+        };
+        Returns: DbJobSearch[];
+      };
+      finish_job_search_schedule: {
+        Args: {
+          p_search_id: string;
+          p_lease_token: string;
+          p_succeeded: boolean;
+          p_retry_after_seconds?: number | null;
+        };
+        Returns: undefined;
+      };
+      upsert_job_discoveries_v2: {
+        Args: {
+          p_client_id: string;
+          p_run_id: string;
+          p_items: Record<string, unknown>[];
+          p_complete_snapshot: boolean;
+        };
+        Returns: {
+          result_count: number;
+          new_count: number;
+          changed_count: number;
+          expired_count: number;
+        }[];
+      };
+      acknowledge_job_ad_recrawl: {
+        Args: {
+          p_client_id: string;
+          p_job_ad_id: string;
+        };
+        Returns: undefined;
       };
       upsert_lead_company_enrichment: {
         Args: {

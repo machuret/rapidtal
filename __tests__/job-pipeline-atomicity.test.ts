@@ -53,7 +53,7 @@ describe("atomic job pipeline hardening", () => {
   test("Edge handlers use atomic RPCs instead of direct upserts", () => {
     expect(ingest).toContain('.rpc("upsert_job_ad_extraction"');
     expect(ingest).not.toContain('.from("job_ads")\n      .upsert(');
-    expect(discover).toContain('.rpc("upsert_job_discoveries"');
+    expect(discover).toContain('.rpc("upsert_job_discoveries_v2"');
     expect(discover).not.toContain('.from("job_discoveries").upsert(');
   });
 

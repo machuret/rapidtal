@@ -10,10 +10,14 @@ export function JobDiscoveryActions({
   clientId,
   discoveryId,
   jobUrl,
+  status,
+  listingState,
 }: {
   clientId: string;
   discoveryId: string;
   jobUrl: string;
+  status: "new" | "imported" | "dismissed" | "error";
+  listingState: "active" | "changed" | "expired";
 }) {
   const router = useRouter();
   const [action, setAction] = useState<"import" | "dismiss" | null>(null);
@@ -28,7 +32,11 @@ export function JobDiscoveryActions({
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) return toast.error(body.error ?? "The job could not be extracted.");
-      toast.success("Job extracted and moved to the review queue.");
+      toast.success(
+        listingState === "changed"
+          ? "Changed job re-extracted and returned to the review queue."
+          : "Job extracted and moved to the review queue.",
+      );
       router.refresh();
     } catch {
       toast.error("Network error. Please try again.");
@@ -62,20 +70,22 @@ export function JobDiscoveryActions({
         {action === "import"
           ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
           : <Download className="w-3.5 h-3.5" />}
-        Extract for review
+        {listingState === "changed" ? "Re-extract changed ad" : "Extract for review"}
       </Button>
-      <Button
-        size="sm"
-        variant="ghost"
-        onClick={dismiss}
-        disabled={action !== null}
-        className="gap-1.5 text-zinc-400"
-      >
-        {action === "dismiss"
-          ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
-          : <X className="w-3.5 h-3.5" />}
-        Dismiss
-      </Button>
+      {status !== "imported" && (
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={dismiss}
+          disabled={action !== null}
+          className="gap-1.5 text-zinc-400"
+        >
+          {action === "dismiss"
+            ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            : <X className="w-3.5 h-3.5" />}
+          Dismiss
+        </Button>
+      )}
     </div>
   );
 }

@@ -3,6 +3,10 @@
 import {
   actorForSource,
   buildDiscoveryActorInput,
+  discoveryAccessBarrier,
+  discoveryContentFingerprint,
+  isCompleteDiscoverySnapshot,
+  isPublicDiscoveryActorInput,
   normalizeDiscoveryDataset,
 } from "../supabase/functions/_shared/job-discovery";
 
@@ -77,6 +81,7 @@ describe("job discovery adapters", () => {
       salary_text: "$120k",
       work_type: "Full time",
     });
+    expect(jobs[0].content_fingerprint).toMatch(/^[0-9a-f]{16}$/);
   });
 
   test("rejects unsafe and incomplete actor rows", () => {
@@ -85,5 +90,59 @@ describe("job discovery adapters", () => {
       { positionName: "Internal role", url: "http://localhost/job/1" },
       null,
     ], "AU", 25)).toEqual([]);
+  });
+
+  test("rejects cross-source URLs and authentication barriers", () => {
+    expect(normalizeDiscoveryDataset("seek", [
+      { title: "Wrong source", jobLink: "https://www.indeed.com/viewjob?jk=1" },
+      { title: "Login", jobLink: "https://www.seek.com.au/login/job/1" },
+    ], "AU", 25)).toEqual([]);
+
+    expect(normalizeDiscoveryDataset("linkedin", [
+      { title: "Authwall", jobUrl: "https://www.linkedin.com/authwall/jobs/view/1" },
+    ], "AU", 25)).toEqual([]);
+  });
+
+  test("stops on CAPTCHA or login output and forbids credentials in actor input", () => {
+    expect(discoveryAccessBarrier([{ errorMessage: "CAPTCHA challenge required" }]))
+      .toBe("captcha");
+    expect(discoveryAccessBarrier({ finalUrl: "https://example.com/login required" }))
+      .toBe("login_required");
+    expect(discoveryAccessBarrier([{ title: "Normal public result" }])).toBeNull();
+
+    expect(isPublicDiscoveryActorInput({ query: "sales", nested: { max: 10 } })).toBe(true);
+    expect(isPublicDiscoveryActorInput({ query: "sales", cookies: ["secret"] })).toBe(false);
+    expect(isPublicDiscoveryActorInput({ nested: { session: "secret" } })).toBe(false);
+  });
+
+  test("only treats complete, untruncated datasets as expiry evidence", () => {
+    expect(isCompleteDiscoverySnapshot([{ id: 1 }], 1, 25)).toBe(true);
+    expect(isCompleteDiscoverySnapshot(new Array(25).fill({}), 25, 25)).toBe(false);
+    expect(isCompleteDiscoverySnapshot([{ id: 1 }, { id: 2 }], 1, 25)).toBe(false);
+    expect(isCompleteDiscoverySnapshot({ items: [] }, 0, 25)).toBe(false);
+  });
+
+  test("content fingerprints are stable and change with meaningful fields", () => {
+    const base = {
+      source: "seek" as const,
+      source_job_id: "42",
+      job_url: "https://www.seek.com.au/job/42",
+      canonical_url: "https://www.seek.com.au/job/42",
+      title: "Sales Manager",
+      company_name: "Acme",
+      company_website: null,
+      location: "Sydney",
+      country: "AU",
+      salary_text: null,
+      work_type: "Full time",
+      work_arrangement: null,
+      summary: "Build the team.",
+      listed_at: null,
+      expires_at: null,
+    };
+    const first = discoveryContentFingerprint(base);
+    expect(discoveryContentFingerprint({ ...base })).toBe(first);
+    expect(discoveryContentFingerprint({ ...base, summary: "Lead the team." }))
+      .not.toBe(first);
   });
 });

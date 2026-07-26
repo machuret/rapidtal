@@ -38,7 +38,8 @@ type JobLeadListItem = Pick<
     | "salary_currency" | "salary_period" | "skills" | "status"
     | "description" | "responsibilities" | "field_evidence" | "posted_at"
     | "expires_at" | "reviewed_at" | "extraction_confidence"
-    | "extraction_method" | "last_seen_at"
+    | "extraction_method" | "last_seen_at" | "source_listing_state"
+    | "source_changed_at" | "source_expired_at" | "recrawl_required"
 >;
 
 type FailedRunListItem = Pick<
@@ -57,13 +58,24 @@ type DiscoveryListItem = Pick<
   DbJobDiscovery,
   "id" | "source" | "job_url" | "title" | "company_name" | "location"
     | "salary_text" | "work_type" | "work_arrangement" | "summary" | "listed_at"
-    | "last_seen_at"
+    | "last_seen_at" | "status" | "listing_state" | "changed_at"
 >;
 
 type SavedSearchListItem = Pick<
   DbJobSearch,
-  "id" | "source" | "search_term" | "location"
+  "id" | "source" | "search_term" | "location" | "schedule_enabled"
+    | "schedule_interval_minutes" | "next_run_at" | "backoff_until"
+    | "consecutive_failures"
 >;
+
+type SourcePolicyListItem = {
+  source: DbJobSearch["source"];
+  scheduled_access_enabled: boolean;
+  min_interval_minutes: number;
+  max_results_per_run: number;
+  policy_version: string;
+  terms_url: string;
+};
 
 type CompanyListItem = Pick<
   DbLeadCompany,
@@ -175,7 +187,8 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
     location, remote_type,
     employment_type, salary_min, salary_max, salary_currency, salary_period,
     description, responsibilities, skills, field_evidence, posted_at, expires_at,
-    extraction_method, extraction_confidence, status, reviewed_at, last_seen_at
+    extraction_method, extraction_confidence, status, reviewed_at, last_seen_at,
+    source_listing_state, source_changed_at, source_expired_at, recrawl_required
     ${needsScoreJoin
       ? ", score_filter:lead_scores!job_ads_lead_score_id_fkey!inner(id)"
       : ""}
@@ -214,6 +227,8 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
     searchResult,
     failedCompanyRunResult,
     allJobCountResult,
+    sourcePolicyResult,
+    expiredDiscoveryResult,
   ] = await Promise.all([
     jobQuery,
     admin
@@ -231,15 +246,21 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
       .from("job_discoveries")
       .select(`
         id, source, job_url, title, company_name, location, salary_text,
-        work_type, work_arrangement, summary, listed_at, last_seen_at
+        work_type, work_arrangement, summary, listed_at, last_seen_at,
+        status, listing_state, changed_at
       `)
       .eq("client_id", clientId)
-      .eq("status", "new")
+      .or("status.eq.new,and(status.eq.imported,listing_state.eq.changed)")
+      .neq("listing_state", "expired")
       .order("last_seen_at", { ascending: false })
       .limit(50),
     admin
       .from("job_searches")
-      .select("id, source, search_term, location")
+      .select(`
+        id, source, search_term, location, schedule_enabled,
+        schedule_interval_minutes, next_run_at, backoff_until,
+        consecutive_failures
+      `)
       .eq("client_id", clientId)
       .eq("is_active", true)
       .order("last_run_at", { ascending: false, nullsFirst: false })
@@ -254,6 +275,18 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
       .from("job_ads")
       .select("id", { count: "exact", head: true })
       .eq("client_id", clientId),
+    admin
+      .from("job_source_access_policies")
+      .select(`
+        source, scheduled_access_enabled, min_interval_minutes,
+        max_results_per_run, policy_version, terms_url
+      `)
+      .order("source"),
+    admin
+      .from("job_discoveries")
+      .select("id", { count: "exact", head: true })
+      .eq("client_id", clientId)
+      .eq("listing_state", "expired"),
   ]);
 
   const jobs = (jobResult.data ?? []) as unknown as JobLeadListItem[];
@@ -341,6 +374,7 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
     .slice(0, 10);
   const discoveries = (discoveryResult.data ?? []) as DiscoveryListItem[];
   const savedSearches = (searchResult.data ?? []) as SavedSearchListItem[];
+  const sourcePolicies = (sourcePolicyResult.data ?? []) as SourcePolicyListItem[];
   const companies = (companyResult.data ?? []) as CompanyListItem[];
   const scoringProfile = scoringProfileResult.data as DbLeadScoringProfile | null;
   const scoreComponents = (scoreComponentResult.data ?? []) as LeadScoreComponentListItem[];
@@ -377,7 +411,11 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
         </p>
       </div>
 
-      <JobDiscoverySearch clientId={clientId} savedSearches={savedSearches} />
+      <JobDiscoverySearch
+        clientId={clientId}
+        savedSearches={savedSearches}
+        sourcePolicies={sourcePolicies}
+      />
       <JobLeadIngest clientId={clientId} />
       {scoringProfile && (
         <LeadScoringProfileForm clientId={clientId} profile={scoringProfile} />
@@ -389,7 +427,10 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
             <div>
               <h2 className="text-lg font-semibold text-zinc-100">Discovery queue</h2>
               <p className="text-sm text-zinc-500">
-                {discoveries.length} public listings waiting for extraction.
+                {discoveries.length} public listings waiting for extraction or recrawl
+                {(expiredDiscoveryResult.count ?? 0) > 0
+                  ? ` · ${expiredDiscoveryResult.count} expired detected`
+                  : ""}.
               </p>
             </div>
           </div>
@@ -401,6 +442,11 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
                     <span className="text-xs font-medium uppercase tracking-wide text-violet-400">
                       {item.source}
                     </span>
+                    {item.listing_state === "changed" && (
+                      <span className="ml-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[11px] text-amber-300">
+                        source changed
+                      </span>
+                    )}
                     <h3 className="mt-1 font-semibold text-zinc-100">{item.title}</h3>
                     <p className="mt-1 text-sm text-zinc-400">
                       {item.company_name ?? "Company not identified"}
@@ -429,6 +475,8 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
                   clientId={clientId}
                   discoveryId={item.id}
                   jobUrl={item.job_url}
+                  status={item.status}
+                  listingState={item.listing_state}
                 />
               </article>
             ))}
@@ -527,6 +575,15 @@ export default async function JobLeadsPage({ searchParams }: PageProps) {
                     <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-xs text-amber-300">
                       {job.status.replaceAll("_", " ")}
                     </span>
+                    {job.source_listing_state !== "active" && (
+                      <span className={`rounded-full border px-2 py-0.5 text-xs ${
+                        job.source_listing_state === "changed"
+                          ? "border-amber-500/30 bg-amber-500/10 text-amber-300"
+                          : "border-zinc-600 bg-zinc-800 text-zinc-300"
+                      }`}>
+                        source {job.source_listing_state}
+                      </span>
+                    )}
                     <span className="text-xs text-zinc-500">
                       {Math.round(Number(job.extraction_confidence) * 100)}% extraction confidence
                     </span>

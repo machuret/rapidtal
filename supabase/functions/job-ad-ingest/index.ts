@@ -626,6 +626,14 @@ Deno.serve(async (req: Request) => {
       console.error("job-ad-ingest discovery link:", linkError);
     }
 
+    const { error: recrawlError } = await admin.rpc("acknowledge_job_ad_recrawl", {
+      p_client_id: clientId,
+      p_job_ad_id: saved.id,
+    });
+    if (recrawlError && recrawlError.code !== "42883") {
+      console.error("job-ad-ingest recrawl acknowledgement:", recrawlError);
+    }
+
     const { error: completionError } = await admin
       .from("job_scrape_runs")
       .update({
