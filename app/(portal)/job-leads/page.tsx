@@ -10,7 +10,10 @@ import { JobDiscoveryActions } from "@/components/job-leads/JobDiscoveryActions"
 import { CompanyEnrichmentActions } from "@/components/job-leads/CompanyEnrichmentActions";
 import { LeadScoreActions } from "@/components/job-leads/LeadScoreActions";
 import { LeadScoringProfileForm } from "@/components/job-leads/LeadScoringProfileForm";
+import { CrmPromotionActions } from "@/components/job-leads/CrmPromotionActions";
+import { RetryScrapeButton } from "@/components/job-leads/RetryScrapeButton";
 import type {
+  DbCrmCompany,
   DbLeadScore,
   DbLeadScoreComponent,
   DbLeadScoringProfile,
@@ -129,7 +132,18 @@ function sourceHostname(url: string): string {
   }
 }
 
-export default async function JobLeadsPage() {
+type PageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function JobLeadsPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const statusFilter = typeof params.status === "string" ? params.status : "all";
+  const scoreFilter = typeof params.score === "string" ? params.score : "all";
+  const query = typeof params.q === "string" ? params.q.trim().toLowerCase() : "";
+  const minScore = typeof params.minScore === "string"
+    ? Math.min(100, Math.max(0, Number(params.minScore) || 0))
+    : 0;
   const ctx = await getCurrentUserAndClient();
   if (!ctx) redirect("/login");
   if (ctx.user.role !== "client_admin" || !ctx.user.client_id) redirect("/dashboard");
@@ -212,6 +226,16 @@ export default async function JobLeadsPage() {
         ? linkedCompanyIds
         : ["00000000-0000-0000-0000-000000000000"],
     );
+  const crmCompanyResult = await admin
+    .from("crm_companies")
+    .select("*")
+    .eq("client_id", clientId)
+    .in(
+      "lead_company_id",
+      linkedCompanyIds.length
+        ? linkedCompanyIds
+        : ["00000000-0000-0000-0000-000000000000"],
+    );
   const linkedScoreIds = [
     ...new Set(jobs.flatMap((job) => job.lead_score_id ? [job.lead_score_id] : [])),
   ];
@@ -248,11 +272,30 @@ export default async function JobLeadsPage() {
   const companiesById = new Map(companies.map((company) => [company.id, company]));
   const scoresById = new Map(scores.map((score) => [score.id, score]));
   const componentsByScoreId = new Map<string, LeadScoreComponentListItem[]>();
+  const crmCompanies = (crmCompanyResult.data ?? []) as DbCrmCompany[];
+  const crmCompaniesByLeadCompanyId = new Map(
+    crmCompanies.map((company) => [company.lead_company_id, company]),
+  );
   for (const component of scoreComponents) {
     const existing = componentsByScoreId.get(component.lead_score_id) ?? [];
     existing.push(component);
     componentsByScoreId.set(component.lead_score_id, existing);
   }
+  const displayedJobs = jobs.filter((job) => {
+    const score = job.lead_score_id ? scoresById.get(job.lead_score_id) : null;
+    if (statusFilter !== "all" && job.status !== statusFilter) return false;
+    if (scoreFilter === "unscored" && score) return false;
+    if (["high", "medium", "low"].includes(scoreFilter) && score?.score_band !== scoreFilter) return false;
+    if (score && score.total_score < minScore) return false;
+    if (!score && minScore > 0) return false;
+    if (query && ![
+      job.title,
+      job.company_name,
+      job.location,
+      job.canonical_url,
+    ].some((value) => value?.toLowerCase().includes(query))) return false;
+    return true;
+  });
 
   return (
     <div>
@@ -264,7 +307,7 @@ export default async function JobLeadsPage() {
       </div>
 
       <JobDiscoverySearch clientId={clientId} savedSearches={savedSearches} />
-      <JobLeadIngest clientId={clientId} />
+      <JobLeadIngest clientId={clientId} existingUrls={jobs.map((job) => job.canonical_url)} />
       {scoringProfile && (
         <LeadScoringProfileForm clientId={clientId} profile={scoringProfile} />
       )}
@@ -332,6 +375,11 @@ export default async function JobLeadsPage() {
           Company enrichment data could not be loaded: {companyResult.error.message}
         </div>
       )}
+      {crmCompanyResult.error && (
+        <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/5 p-4 text-sm text-red-300">
+          CRM promotion state could not be loaded. Import migration 025 before using Phase 5.
+        </div>
+      )}
 
       {!jobResult.error && jobs.length === 0 && (
         <div className="rounded-xl border border-dashed border-zinc-800 p-10 text-center">
@@ -342,8 +390,45 @@ export default async function JobLeadsPage() {
         </div>
       )}
 
+      {jobs.length > 0 && (
+        <form className="mb-4 grid gap-3 rounded-xl border border-zinc-800 bg-zinc-900 p-4 sm:grid-cols-2 lg:grid-cols-5">
+          <input
+            name="q"
+            defaultValue={typeof params.q === "string" ? params.q : ""}
+            placeholder="Search role, company, location"
+            className="h-9 rounded-md border border-zinc-700 bg-zinc-800 px-3 text-sm lg:col-span-2"
+          />
+          <select name="status" defaultValue={statusFilter} className="h-9 rounded-md border border-zinc-700 bg-zinc-800 px-3 text-sm">
+            <option value="all">All review states</option>
+            <option value="needs_review">Needs review</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+          <select name="score" defaultValue={scoreFilter} className="h-9 rounded-md border border-zinc-700 bg-zinc-800 px-3 text-sm">
+            <option value="all">All score bands</option>
+            <option value="high">High score</option>
+            <option value="medium">Medium score</option>
+            <option value="low">Low score</option>
+            <option value="unscored">Not scored</option>
+          </select>
+          <div className="flex gap-2">
+            <input name="minScore" type="number" min={0} max={100} defaultValue={minScore || ""} placeholder="Min score" className="h-9 min-w-0 flex-1 rounded-md border border-zinc-700 bg-zinc-800 px-3 text-sm" />
+            <button className="h-9 rounded-md bg-zinc-100 px-3 text-sm font-medium text-zinc-900">Filter</button>
+          </div>
+          <p className="text-xs text-zinc-500 sm:col-span-2 lg:col-span-5">
+            Showing {displayedJobs.length} of {jobs.length} job leads.
+          </p>
+        </form>
+      )}
+
+      {jobs.length > 0 && displayedJobs.length === 0 && (
+        <div className="mb-4 rounded-xl border border-dashed border-zinc-800 p-8 text-center text-sm text-zinc-400">
+          No job leads match these filters.
+        </div>
+      )}
+
       <div className="grid grid-cols-1 gap-4">
-        {jobs.map((job) => {
+        {displayedJobs.map((job) => {
           const salary = salaryLabel(job);
           const company = job.company_id ? companiesById.get(job.company_id) ?? null : null;
           const companyEvidence = company ? companyEvidenceItems(company.evidence) : [];
@@ -360,6 +445,9 @@ export default async function JobLeadsPage() {
               || leadScore.company_enrichment_hash !== company?.enrichment_hash
             )
           );
+          const crmCompany = company
+            ? crmCompaniesByLeadCompanyId.get(company.id) ?? null
+            : null;
           return (
             <article key={job.id} className="rounded-xl border border-zinc-800 bg-zinc-900 p-5">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
@@ -608,6 +696,12 @@ export default async function JobLeadsPage() {
                           </p>
                         </div>
                       )}
+                      <CrmPromotionActions
+                        clientId={clientId}
+                        jobAdId={job.id}
+                        companyId={company.id}
+                        crmCompanyId={crmCompany?.id ?? null}
+                      />
                     </div>
                   )}
                 </div>
@@ -647,6 +741,9 @@ export default async function JobLeadsPage() {
                 <p className="text-xs text-red-300 mt-1">
                   {run.error_message ?? run.error_code ?? "Unknown ingestion failure"}
                 </p>
+                <div className="mt-2">
+                  <RetryScrapeButton clientId={clientId} url={run.requested_url} />
+                </div>
               </div>
             ))}
             {failedCompanyRuns.map((run) => {

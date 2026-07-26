@@ -59,3 +59,19 @@ mark the displayed score for recalculation.
 
 There is no model call, unexplained AI-generated total, or automatic creation
 of a human CRM contact.
+
+## Phase 5 — Review and CRM promotion
+
+Job Leads is the human control surface for single URL, batch URL, and CSV
+imports; extraction preview; duplicate warnings; failed-scrape retry; review
+and score filters; job and company approval; and explicit CRM promotion.
+
+An approved job and an approved, reviewed company are both required before a
+company can be promoted. Promotion is an atomic, tenant-scoped database action
+with an immutable event and creates only a `crm_companies` record. Scraping,
+enrichment, scoring, and approval never create CRM records as side effects.
+
+A human can be added later only through the verified-contact action. It requires
+a real first name, email or phone, an HTTPS verification source, a verification
+method, and a written evidence note. Verification evidence is immutable, and
+changing an identity field removes the contact's verified state.

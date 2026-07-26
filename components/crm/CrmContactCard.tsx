@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import type { CrmContact } from "@/app/(portal)/crm/page";
 import { CRM_STATUS_META } from "@/lib/crm-config";
-import { Mail, Phone, ExternalLink, Tag, CalendarDays } from "lucide-react";
+import { Mail, Phone, ExternalLink, Tag, CalendarDays, BadgeCheck } from "lucide-react";
 
 interface CrmContactCardProps {
   contact: CrmContact;
@@ -31,6 +31,11 @@ export function CrmContactCard({ contact: c, isSelected, onClick }: CrmContactCa
         </div>
         <div className="flex-1 min-w-0">
           <p className="font-semibold text-sm text-zinc-100 truncate">{c.first_name} {c.last_name}</p>
+          {c.verification_status === "verified" && (
+            <p className="mt-0.5 flex items-center gap-1 text-[11px] text-emerald-400">
+              <BadgeCheck className="h-3 w-3" /> Verified person
+            </p>
+          )}
           <p className="text-xs text-zinc-500 truncate">
             {c.job_title ?? ""}{c.job_title && c.company ? " · " : ""}{c.company ?? ""}
           </p>

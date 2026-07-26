@@ -13,6 +13,14 @@ export type JobDiscoveryStatus = "new" | "imported" | "dismissed" | "error";
 export type LeadCompanyStatus = "needs_review" | "approved" | "rejected" | "error";
 export type CompanyEnrichmentRunStatus = "running" | "completed" | "failed" | "reused";
 export type LeadScoreBand = "high" | "medium" | "low";
+export type CrmCompanyStatus = "prospect" | "active" | "inactive" | "closed";
+export type CrmContactVerificationStatus = "unverified" | "verified" | "rejected";
+export type CrmVerificationMethod =
+  | "company_website"
+  | "linkedin"
+  | "email"
+  | "phone"
+  | "manual_research";
 export type LeadScoreComponentKey =
   | "target_role"
   | "target_geography"
@@ -80,6 +88,80 @@ export interface DbCompanyDna {
   extra: Record<string, unknown>;
   updated_at: string;
 }
+
+export type DbCrmContact = {
+  id: string;
+  client_id: string;
+  first_name: string;
+  last_name: string | null;
+  email: string | null;
+  phone: string | null;
+  company: string | null;
+  job_title: string | null;
+  status: string;
+  source: string | null;
+  tags: string[];
+  notes: string | null;
+  created_by: string | null;
+  crm_company_id: string | null;
+  verification_status: CrmContactVerificationStatus;
+  verified_by: string | null;
+  verified_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DbCrmCompany = {
+  id: string;
+  client_id: string;
+  lead_company_id: string;
+  source_job_ad_id: string | null;
+  source_lead_score_id: string | null;
+  source_enrichment_hash: string;
+  name: string;
+  domain: string;
+  website_url: string;
+  industry: string | null;
+  location: string | null;
+  services: string[];
+  description: string | null;
+  source_score_total: number | null;
+  source_score_band: LeadScoreBand | null;
+  source_score_summary: string | null;
+  status: CrmCompanyStatus;
+  promoted_by: string;
+  promoted_at: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DbCrmCompanyPromotionEvent = {
+  id: string;
+  client_id: string;
+  lead_company_id: string;
+  crm_company_id: string;
+  job_ad_id: string;
+  lead_score_id: string | null;
+  enrichment_hash: string;
+  promoted_by: string;
+  promoted_at: string;
+};
+
+export type DbCrmContactVerification = {
+  id: string;
+  client_id: string;
+  contact_id: string | null;
+  crm_company_id: string;
+  verification_method: CrmVerificationMethod;
+  source_url: string;
+  evidence_note: string;
+  verified_name: string;
+  verified_email: string | null;
+  verified_phone: string | null;
+  verified_job_title: string | null;
+  verified_by: string;
+  verified_at: string;
+};
 
 export type VaultCategory = 'process' | 'policy' | 'service' | 'contact' | 'reference' | 'general';
 
@@ -433,9 +515,27 @@ export interface Database {
         Relationships: NoRelationships;
       };
       crm_contacts: {
-        Row: { id: string; client_id: string; first_name: string; last_name: string | null; email: string | null; phone: string | null; company: string | null; job_title: string | null; status: string; source: string | null; tags: string[]; notes: string | null; created_by: string | null; created_at: string; updated_at: string };
-        Insert: { id?: string; client_id: string; first_name: string; last_name?: string | null; email?: string | null; phone?: string | null; company?: string | null; job_title?: string | null; status?: string; source?: string | null; tags?: string[]; notes?: string | null; created_by?: string | null; created_at?: string; updated_at?: string };
-        Update: { id?: string; client_id?: string; first_name?: string; last_name?: string | null; email?: string | null; phone?: string | null; company?: string | null; job_title?: string | null; status?: string; source?: string | null; tags?: string[]; notes?: string | null; created_by?: string | null; created_at?: string; updated_at?: string };
+        Row: DbCrmContact;
+        Insert: { id?: string; client_id: string; first_name: string; last_name?: string | null; email?: string | null; phone?: string | null; company?: string | null; job_title?: string | null; status?: string; source?: string | null; tags?: string[]; notes?: string | null; created_by?: string | null; crm_company_id?: string | null; verification_status?: CrmContactVerificationStatus; verified_by?: string | null; verified_at?: string | null; created_at?: string; updated_at?: string };
+        Update: Partial<DbCrmContact>;
+        Relationships: NoRelationships;
+      };
+      crm_companies: {
+        Row: DbCrmCompany;
+        Insert: Omit<DbCrmCompany, "id" | "created_at" | "updated_at" | "promoted_at"> & { id?: string; created_at?: string; updated_at?: string; promoted_at?: string };
+        Update: Partial<DbCrmCompany>;
+        Relationships: NoRelationships;
+      };
+      crm_company_promotion_events: {
+        Row: DbCrmCompanyPromotionEvent;
+        Insert: Omit<DbCrmCompanyPromotionEvent, "id" | "promoted_at"> & { id?: string; promoted_at?: string };
+        Update: Partial<DbCrmCompanyPromotionEvent>;
+        Relationships: NoRelationships;
+      };
+      crm_contact_verifications: {
+        Row: DbCrmContactVerification;
+        Insert: Omit<DbCrmContactVerification, "id" | "verified_at"> & { id?: string; verified_at?: string };
+        Update: Partial<DbCrmContactVerification>;
         Relationships: NoRelationships;
       };
       crm_notes: {
@@ -891,6 +991,24 @@ export interface Database {
           p_payload: Record<string, unknown>;
         };
         Returns: DbLeadScore[];
+      };
+      promote_lead_company_to_crm: {
+        Args: {
+          p_actor_id: string;
+          p_client_id: string;
+          p_job_ad_id: string;
+          p_company_id: string;
+        };
+        Returns: DbCrmCompany[];
+      };
+      add_verified_crm_contact: {
+        Args: {
+          p_actor_id: string;
+          p_client_id: string;
+          p_crm_company_id: string;
+          p_payload: Record<string, unknown>;
+        };
+        Returns: DbCrmContact[];
       };
     };
     Enums: Record<string, never>;
