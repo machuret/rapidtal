@@ -15,7 +15,7 @@ const VsTable = dynamic(() => import('@/components/VsTable'), { ssr: true });
 const Testimonials = dynamic(() => import('@/components/Testimonials'), { ssr: true });
 const Pricing = dynamic(() => import('@/components/Pricing'), { ssr: true });
 const FinalCta = dynamic(() => import('@/components/FinalCta'), { ssr: true });
-const CalendlyEmbed = dynamic(() => import('@/components/CalendlyEmbed'), { ssr: true });
+const CalComEmbed = dynamic(() => import('@/components/CalComEmbed'), { ssr: true });
 const Footer = dynamic(() => import('@/components/Footer'), { ssr: true });
 const StickyCtaBar = dynamic(() => import('@/components/StickyCtaBar'));
 
@@ -57,7 +57,7 @@ export default function Home() {
         <VsTable />
         <Testimonials />
         <Pricing />
-        <CalendlyEmbed />
+        <CalComEmbed />
         <FinalCta />
       </main>
       <Footer />

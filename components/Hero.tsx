@@ -1,3 +1,5 @@
+import { CALCOM_EMBED_URL } from '@/lib/booking';
+
 export default function Hero() {
   return (
     <section className="hero">
@@ -33,11 +35,11 @@ export default function Hero() {
             <span>✦ 300+ screened per role</span>
           </div>
         </div>
-        <div className="hero-calendly">
-          <div className="hero-calendly-label">Book a Free Discovery Call</div>
+        <div className="hero-calcom">
+          <div className="hero-calcom-label">Book a Free Discovery Call</div>
           <iframe
-            src="https://calendly.com/machuret/rapid-tal?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=ff7100"
-            className="hero-calendly-widget"
+            src={CALCOM_EMBED_URL}
+            className="hero-calcom-widget"
             frameBorder="0"
             title="Schedule a call"
           />
