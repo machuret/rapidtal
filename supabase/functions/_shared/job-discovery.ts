@@ -168,10 +168,11 @@ export function buildDiscoveryActorInput(
     return {
       searchTerm: params.searchTerm,
       location: params.location || undefined,
+      country: params.country === "AU" ? "australia" : undefined,
       maxResults: params.maxResults,
       dateRange: params.dateRangeDays,
-      sortBy: "date",
-      ...(params.workType ? { workType: [params.workType] } : {}),
+      sortBy: "ListedDate",
+      ...(params.workType ? { workTypes: [params.workType] } : {}),
     };
   }
   if (source === "indeed") {

@@ -23,9 +23,11 @@ describe("job discovery adapters", () => {
     expect(buildDiscoveryActorInput("seek", params)).toMatchObject({
       searchTerm: "marketing manager",
       location: "Sydney",
+      country: "australia",
       maxResults: 25,
       dateRange: 7,
-      workType: ["fulltime"],
+      sortBy: "ListedDate",
+      workTypes: ["fulltime"],
     });
     expect(buildDiscoveryActorInput("indeed", params)).toMatchObject({
       position: "marketing manager",
