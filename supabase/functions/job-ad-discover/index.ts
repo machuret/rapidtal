@@ -5,27 +5,33 @@
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.105.1";
-import { isApifyRunPending, parseApifyRun } from "../_shared/apify.ts";
 import {
   actorForSource,
-  buildDiscoveryActorInput,
   DISCOVERY_ADAPTERS,
-  discoveryAccessBarrier,
-  isCompleteDiscoverySnapshot,
-  isPublicDiscoveryActorInput,
-  normalizeDiscoveryDataset,
-  type DiscoveryParameters,
-  type JobDiscoverySource,
 } from "../_shared/job-discovery.ts";
+import {
+  discoverJobsWithApify,
+  DiscoveryProviderError,
+  type DiscoveryProviderResult,
+} from "../_shared/job-discovery-provider.ts";
+import {
+  normalizeManualDiscoveryRequest,
+  normalizeScheduledDiscoveryRequest,
+  validateDiscoveryRequest,
+  type NormalizedDiscoveryRequest,
+} from "../_shared/job-discovery-request.ts";
+import {
+  normalizeDiscoveryCounts,
+  prepareDiscoveryCompletion,
+  prepareDiscoveryRunPayload,
+  prepareSavedSearchPayload,
+} from "../_shared/job-discovery-persistence.ts";
+import { isUuid } from "../_shared/validation.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
-const UUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{12}$/i;
-const SOURCES = new Set<JobDiscoverySource>(["seek", "indeed", "linkedin"]);
-
 type AdminClient = ReturnType<typeof createClient>;
 
 function response(payload: Record<string, unknown>, status: number): Response {
@@ -33,60 +39,6 @@ function response(payload: Record<string, unknown>, status: number): Response {
     status,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
-}
-
-function cleanText(value: unknown, max: number): string {
-  return typeof value === "string"
-    ? value.replace(/\s+/g, " ").trim().slice(0, max)
-    : "";
-}
-
-async function fetchWithRetry(
-  url: string,
-  init: RequestInit,
-  timeoutMs: number,
-  attempts = 2,
-): Promise<Response> {
-  let lastError: unknown;
-  for (let attempt = 1; attempt <= attempts; attempt += 1) {
-    let result: Response | null = null;
-    try {
-      result = await fetch(url, {
-        ...init,
-        signal: AbortSignal.timeout(timeoutMs),
-      });
-      if (result.status !== 429 && result.status < 500) return result;
-      if (attempt === attempts) return result;
-    } catch (error) {
-      lastError = error;
-      if (attempt === attempts) throw error;
-    }
-    const retryAfter = Number(result?.headers.get("Retry-After"));
-    await new Promise((resolve) =>
-      setTimeout(
-        resolve,
-        Number.isFinite(retryAfter)
-          ? Math.min(retryAfter * 1000, 3000)
-          : 500 * attempt,
-      )
-    );
-  }
-  throw lastError instanceof Error
-    ? lastError
-    : new Error("Provider request failed.");
-}
-
-async function abortRun(runId: string, authorization: string): Promise<void> {
-  try {
-    await fetchWithRetry(
-      `https://api.apify.com/v2/actor-runs/${runId}/abort`,
-      { method: "POST", headers: { Authorization: authorization } },
-      10_000,
-      1,
-    );
-  } catch (error) {
-    console.error("job-ad-discover Apify abort:", error);
-  }
 }
 
 async function finishSchedule(
@@ -171,28 +123,14 @@ Deno.serve(async (req: Request) => {
       auth: { autoRefreshToken: false, persistSession: false },
     });
 
-    let actorId = "";
-    let clientId = "";
-    let source: JobDiscoverySource;
-    let searchTerm = "";
-    let location = "";
-    let country = "AU";
-    let workType = "";
-    let maxResults = 25;
-    let dateRangeDays = 7;
-    let search: { id: string } | null = null;
-    let policyVersion: string | null = null;
-
+    let discoveryRequest: NormalizedDiscoveryRequest;
     if (isScheduled) {
       if (jwt !== serviceKey) return response({ error: "Unauthorized." }, 401);
       scheduledSearchId =
         typeof body.searchId === "string" ? body.searchId : "";
       scheduledLeaseToken =
         typeof body.leaseToken === "string" ? body.leaseToken : "";
-      if (
-        !UUID_RE.test(scheduledSearchId)
-        || !UUID_RE.test(scheduledLeaseToken)
-      ) {
+      if (!isUuid(scheduledSearchId) || !isUuid(scheduledLeaseToken)) {
         return response({ error: "Invalid scheduled search lease." }, 400);
       }
       const { data: leasedSearch, error: leaseError } = await admin
@@ -204,17 +142,10 @@ Deno.serve(async (req: Request) => {
       if (leaseError || !leasedSearch) {
         return response({ error: "Scheduled search lease is no longer valid." }, 409);
       }
-      actorId = String(leasedSearch.schedule_approved_by ?? "");
-      clientId = String(leasedSearch.client_id);
-      source = leasedSearch.source as JobDiscoverySource;
-      searchTerm = cleanText(leasedSearch.search_term, 120);
-      location = cleanText(leasedSearch.location, 120);
-      country = cleanText(leasedSearch.country, 2).toUpperCase() || "AU";
-      workType = cleanText(leasedSearch.work_type, 50);
-      maxResults = Math.floor(Number(leasedSearch.max_results));
-      dateRangeDays = Math.floor(Number(leasedSearch.date_range_days));
-      policyVersion = String(leasedSearch.compliance_policy_version ?? "");
-      search = { id: scheduledSearchId };
+      discoveryRequest = normalizeScheduledDiscoveryRequest(
+        leasedSearch as Record<string, unknown>,
+        scheduledSearchId,
+      );
     } else {
       const userClient = createClient(supabaseUrl, anonKey, {
         global: { headers: { Authorization: `Bearer ${jwt}` } },
@@ -224,20 +155,12 @@ Deno.serve(async (req: Request) => {
         error: authError,
       } = await userClient.auth.getUser();
       if (authError || !authUser) return response({ error: "Unauthorized." }, 401);
-      actorId = authUser.id;
-      clientId = typeof body.clientId === "string" ? body.clientId : "";
-      source = body.source as JobDiscoverySource;
-      searchTerm = cleanText(body.searchTerm, 120);
-      location = cleanText(body.location, 120);
-      country = cleanText(body.country, 2).toUpperCase() || "AU";
-      workType = cleanText(body.workType, 50);
-      maxResults = Math.floor(Number(body.maxResults ?? 25));
-      dateRangeDays = Math.floor(Number(body.dateRangeDays ?? 7));
+      discoveryRequest = normalizeManualDiscoveryRequest(body, authUser.id);
 
       const { data: allowed, error: rateError } = await admin.rpc(
         "consume_api_rate_limit",
         {
-          p_key: `job-ad-discover:${actorId}`,
+          p_key: `job-ad-discover:${discoveryRequest.actorId}`,
           p_limit: 3,
           p_window_seconds: 600,
         },
@@ -258,28 +181,25 @@ Deno.serve(async (req: Request) => {
           },
         );
       }
-
     }
 
-    if (
-      !UUID_RE.test(actorId)
-      || !UUID_RE.test(clientId)
-      || !SOURCES.has(source)
-      || searchTerm.length < 2
-      || !/^[A-Z]{2}$/.test(country)
-      || !Number.isInteger(maxResults)
-      || maxResults < 10
-      || maxResults > 50
-      || !Number.isInteger(dateRangeDays)
-      || dateRangeDays < 1
-      || dateRangeDays > 30
-    ) {
-      return await fail(
-        400,
-        "Search filters are outside the supported limits.",
-        "invalid_search",
-      );
+    const validationError = validateDiscoveryRequest(discoveryRequest);
+    if (validationError) {
+      return await fail(400, validationError, "invalid_search");
     }
+    const {
+      actorId,
+      clientId,
+      source,
+      parameters,
+    } = discoveryRequest;
+    const {
+      searchTerm,
+      location,
+    } = parameters;
+    let search = discoveryRequest.searchId
+      ? { id: discoveryRequest.searchId }
+      : null;
 
     const { data: userRow, error: userError } = await admin
       .from("users")
@@ -299,19 +219,10 @@ Deno.serve(async (req: Request) => {
     if (!isScheduled) {
       const { data: savedSearch, error: searchError } = await admin
         .from("job_searches")
-        .upsert({
-          client_id: clientId,
-          source,
-          search_term: searchTerm,
-          location,
-          country,
-          work_type: workType,
-          date_range_days: dateRangeDays,
-          max_results: maxResults,
-          is_active: true,
-          created_by: actorId,
-          updated_at: new Date().toISOString(),
-        }, {
+        .upsert(prepareSavedSearchPayload(
+          discoveryRequest,
+          new Date().toISOString(),
+        ), {
           onConflict:
             "client_id,source,search_term,location,country,work_type,date_range_days",
         })
@@ -340,18 +251,13 @@ Deno.serve(async (req: Request) => {
     const adapter = DISCOVERY_ADAPTERS[source];
     const { data: run, error: runError } = await admin
       .from("job_discovery_runs")
-      .insert({
-        client_id: clientId,
-        search_id: search.id,
-        source,
-        search_term: searchTerm,
-        location,
-        created_by: actorId,
-        trigger_type: isScheduled ? "scheduled" : "manual",
-        lease_token: scheduledLeaseToken,
-        adapter_version: adapter.version,
-        compliance_policy_version: policyVersion,
-      })
+      .insert(prepareDiscoveryRunPayload({
+        request: discoveryRequest,
+        searchId: search.id,
+        scheduled: isScheduled,
+        leaseToken: scheduledLeaseToken,
+        adapterVersion: adapter.version,
+      }))
       .select("id")
       .single();
     if (runError || !run) {
@@ -363,18 +269,6 @@ Deno.serve(async (req: Request) => {
     }
     runId = String(run.id);
 
-    const actor = actorForSource(source, {
-      seek: Deno.env.get("APIFY_SEEK_ACTOR") || undefined,
-      indeed: Deno.env.get("APIFY_INDEED_ACTOR") || undefined,
-      linkedin: Deno.env.get("APIFY_LINKEDIN_ACTOR") || undefined,
-    });
-    if (!/^[a-zA-Z0-9_-]+~[a-zA-Z0-9_-]+$/.test(actor)) {
-      return await fail(
-        503,
-        "Job discovery provider is misconfigured.",
-        "provider_config",
-      );
-    }
     const configuredChargeCap = Number(
       Deno.env.get("APIFY_DISCOVERY_MAX_CHARGE_USD") ?? 1,
     );
@@ -383,123 +277,36 @@ Deno.serve(async (req: Request) => {
         && configuredChargeCap <= 5
       ? configuredChargeCap
       : 1;
-    const params: DiscoveryParameters = {
-      searchTerm,
-      location,
-      country,
-      maxResults,
-      dateRangeDays,
-      workType,
-    };
-    const actorInput = buildDiscoveryActorInput(source, params);
-    if (!isPublicDiscoveryActorInput(actorInput)) {
-      return await fail(
-        500,
-        "The source adapter violated the public-only policy.",
-        "adapter_credentials_forbidden",
-      );
-    }
-
-    const authorization = `Bearer ${apifyKey}`;
-    const startRes = await fetchWithRetry(
-      `https://api.apify.com/v2/acts/${actor}/runs?timeout=120&maxItems=${maxResults}&maxTotalChargeUsd=${maxChargeUsd}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: authorization,
-          "Content-Type": "application/json",
+    let provider: DiscoveryProviderResult;
+    try {
+      provider = await discoverJobsWithApify({
+        actor: actorForSource(source, {
+          seek: Deno.env.get("APIFY_SEEK_ACTOR") || undefined,
+          indeed: Deno.env.get("APIFY_INDEED_ACTOR") || undefined,
+          linkedin: Deno.env.get("APIFY_LINKEDIN_ACTOR") || undefined,
+        }),
+        apiKey: apifyKey,
+        source,
+        parameters,
+        maxChargeUsd,
+      }, {
+        onRunStarted: async (providerRunId) => {
+          await admin!.from("job_discovery_runs")
+            .update({ provider_run_id: providerRunId })
+            .eq("id", runId!);
         },
-        body: JSON.stringify(actorInput),
-      },
-      20_000,
-    );
-    const startJson = await startRes.json().catch(() => null);
-    let providerRun = parseApifyRun(startJson);
-    if (!startRes.ok || !providerRun) {
-      const retryAfter = Number(startRes.headers.get("Retry-After"));
+      });
+    } catch (error) {
+      if (!(error instanceof DiscoveryProviderError)) throw error;
       return await fail(
-        502,
-        "The job search could not be started.",
-        "provider_start_failed",
-        `Apify returned HTTP ${startRes.status}.`,
-        Number.isFinite(retryAfter) ? retryAfter : null,
+        error.responseStatus,
+        error.publicMessage,
+        error.code,
+        error.message,
+        error.retryAfterSeconds,
       );
     }
-    await admin.from("job_discovery_runs")
-      .update({ provider_run_id: providerRun.id })
-      .eq("id", runId);
-
-    const deadline = Date.now() + 110_000;
-    while (isApifyRunPending(providerRun.status) && Date.now() < deadline) {
-      await new Promise((resolve) => setTimeout(resolve, 3_000));
-      const statusRes = await fetchWithRetry(
-        `https://api.apify.com/v2/actor-runs/${providerRun.id}`,
-        { headers: { Authorization: authorization } },
-        10_000,
-      );
-      const nextRun = parseApifyRun(await statusRes.json().catch(() => null));
-      if (!statusRes.ok || !nextRun) {
-        await abortRun(providerRun.id, authorization);
-        return await fail(
-          502,
-          "The job search status could not be read.",
-          "provider_status_failed",
-        );
-      }
-      providerRun = nextRun;
-    }
-    if (isApifyRunPending(providerRun.status)) {
-      await abortRun(providerRun.id, authorization);
-      return await fail(
-        504,
-        "The job search took too long.",
-        "provider_timeout",
-      );
-    }
-    if (providerRun.status !== "SUCCEEDED" || !providerRun.defaultDatasetId) {
-      return await fail(
-        502,
-        "The job search did not complete.",
-        "provider_run_failed",
-        `Apify finished with status ${providerRun.status}.`,
-      );
-    }
-
-    const datasetRes = await fetchWithRetry(
-      `https://api.apify.com/v2/datasets/${providerRun.defaultDatasetId}/items?clean=true&limit=${maxResults}`,
-      { headers: { Authorization: authorization } },
-      15_000,
-    );
-    const dataset = await datasetRes.json().catch(() => null);
-    if (!datasetRes.ok) {
-      return await fail(
-        502,
-        "The job search results could not be read.",
-        "dataset_failed",
-      );
-    }
-    const accessBarrier = discoveryAccessBarrier(dataset);
-    if (accessBarrier) {
-      return await fail(
-        409,
-        "The source requested authentication or human verification. Automation stopped.",
-        "source_access_blocked",
-        `Public-only adapter stopped on ${accessBarrier}.`,
-        86400,
-      );
-    }
-
-    const discoveries = normalizeDiscoveryDataset(
-      source,
-      dataset,
-      country,
-      maxResults,
-    );
-    const completeSnapshot = isCompleteDiscoverySnapshot(
-      dataset,
-      discoveries.length,
-      maxResults,
-    );
+    const { discoveries, completeSnapshot } = provider;
     const { data: savedCounts, error: saveError } = await admin
       .rpc("upsert_job_discoveries_v2", {
         p_client_id: clientId,
@@ -517,24 +324,25 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const resultCount = Number(savedCounts.result_count ?? 0);
-    const newCount = Number(savedCounts.new_count ?? 0);
-    const changedCount = Number(savedCounts.changed_count ?? 0);
-    const expiredCount = Number(savedCounts.expired_count ?? 0);
+    const counts = normalizeDiscoveryCounts(
+      savedCounts as Record<string, unknown>,
+    );
+    const {
+      resultCount,
+      newCount,
+      changedCount,
+      expiredCount,
+    } = counts;
     const now = new Date().toISOString();
     const { error: completeError } = await admin
       .from("job_discovery_runs")
-      .update({
-        status: "completed",
-        result_count: resultCount,
-        new_count: newCount,
-        changed_count: changedCount,
-        expired_count: expiredCount,
-        complete_snapshot: completeSnapshot,
-        cost_usd: providerRun.usageTotalUsd,
-        duration_ms: Date.now() - startedAt,
-        completed_at: now,
-      })
+      .update(prepareDiscoveryCompletion({
+        counts,
+        completeSnapshot,
+        providerCostUsd: provider.providerCostUsd,
+        durationMs: Date.now() - startedAt,
+        completedAt: now,
+      }))
       .eq("id", runId);
     if (completeError) {
       return await fail(
@@ -562,8 +370,8 @@ Deno.serve(async (req: Request) => {
       completeSnapshot,
       searchId: search.id,
       discoveryRunId: runId,
-      providerRunId: providerRun.id,
-      providerCostUsd: providerRun.usageTotalUsd,
+      providerRunId: provider.providerRunId,
+      providerCostUsd: provider.providerCostUsd,
     }, 200);
   } catch (error) {
     console.error("job-ad-discover:", error);

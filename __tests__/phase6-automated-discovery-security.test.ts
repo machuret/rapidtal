@@ -11,6 +11,13 @@ const worker = readFileSync(
   join(process.cwd(), "supabase/functions/job-ad-discover/index.ts"),
   "utf8",
 );
+const provider = readFileSync(
+  join(
+    process.cwd(),
+    "supabase/functions/_shared/job-discovery-provider.ts",
+  ),
+  "utf8",
+);
 const cron = readFileSync(
   join(process.cwd(), "app/api/cron/job-discovery/route.ts"),
   "utf8",
@@ -51,7 +58,7 @@ describe("Phase 6 automated discovery security", () => {
     expect(migration).toContain("IF p_complete_snapshot THEN");
     expect(migration).toContain("missed_run_count + 1 >= 3");
     expect(migration).toContain("'missing_from_three_complete_runs'");
-    expect(worker).toContain("isCompleteDiscoverySnapshot(");
+    expect(provider).toContain("isCompleteDiscoverySnapshot(");
     expect(worker).toContain("p_complete_snapshot: completeSnapshot");
   });
 
@@ -66,12 +73,12 @@ describe("Phase 6 automated discovery security", () => {
   });
 
   test("the worker refuses credentials, login walls, and CAPTCHA challenges", () => {
-    expect(worker).toContain("isPublicDiscoveryActorInput(actorInput)");
-    expect(worker).toContain("discoveryAccessBarrier(dataset)");
-    expect(worker).toContain('"source_access_blocked"');
-    expect(worker).toContain("86400");
-    expect(worker).toContain("maxTotalChargeUsd=");
-    expect(worker).toContain("maxItems=");
+    expect(provider).toContain("isPublicDiscoveryActorInput(actorInput)");
+    expect(provider).toContain("discoveryAccessBarrier(dataset)");
+    expect(provider).toContain('"source_access_blocked"');
+    expect(provider).toContain("86_400");
+    expect(provider).toContain("maxTotalChargeUsd=");
+    expect(provider).toContain("maxItems=");
   });
 
   test("the cron endpoint requires its secret and only calls the service worker", () => {
