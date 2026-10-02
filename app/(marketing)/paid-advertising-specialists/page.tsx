@@ -6,6 +6,7 @@ import CursorTracker from '@/components/CursorTracker';
 import s from '../specialists.module.css';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/paid-advertising-specialists' },
   title: 'Hire Paid Advertising Specialists from Philippines | Save up to 80% | Rapid Tal',
   description: 'Compare the real cost of hiring paid advertising specialists in Australia vs the Philippines. 10 role comparisons including Google Ads, Facebook Ads, TikTok Ads, and more. Save up to 80%.',
   openGraph: {

@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Rapid Tal — Hiring Cost Calculator',
-  description: 'Answer 7 quick questions to find out if Rapid Tal is right for you. Elite Filipino marketing and sales talent. 18-day placement. AU$3,990 flat fee.',
+  title: 'Rapid Tal — Hiring Questionnaire',
+  description: 'Answer 6 quick questions to find out if Rapid Tal is right for you. Elite Filipino marketing and sales talent. 18-day placement. AU$3,990 flat fee.',
   alternates: { canonical: '/calculator' },
   openGraph: {
-    title: 'Rapid Tal — Hiring Cost Calculator',
+    title: 'Rapid Tal — Hiring Questionnaire',
     description: 'Prequalification calculator — find out if we\'re a fit in under 2 minutes.',
     type: 'website',
     url: 'https://rapidtal.com/calculator',
@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary',
-    title: 'Rapid Tal — Hiring Cost Calculator',
-    description: '7 questions. Instant result. Find out if Rapid Tal is right for your next hire.',
+    title: 'Rapid Tal — Hiring Questionnaire',
+    description: '6 questions. Instant result. Find out if Rapid Tal is right for your next hire.',
   },
 };
 

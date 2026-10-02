@@ -25,13 +25,13 @@ export default function Hero() {
             The top Filipino marketing and sales talent is <strong>sharper, hungrier, and half the cost</strong> of your current team. We find them. You hire them directly. No agency markup. No BS.
           </p>
           <div className="hero-actions">
-            <a href="/calculator" className="btn-primary"><span>Take the Calculator →</span></a>
+            <a href="/calculator" className="btn-primary"><span>Find Your Hire →</span></a>
             <a href="#process" className="btn-ghost">See How It Works</a>
           </div>
           <div className="hero-trust">
             <span>✦ 18-day avg. placement</span>
             <span>✦ 6-month guarantee</span>
-            <span>✦ Direct hire — you own them</span>
+            <span>✦ Direct hire — your team, directly</span>
             <span>✦ 300+ screened per role</span>
           </div>
         </div>

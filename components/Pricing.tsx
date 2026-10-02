@@ -1,5 +1,6 @@
 'use client';
 
+import { CALCOM_BOOKING_URL } from '@/lib/booking';
 import { useCurrency } from '@/components/CurrencyProvider';
 import { formatPrice } from '@/lib/currency';
 
@@ -34,7 +35,7 @@ export default function Pricing() {
             <li key={f}>{f}</li>
           ))}
         </ul>
-        <a href="/calculator" className="btn-primary pricing-btn">
+        <a href={CALCOM_BOOKING_URL} className="btn-primary pricing-btn">
           <span>Book a Discovery Call →</span>
         </a>
       </div>

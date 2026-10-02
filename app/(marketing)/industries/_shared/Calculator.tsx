@@ -4,16 +4,14 @@
  * Savings calculator — fully config-driven.
  *
  * Formula is industry-agnostic (same Australian employment cost structure
- * applies to every SMB vertical): base salary × roles + super 11.5% + leave
+ * applies to every SMB vertical): base salary × roles + super 12% + leave
  * 6wk equiv + WorkCover 1.5% + recruitment 15% + equipment $6K + onboarding
  * 12.5%. Offshore side: VA salary + AI tool annual + $2K setup.
  *
  * What IS customisable per industry: slider ranges, defaults, labels,
  * descriptions, and result-tile labels. All passed via CalcConfig.
  *
- * Saving is clamped to >= 0 for UX — if a user drags sliders into an
- * impossible region (e.g. 1 role at $65K vs $40K VA with $2K/mo tools) we
- * never show a negative "saving" which would confuse the pitch.
+ * Savings retain their sign so higher-cost scenarios remain visible.
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 import { useMemo, useState } from 'react';
@@ -26,8 +24,8 @@ import { useCurrency } from '@/components/CurrencyProvider';
  * WorkCover AU. Update here once and every industry page recalculates.
  * ────────────────────────────────────────────────────────────────────────── */
 export const CALC_CONSTANTS = {
-  /** Superannuation — 11.5% from July 2024, legislated to 12% July 2025. */
-  SUPER_RATE: 0.115,
+  /** Superannuation — 12% from July 2025. */
+  SUPER_RATE: 0.12,
   /** Leave equivalent (annual + sick) = 6 weeks of the 52-week salary */
   LEAVE_WEEKS: 6,
   WEEKS_PER_YEAR: 52,
@@ -49,7 +47,6 @@ function useFmt() {
   return {
     fmt: (v: number) => sym + Math.max(0, Math.round(v * (currency === 'USD' ? 0.65 : 1))).toLocaleString(),
     fmtSigned: (v: number) => sym + Math.round(v * (currency === 'USD' ? 0.65 : 1)).toLocaleString(),
-    rawFmt: (v: number) => sym + Math.max(0, Math.round(v)).toLocaleString(),
   };
 }
 
@@ -61,7 +58,7 @@ function pct(value: number, min: number, max: number): string {
 }
 
 export default function Calculator({ config }: { config: CalcConfig }) {
-  const { fmt, fmtSigned, rawFmt } = useFmt();
+  const { fmt, fmtSigned } = useFmt();
   const s = config.sliders;
   const [roles, setRoles] = useState(s.roles.default);
   const [sal,   setSal]   = useState(s.salary.default);
@@ -144,7 +141,7 @@ export default function Calculator({ config }: { config: CalcConfig }) {
           </div>
           <div className={styles.rmet}>
             <div className={styles.rmetLbl}>{config.resultLabels.saving}</div>
-            <div className={`${styles.rmetVal} ${styles.rmetValO}`}>{fmt(calc.saving)}</div>
+            <div className={`${styles.rmetVal} ${styles.rmetValO}`}>{fmtSigned(calc.saving)}</div>
           </div>
         </div>
 
@@ -157,7 +154,7 @@ export default function Calculator({ config }: { config: CalcConfig }) {
           <BdRow label={`Base salaries (${roles} role${roles > 1 ? 's' : ''} at ${fmt(sal)} each)`}>
             <span className={`${styles.bdV} ${styles.bdVRed}`}>{fmt(calc.totalSal)}</span>
           </BdRow>
-          <BdRow label="Superannuation (11.5% — mandatory from July 2024)">
+          <BdRow label="Superannuation (12%)">
             <span className={`${styles.bdV} ${styles.bdVRed}`}>{fmt(calc.sup)}</span>
           </BdRow>
           <BdRow label="Annual leave + sick leave (6 weeks equivalent)">
@@ -187,13 +184,11 @@ export default function Calculator({ config }: { config: CalcConfig }) {
             <span className={`${styles.bdV} ${styles.bdVGrn}`}>{fmt(tools * 12)}</span>
           </BdRow>
           <BdRow label="Onboarding blueprint and setup (one-off)">
-            <span className={`${styles.bdV} ${styles.bdVGrn}`}>{rawFmt(2000)}</span>
+            <span className={`${styles.bdV} ${styles.bdVGrn}`}>{fmt(CALC_CONSTANTS.OFFSHORE_SETUP_FEE)}</span>
           </BdRow>
 
           <div className={styles.bdTotal}>
             <span className={styles.bdTotalLbl}>{config.totalLabel}</span>
-            {/* Use signed formatter here so we still honour what math says at
-                 the grand-total line, even if headline tiles clamp to 0. */}
             <span className={styles.bdTotalV}>{fmtSigned(calc.saving)}</span>
           </div>
         </div>

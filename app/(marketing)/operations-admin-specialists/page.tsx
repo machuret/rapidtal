@@ -6,6 +6,7 @@ import CursorTracker from '@/components/CursorTracker';
 import s from '../specialists.module.css';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/operations-admin-specialists' },
   title: 'Hire Operations & Admin Specialists from Philippines | Save up to 81% | Rapid Tal',
   description: 'Compare the real cost of hiring operations and admin specialists in Australia vs the Philippines. 10 role comparisons including Executive Assistant, Virtual Assistant, Project Manager, and more. Save up to 81%.',
   openGraph: {

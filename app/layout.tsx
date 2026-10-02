@@ -53,6 +53,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://rapidtal.com"),
   title: "Rapid Tal Portal",
   description: "Multi-tenant SaaS portal for managing client knowledge bases.",
 };

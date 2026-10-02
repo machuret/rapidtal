@@ -3,17 +3,6 @@
 import styles from './ComparisonHero.module.css';
 import { useCurrency } from '@/components/CurrencyProvider';
 import { formatPrice } from '@/lib/currency';
-import type { Currency } from '@/lib/currency';
-
-function formatSavedPerYear(value: string, currency: Currency): string {
-  const match = value.match(/\$(\d+)K\+/);
-  if (!match) return value;
-  const audK = parseInt(match[1], 10);
-  if (currency === 'AUD') return value;
-  const usdK = Math.round(audK * 0.65);
-  return `US$${usdK}K+`;
-}
-
 interface HeroStats {
   saving: string;
   savedPerYear: string;
@@ -27,9 +16,10 @@ interface ComparisonHeroProps {
   heroSub: string;
   heroGhost: string;
   stats: HeroStats;
+  annualSaving: number;
 }
 
-export default function ComparisonHero({ roleTag, headline, heroSub, heroGhost, stats }: ComparisonHeroProps) {
+export default function ComparisonHero({ roleTag, headline, heroSub, heroGhost, stats, annualSaving }: ComparisonHeroProps) {
   const { currency } = useCurrency();
 
   return (
@@ -69,11 +59,11 @@ export default function ComparisonHero({ roleTag, headline, heroSub, heroGhost, 
           <div className={styles.heroStats}>
             <div className={styles.heroStat}>
               <span className={styles.heroStatNum}>{stats.saving}</span>
-              <span className={styles.heroStatLabel}>Average saving</span>
+              <span className={styles.heroStatLabel}>Estimated saving</span>
             </div>
             <div className={styles.heroStat}>
-              <span className={styles.heroStatNum}>{formatSavedPerYear(stats.savedPerYear, currency)}</span>
-              <span className={styles.heroStatLabel}>Saved per year</span>
+              <span className={styles.heroStatNum}>{formatPrice(annualSaving, currency)}</span>
+              <span className={styles.heroStatLabel}>Estimated first-year saving</span>
             </div>
             <div className={styles.heroStat}>
               <span className={styles.heroStatNum}>{stats.daysToHire}</span>

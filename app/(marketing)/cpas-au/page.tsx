@@ -261,7 +261,7 @@ export default function CPAsAUPage() {
             <li><strong>Within 30 minutes:</strong> hot leads get a phone call. VA qualifies and books directly into your calendar.</li>
             <li><strong>Over 7 days:</strong> non-responsive leads get a 3-touch follow-up. Helpful content, not pushy sales.</li>
           </ul>
-          <p><strong>The maths:</strong> 20 enquiries/month at 20% conversion = 4 new clients. Improve response to under 15 min → 35–40% = 7–8 clients. <strong>3–4 extra clients/month. At $5K average annual fee = $15,000–$20,000/month in additional recurring revenue.</strong></p>
+          <p><strong>The maths:</strong> 20 enquiries/month at 20% conversion = 4 new clients. Improve response to under 15 min → 35–40% = 7–8 clients. <strong>3–4 extra clients/month. At $5K average annual fee = $15,000–$20,000 in additional annual recurring revenue from that month’s new clients (about $1,250–$1,667 per month).</strong></p>
           <div className={s.callout}>Your marketing VA doesn&apos;t just create content. They close leads. Follow up within 5 minutes. Qualify prospects. Book appointments. Nurture until conversion. That&apos;s the difference between a marketing system and a marketing expense.</div>
           <div className={s.timeCompare}>⏱ VA: ~2.5 hrs/week &nbsp;|&nbsp; You: 5+ hrs/week</div>
 

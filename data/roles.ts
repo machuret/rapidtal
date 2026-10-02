@@ -1,3 +1,5 @@
+import { calculateHiringCosts } from '@/lib/hiring-costs';
+
 // Role data for cost comparison pages
 export interface RoleData {
   slug: string;
@@ -42,7 +44,7 @@ export interface RoleData {
   relatedRoles: string[];
 }
 
-export const ROLES: Record<string, RoleData> = {
+const ROLE_DATA: Record<string, RoleData> = {
   'wordpress-seo-specialist': {
     slug: 'wordpress-seo-specialist',
     title: 'WordPress SEO Specialist',
@@ -4139,3 +4141,27 @@ export const ROLES: Record<string, RoleData> = {
   }
 
 };
+
+
+// Keep headings, metadata, related-role cards, and tables on the same estimate.
+export const ROLES: Record<string, RoleData> = Object.fromEntries(
+  Object.entries(ROLE_DATA).map(([slug, role]) => {
+    const costs = {
+      ...role.costs,
+      auSuper: Math.round(role.costs.auBaseSalary * 0.12),
+      phRecruitment: 3990 / 12,
+    };
+    const estimate = calculateHiringCosts(costs);
+    return [slug, {
+      ...role,
+      costs,
+      heroSub: `Explore the skills and responsibilities of a ${role.title}, with an illustrative first-year cost comparison for Australia and the Philippines. Actual costs depend on experience and engagement arrangements.`,
+      metaDescription: `Explore the ${role.title} role and an illustrative Australia–Philippines hiring cost comparison. Review estimated salaries, skills, and responsibilities.`,
+      stats: {
+        ...role.stats,
+        saving: `${estimate.savingPercent}%`,
+        savedPerYear: `AU$${Math.round(estimate.annualSaving).toLocaleString('en-AU')}`,
+      },
+    }];
+  }),
+);

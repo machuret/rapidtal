@@ -11,8 +11,8 @@ interface StickyCtaBarProps {
 
 export default function StickyCtaBar({
   badge = '18 days to your next hire',
-  sub = 'Elite Filipino marketing & sales talent. One flat fee. You own them.',
-  btnLabel = 'Take the Calculator →',
+  sub = 'Elite Filipino marketing & sales talent. One flat fee. You manage the relationship directly.',
+  btnLabel = 'Find Your Hire →',
   btnHref = '/calculator',
 }: StickyCtaBarProps) {
   const [visible, setVisible] = useState(false);

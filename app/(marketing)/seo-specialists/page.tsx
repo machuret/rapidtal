@@ -6,6 +6,7 @@ import CursorTracker from '@/components/CursorTracker';
 import s from '../specialists.module.css';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/seo-specialists' },
   title: 'Hire SEO Specialists from Philippines | Save up to 77% | Rapid Tal',
   description: 'Compare the real cost of hiring SEO specialists in Australia vs the Philippines. 11 role comparisons including WordPress SEO, Shopify SEO, Technical SEO, and more. Save up to 77%.',
   openGraph: {

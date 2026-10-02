@@ -4,7 +4,7 @@
  * Emits three linked schemas Google understands:
  *   • Service          — what RapidTAL provides for this industry
  *   • FAQPage          — pulled straight from config.faq.items
- *   • BreadcrumbList   — Home → Industries → {industry}
+ *   • BreadcrumbList   — Home → {industry}
  *
  * Rendered as a plain <script type="application/ld+json"> so it ships in the
  * HTML payload (no JS required, indexable immediately).
@@ -55,8 +55,7 @@ export default function StructuredData({ config }: { config: IndustryConfig }) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home',       item: SITE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Industries', item: `${SITE_URL}/industries` },
-      { '@type': 'ListItem', position: 3, name: config.industryName, item: pageUrl },
+      { '@type': 'ListItem', position: 2, name: config.industryName, item: pageUrl },
     ],
   };
 

@@ -25,12 +25,12 @@ export default function Nav() {
       <ThemeToggle />
 
       <ul className={s.navLinks}>
-        <li><a href="/#roles" onClick={close}>Roles</a></li>
-        <li><a href="/#process" onClick={close}>How It Works</a></li>
+        <li><a href="/roles" onClick={close}>Roles</a></li>
+        <li><a href="/how-we-hire" onClick={close}>How It Works</a></li>
         <li><a href="/#pricing" onClick={close}>Pricing</a></li>
-        <li><a href="/#about" onClick={close}>About</a></li>
+        <li><a href="/#about" onClick={close}>Contact</a></li>
         <li><a href="/case-studies" onClick={close}>Case Studies</a></li>
-        <li><a href="/calculator" className={s.navCta} onClick={close}>Saving$ Calculator →</a></li>
+        <li><a href="/calculator" className={s.navCta} onClick={close}>Find Your Hire →</a></li>
         <li><a href="https://rapidtal.online" className={s.navPortal} target="_blank" rel="noopener noreferrer" onClick={close}>Login to Portal</a></li>
       </ul>
 
@@ -47,12 +47,12 @@ export default function Nav() {
       {open && (
         <div className={s.mobileMenu} role="dialog" aria-modal="true" aria-label="Navigation menu">
           <ul>
-            <li><a href="/#roles" onClick={close}>Roles</a></li>
-            <li><a href="/#process" onClick={close}>How It Works</a></li>
+            <li><a href="/roles" onClick={close}>Roles</a></li>
+            <li><a href="/how-we-hire" onClick={close}>How It Works</a></li>
             <li><a href="/#pricing" onClick={close}>Pricing</a></li>
-            <li><a href="/#about" onClick={close}>About</a></li>
+            <li><a href="/#about" onClick={close}>Contact</a></li>
             <li><a href="/case-studies" onClick={close}>Case Studies</a></li>
-            <li><a href="/calculator" onClick={close} className={s.mobileCta}>Saving$ Calculator →</a></li>
+            <li><a href="/calculator" onClick={close} className={s.mobileCta}>Find Your Hire →</a></li>
             <li><a href="https://rapidtal.online" target="_blank" rel="noopener noreferrer" onClick={close} className={s.mobilePortal}>Login to Portal</a></li>
           </ul>
         </div>
