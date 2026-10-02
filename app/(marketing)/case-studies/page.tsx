@@ -213,7 +213,7 @@ export default function CaseStudiesPage() {
             Get matched with pre-vetted candidates within 48 hours. No commitment, no agency fees.
           </p>
           <div className={s.ctaActions}>
-            <a href="/calculator" className="btn-primary"><span>Take the Calculator →</span></a>
+            <a href="/calculator" className="btn-primary"><span>Find Your Hire →</span></a>
             <a href="https://calendly.com/machuret/rapid-tal" className="btn-ghost">Book a Call</a>
           </div>
         </section>

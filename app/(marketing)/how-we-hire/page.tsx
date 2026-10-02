@@ -8,6 +8,7 @@ const ComparisonNav = dynamic(() => import('@/components/comparison').then(mod =
 const ComparisonFooter = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonFooter })), { ssr: true });
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/how-we-hire' },
   title: 'How We Hire | Our Recruitment Process | Rapid Tal',
   description: 'Our proven 18-day hiring process for finding experienced marketing, sales, and operations talent in the Philippines. No agencies. No markup. Direct hire only.',
   openGraph: {

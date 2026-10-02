@@ -6,6 +6,7 @@ import FormattedPrice from '@/components/FormattedPrice';
 import s from './page.module.css';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/hire-marketing-sales-philippines' },
   title: 'Hire Marketing & Sales Talent Direct from Philippines | Rapid Tal',
   description: 'Compare the real cost of hiring marketing, sales and operations staff in Australia vs the Philippines. 51 role comparisons. Save up to 82%. One fee. 18 days.',
   openGraph: {
@@ -146,7 +147,7 @@ export default function HireMarketingSalesPhilippinesPage() {
               Direct hire means you employ the talent directly on your payroll. No middleman. No markup. No ongoing fees. You pay them directly, they work for you exclusively, and you build a real team.
             </p>
             <p className={s.directHireParagraph}>
-              We handle recruitment, vetting, and onboarding for a one-time fee of <strong className={s.directHireAccent}><FormattedPrice amount={3990} /></strong>. After that, you pay your team member&apos;s salary directly and they&apos;re yours forever.
+              We handle recruitment, vetting, and onboarding for a one-time fee of <strong className={s.directHireAccent}><FormattedPrice amount={3990} /></strong>. After that, you pay your team member&apos;s salary directly and you manage the working relationship directly.
             </p>
             <p className={s.directHireParagraphLast}>
               This is the opposite of outsourcing agencies that charge 2-3x markups forever. With direct hire, you save 70-82% compared to local hiring and build a loyal, dedicated team that grows with your business.

@@ -40,21 +40,18 @@ interface DisqualifyEntry {
 
 /* ─── DATA ───────────────────────────────────────────────────────────── */
 function getQuestions(currency: Currency): Question[] {
-  const sym = currency === 'USD' ? 'US$' : 'AU$';
-  const low = currency === 'USD' ? '910' : '1,400';
-  const high = currency === 'USD' ? '1,170' : '1,800';
   const fee = formatPrice(3990, currency);
   return [
     {
       id: 1,
       headline: <>What role are you looking to <em>HIRE?</em></>,
-      sub: 'We specialise exclusively in revenue-generating roles. Pick the closest match.',
+      sub: 'Tell us which area you need help with. We will confirm role availability on your call.',
       grid: 'two-col',
       options: [
         { icon: '📈', label: 'Marketing Specialist',   sub: 'Paid ads, SEO, email, social, growth',          qualify: true  },
         { icon: '📞', label: 'Sales / SDR',            sub: 'Outbound, closing, account management',          qualify: true  },
         { icon: '✍️', label: 'Content & Creative',     sub: 'Copywriting, video, design, strategy',           qualify: true  },
-        { icon: '🤷', label: 'Something Else',          sub: 'Admin, IT, finance, ops...',                     qualify: false },
+        { icon: '🤝', label: 'Operations, Admin or Another Role', sub: 'Tell us about the support your team needs', qualify: true },
       ],
     },
     {
@@ -96,25 +93,25 @@ function getQuestions(currency: Currency): Question[] {
     {
       id: 5,
       headline: <>What&apos;s your <em>MONTHLY BUDGET</em> for this role?</>,
-      sub: `Our talent earns ${sym}${low}–${high}/month. Our one-time placement fee is ${fee}. Be real with us.`,
+      sub: `Share an indicative salary budget. Actual salaries depend on role and experience; the placement fee is separate (${fee}).`,
       grid: 'single-col',
       options: [
-        { icon: '😬', label: 'Under $1,500 / month',    sub: 'Might be a stretch for our talent level',               qualify: false },
-        { icon: '✅', label: '$1,500 – $2,500 / month', sub: 'This is the sweet spot for most of our placements',      qualify: true  },
-        { icon: '💪', label: '$2,500 – $4,000 / month', sub: 'Senior talent, complex roles, high output',              qualify: true  },
-        { icon: '🔥', label: '$4,000+ / month',          sub: 'We can build you a team for that',                       qualify: true  },
+        { icon: '💬', label: `Under ${formatPrice(1500, currency)} / month`, sub: 'Let’s discuss scope and availability', qualify: true },
+        { icon: '✅', label: `${formatPrice(1500, currency)} – ${formatPrice(2500, currency)} / month`, sub: 'This is the sweet spot for most of our placements',      qualify: true  },
+        { icon: '💪', label: `${formatPrice(2500, currency)} – ${formatPrice(4000, currency)} / month`, sub: 'Senior talent, complex roles, high output',              qualify: true  },
+        { icon: '🔥', label: `${formatPrice(4000, currency)}+ / month`,          sub: 'We can build you a team for that',                       qualify: true  },
       ],
     },
     {
       id: 6,
       headline: <>How soon are you looking to <em>HIRE?</em></>,
-      sub: 'We average 18 days from brief to shortlist. We work with people who are ready to move.',
+      sub: 'Share your preferred start date. We will confirm a realistic timeline for your role.',
       grid: 'single-col',
       options: [
         { icon: '⚡', label: 'ASAP — Within 2 Weeks', sub: 'We can move fast. Let\'s go.',                       qualify: true  },
         { icon: '📅', label: 'Within 30 Days',         sub: 'Ready to kick things off now',                       qualify: true  },
         { icon: '🗓️', label: '1–3 Months',             sub: 'Planning ahead, want to get educated',               qualify: true  },
-        { icon: '👀', label: 'Just Researching',        sub: 'No urgency right now',                               qualify: false },
+        { icon: '👀', label: 'Just Researching', sub: 'Explore roles and plan ahead', qualify: true },
       ],
     },
   ];
@@ -131,7 +128,7 @@ function getDisqualifyMap(currency: Currency): Record<number, DisqualifyEntry> {
   };
 }
 
-const TOTAL_STEPS = 7;
+const TOTAL_STEPS = 6;
 
 /* ─── COMPONENT ──────────────────────────────────────────────────────── */
 function CalculatorContent() {
@@ -176,7 +173,7 @@ function CalculatorContent() {
 
     if (typeof window !== 'undefined' && (window as { fbq?: (...args: unknown[]) => void }).fbq) {
       (window as { fbq?: (...args: unknown[]) => void }).fbq!('track', 'ViewContent', {
-        content_name: 'Savings Calculator',
+        content_name: 'Hiring Questionnaire',
         content_category: 'Calculator',
       });
     }
@@ -293,31 +290,31 @@ function CalculatorContent() {
                 <div>
                   <div className={styles.introEyebrow}>Find Your Hire</div>
                   <h1 className={styles.introHeadline}>
-                    STOP PAYING FOR<br />
-                    MARKETING EXPERTS<br />
-                    TO <span className={styles.accent}>RIP YOU OFF.</span>
+                    TELL US ABOUT<br />
+                    YOUR NEXT<br />
+                    <span className={styles.accent}>HIRE.</span>
                   </h1>
                   <p className={styles.introBody}>
-                    Answer 6 quick questions. If you&apos;re a fit, book your free discovery call straight away — no fluff, no sales pressure.
+                    Answer six questions about your role, budget, and timing, then book a discovery call. This questionnaire does not calculate savings or confirm candidate availability.
                   </p>
                   <ul className={styles.introFeatures}>
                     <li>Takes under 2 minutes</li>
-                    <li>Sales &amp; Marketing roles only</li>
-                    <li>If we&apos;re a fit, you&apos;ll know instantly</li>
+                    <li>Marketing, sales, creative, and operations roles</li>
+                    <li>Discuss role fit and availability on your call</li>
                   </ul>
                   <button
                     type="button"
                     className={styles.btnPrimary}
                     onClick={() => transition(() => { setScreen('question'); setQuestionIdx(0); })}
                   >
-                    Start the Calculator →
+                    Start the Questionnaire →
                   </button>
                 </div>
                 <div className={styles.statCards}>
                   {[
-                    { num: '70%',   label: 'Average savings vs. local hire or agency' },
-                    { num: '18',    label: 'Days average from brief to shortlist' },
-                    { num: formatPrice(3990, currency), label: 'One-time placement fee. No ongoing costs. Ever.' },
+                    { num: '6', label: 'Questions about your hiring needs' },
+                    { num: '1', label: 'Discovery call to discuss your requirements' },
+                    { num: formatPrice(3990, currency), label: 'One-time placement fee. Salary and tools are separate.' },
                     { num: '6 mo', label: 'Replacement guarantee if the hire doesn\'t work out' },
                   ].map((s) => (
                     <div key={s.num} className={styles.statCard}>
@@ -333,7 +330,7 @@ function CalculatorContent() {
             {screen === 'question' && currentQ && (
               <div className={styles.screenInner}>
                 <div className={styles.screenWatermark}>{stepNum}</div>
-                <div className={styles.stepLabel}>Step {stepNum} of 7</div>
+                <div className={styles.stepLabel}>Question {stepNum} of {TOTAL_STEPS}</div>
                 <div className={styles.qLayout}>
                   <div className={styles.qRule} />
                   <div className={styles.qContent}>
@@ -366,12 +363,12 @@ function CalculatorContent() {
             {/* ── BOOKING (Calendly) ────────────────────────────────── */}
             {screen === 'form' && (
               <div className={styles.screenInner}>
-                <div className={`${styles.resultBadge} ${styles.qualified}`}>You&apos;re Qualified</div>
+                <div className={`${styles.resultBadge} ${styles.qualified}`}>Ready to discuss your hire</div>
                 <h2 className={styles.resultHeadline}>
                   BOOK YOUR<br /><em>DISCOVERY CALL.</em>
                 </h2>
                 <p className={styles.resultBody}>
-                  Pick a time that works — 20 minutes, no pitch, no pressure. Just a real conversation about your hire.
+                  Choose an available time to discuss your role, expected salary, hiring timeline, and next steps.
                 </p>
                 <div className={styles.calendlyWrap}>
                   <iframe

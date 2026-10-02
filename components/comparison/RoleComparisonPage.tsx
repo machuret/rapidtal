@@ -1,3 +1,4 @@
+import { calculateHiringCosts } from '@/lib/hiring-costs';
 import { notFound } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import type { Metadata } from 'next';
@@ -5,7 +6,6 @@ import {
   ComparisonNav,
   ComparisonHero,
   TrustBar,
-  UrgencyBanner,
   Breadcrumb,
 } from '@/components/comparison';
 import { ROLES } from '@/data/roles';
@@ -16,7 +16,6 @@ const RoleDescription = dynamic(() => import('@/components/comparison').then(mod
 const ComparisonTable = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonTable })), { ssr: true });
 const SavingsBanner = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.SavingsBanner })), { ssr: true });
 const SkillsGrid = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.SkillsGrid })), { ssr: true });
-const TruthSection = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.TruthSection })), { ssr: true });
 const CTASection = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.CTASection })), { ssr: true });
 const ComparisonFooter = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.ComparisonFooter })), { ssr: true });
 const AnimatedCTA = dynamic(() => import('@/components/comparison').then(mod => ({ default: mod.AnimatedCTA })), { ssr: true });
@@ -30,8 +29,9 @@ export async function buildRoleMetadata(roleSlug: string): Promise<Metadata> {
   if (!role) return { title: 'Not Found' };
 
   return {
-    title: `${role.title}: Hire Direct from Philippines & Save ${role.stats.saving} | Rapid Tal`,
+    title: `${role.title}: Hire from the Philippines | Cost Estimate | Rapid Tal`,
     description: role.metaDescription,
+    alternates: { canonical: `/hire-${roleSlug}` },
     openGraph: {
       title: `${role.title}: Australia vs Philippines Cost Comparison`,
       description: role.metaDescription,
@@ -52,15 +52,7 @@ export default function RoleComparisonPage({
     notFound();
   }
 
-  const auTotal = role.costs.auBaseSalary + role.costs.auSuper + role.costs.auLeave +
-                  role.costs.auSick + role.costs.auRecruitment + role.costs.tools +
-                  role.costs.auOffice + role.costs.auHR + role.costs.auWorkersComp;
-
-  const phTotal = role.costs.phBaseSalary + role.costs.phRecruitment + role.costs.tools;
-
-  const monthlySaving = auTotal - phTotal;
-  const annualSaving = monthlySaving * 12;
-  const savingPercent = Math.round((monthlySaving / auTotal) * 100);
+  const { auTotal, phTotal, annualSaving, savingPercent } = calculateHiringCosts(role.costs);
 
   const relatedRolesData = role.relatedRoles.map(slug => ({
     title: ROLES[slug]?.title || '',
@@ -77,13 +69,13 @@ export default function RoleComparisonPage({
         categorySlug={role.categorySlug}
         roleTitle={role.title}
       />
-      <UrgencyBanner />
       <ComparisonHero
         roleTag={role.roleTag}
         headline={role.headline}
         heroSub={role.heroSub}
         heroGhost={role.heroGhost}
         stats={role.stats}
+        annualSaving={annualSaving}
       />
       <TrustBar />
       <AnimatedCTA variant="primary" />
@@ -93,8 +85,8 @@ export default function RoleComparisonPage({
       />
       <section className={s.relatedSection}>
         <SectionHeader
-          tag="The Real Numbers"
-          title={<>WHAT IT <em className={s.accentWord}>ACTUALLY COSTS</em><br />MONTH BY MONTH.</>}
+          tag="Illustrative First-Year Estimate"
+          title={<>ESTIMATED <em className={s.accentWord}>HIRING COSTS</em><br />MONTH BY MONTH.</>}
         />
         <ComparisonTable costs={role.costs} />
       </section>
@@ -110,7 +102,6 @@ export default function RoleComparisonPage({
         skills={role.skills}
       />
       <AnimatedCTA variant="primary" />
-      <TruthSection testimonial={role.testimonial} />
       {relatedRolesData.length > 0 && (
         <RelatedRoles
           roles={relatedRolesData}

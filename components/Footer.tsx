@@ -14,19 +14,19 @@ export default function Footer() {
         <div>
           <div className="footer-col-title">Roles</div>
           <ul className="footer-links">
-            <li><a href="/#roles">Marketing</a></li>
-            <li><a href="/#roles">Sales &amp; SDR</a></li>
-            <li><a href="/#roles">Content &amp; Creative</a></li>
-            <li><a href="/#roles">Revenue Ops</a></li>
+            <li><a href="/roles/marketing">Marketing</a></li>
+            <li><a href="/roles/sales">Sales &amp; SDR</a></li>
+            <li><a href="/roles/content">Content &amp; Creative</a></li>
+            <li><a href="/roles/ops">Revenue Ops</a></li>
           </ul>
         </div>
         <div>
           <div className="footer-col-title">Company</div>
           <ul className="footer-links">
-            <li><a href="/#about">About Us</a></li>
-            <li><a href="/#process">How We Hire</a></li>
+            <li><a href="/#about">Contact</a></li>
+            <li><a href="/how-we-hire">How We Hire</a></li>
             <li><a href="/#pricing">Pricing</a></li>
-            <li><a href="https://rapidtal.com/apply" target="_blank" rel="noopener noreferrer">Apply for a Job</a></li>
+            <li><a href="mailto:hello@rapidtal.com?subject=Candidate%20enquiry" target="_blank" rel="noopener noreferrer">Candidate Enquiries</a></li>
           </ul>
         </div>
         <div>

@@ -6,6 +6,7 @@ import CursorTracker from '@/components/CursorTracker';
 import s from '../specialists.module.css';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/marketing-creative-specialists' },
   title: 'Hire Marketing & Creative Specialists from Philippines | Save up to 81% | Rapid Tal',
   description: 'Compare the real cost of hiring marketing and creative specialists in Australia vs the Philippines. 10 role comparisons including Copywriter, Video Editor, Graphic Designer, and more. Save up to 81%.',
   openGraph: {

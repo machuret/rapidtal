@@ -6,6 +6,7 @@ import CursorTracker from '@/components/CursorTracker';
 import s from '../specialists.module.css';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/sales-specialists' },
   title: 'Hire Sales Specialists from Philippines | Save up to 82% | Rapid Tal',
   description: 'Compare the real cost of hiring sales specialists in Australia vs the Philippines. 10 role comparisons including SDR, BDM, Account Executive, and more. Save up to 82%.',
   openGraph: {

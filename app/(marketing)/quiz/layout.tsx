@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
   title: 'Rapid Tal — Find Your Hire',
-  description: 'Answer 7 quick questions to find out if Rapid Tal is right for you. Elite Filipino marketing and sales talent. 18-day placement. AU$3,990 flat fee.',
+  description: 'Answer 6 quick questions to find out if Rapid Tal is right for you. Elite Filipino marketing and sales talent. 18-day placement. AU$3,990 flat fee.',
   alternates: { canonical: '/quiz' },
   openGraph: {
     title: 'Rapid Tal — Find Your Hire',
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Rapid Tal — Find Your Hire',
-    description: '7 questions. Instant result. Find out if Rapid Tal is right for your next hire.',
+    description: '6 questions. Instant result. Find out if Rapid Tal is right for your next hire.',
   },
 };
 

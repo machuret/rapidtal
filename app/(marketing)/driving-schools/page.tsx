@@ -432,7 +432,7 @@ export default function DrivingSchoolsPage() {
         {/* ── CTA ───────────────────────────────────────────────── */}
         <div className={s.ctaSection}>
           <h2>Want to See If This Works for Your School?</h2>
-          <p>No pitch, no pressure. Book a 15-minute call using the calendar below — or drop your email and we&apos;ll reach out directly.</p>
+          <p>No pitch, no pressure. Book a 15-minute call using the calendar below — or email us about your hiring needs.</p>
           <div className={s.ctaLinks}>
             <a href="#book-call">Book a Call →</a><br />
             <a href="mailto:hello@rapidtal.com">hello@rapidtal.com</a>
@@ -446,8 +446,8 @@ export default function DrivingSchoolsPage() {
       {/* ── EMAIL CAPTURE + CALENDLY (merged dark section) ───────── */}
       <div className={s.emailCaptureSection} id="book-call">
         <div className={s.emailCaptureInner}>
-          <div className={s.emailCaptureTitle}>Not ready to book? Leave your email.</div>
-          <p className={s.emailCaptureSub}>We&apos;ll send you a tailored breakdown for your driving school — no obligation, no spam.</p>
+          <div className={s.emailCaptureTitle}>Not ready to book? Email us.</div>
+          <p className={s.emailCaptureSub}>Tell us about your driving school and the support you need. The link below opens your email app; you will need to send the message.</p>
           <EmailCaptureForm />
           <p className={s.emailOrDivider}>— or book directly below —</p>
         </div>
