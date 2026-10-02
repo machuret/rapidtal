@@ -1,0 +1,38 @@
+{
+  "ato": {
+    "title": "ATO: super guarantee rates",
+    "url": "https://www.ato.gov.au/tax-rates-and-codes/key-superannuation-rates-and-thresholds/super-guarantee"
+  },
+  "fairwork": {
+    "title": "Fair Work Ombudsman: annual leave and the National Employment Standards",
+    "url": "https://www.fairwork.gov.au/sites/default/files/migration/723/Annual-leave.pdf"
+  },
+  "oaic": {
+    "title": "OAIC: cross-border disclosure of personal information",
+    "url": "https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines/chapter-8-app-8-cross-border-disclosure-of-personal-information"
+  },
+  "googleAds": {
+    "title": "Google Ads: primary and secondary conversion actions",
+    "url": "https://support.google.com/google-ads/answer/11461796?hl=en-AU"
+  },
+  "klaviyoFlows": {
+    "title": "Klaviyo: getting started with flows",
+    "url": "https://help.klaviyo.com/hc/en-us/articles/115002774932"
+  },
+  "klaviyoCampaigns": {
+    "title": "Klaviyo: creating and sending a campaign",
+    "url": "https://help.klaviyo.com/hc/en-us/articles/115005054847"
+  },
+  "highlevel": {
+    "title": "HighLevel: workflow actions",
+    "url": "https://help.gohighlevel.com/support/solutions/articles/155000002294-a-list-of-workflow-actions"
+  },
+  "googleSeo": {
+    "title": "Google Search Central: SEO Starter Guide",
+    "url": "https://developers.google.com/search/docs/fundamentals/seo-starter-guide"
+  },
+  "googleHelpful": {
+    "title": "Google Search Central: helpful, reliable content",
+    "url": "https://developers.google.com/search/docs/fundamentals/creating-helpful-content"
+  }
+}

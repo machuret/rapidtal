@@ -1,3 +1,4 @@
+import RoleGuides from '@/components/guides/RoleGuides';
 import { calculateHiringCosts } from '@/lib/hiring-costs';
 import { notFound } from 'next/navigation';
 import dynamic from 'next/dynamic';
@@ -108,6 +109,7 @@ export default function RoleComparisonPage({
           category={role.category}
         />
       )}
+      <RoleGuides roleSlug={roleSlug} />
       <FAQSection />
       {showCalendly && <CalendlyEmbed />}
       <CTASection roleTitle={role.title} />

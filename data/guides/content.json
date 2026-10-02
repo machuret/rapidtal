@@ -1,0 +1,1844 @@
+[
+  {
+    "slug": "virtual-assistant-cost-australia",
+    "title": "Virtual assistant costs for Australian businesses: build a complete budget",
+    "description": "Work out a Philippines virtual assistant budget in AUD, separating pay, tools, recruitment, management time, and first-year costs.",
+    "category": "Costs & decisions",
+    "primaryKeyword": "virtual assistant cost Australia",
+    "reviewedOn": "2026-10-02",
+    "answer": "A useful VA budget starts with the work and hours you need, then adds recruitment, software, support, and engagement costs. Compare the same scope on both sides. A monthly salary alone is not a complete hiring quote.",
+    "sections": [
+      {
+        "id": "scope",
+        "title": "Price the role before comparing the rate",
+        "paragraphs": [
+          "List the outputs you need each week: an organised inbox, a reconciled CRM, a campaign report, or a schedule of approved social posts. Record the expected volume, turnaround time, and software. These details distinguish a general assistant from a specialist who can diagnose problems independently.",
+          "Specify whether you need a full-time team member, a part-time schedule, or a defined project. A lower monthly price for fewer hours is not a saving on an equivalent role. Equally, paying for full-time capacity makes little sense if your documented workload only fills two days a week."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "budget",
+        "title": "Separate first-year spending from recurring costs",
+        "paragraphs": [
+          "The figures below are an invented budgeting example in Australian dollars, not salary benchmarks, a Rapid Tal quote, or evidence of typical savings. Replace every input with a written quote. The example deliberately leaves employment-related costs unresolved rather than treating them as zero."
+        ],
+        "items": [],
+        "table": {
+          "caption": "Illustrative cash budget: one remote role",
+          "columns": [
+            "Item",
+            "Example input",
+            "Year-one amount"
+          ],
+          "rows": [
+            [
+              "Worker pay",
+              "AU$2,000/month",
+              "AU$24,000"
+            ],
+            [
+              "Software",
+              "AU$150/month",
+              "AU$1,800"
+            ],
+            [
+              "Recruitment",
+              "AU$4,000 once",
+              "AU$4,000"
+            ],
+            [
+              "Equipment",
+              "AU$800 once",
+              "AU$800"
+            ],
+            [
+              "Subtotal of listed items",
+              "Excludes the items below",
+              "AU$30,600"
+            ],
+            [
+              "Payroll, benefits, taxes, transfer fees",
+              "Confirm for your arrangement",
+              "Not included"
+            ],
+            [
+              "Your management time",
+              "Estimate hours and internal cost",
+              "Not included"
+            ]
+          ]
+        },
+        "sourceIds": []
+      },
+      {
+        "id": "compare",
+        "title": "Compare equal capacity and comparable costs",
+        "paragraphs": [
+          "In the example, the recurring subtotal is AU$25,800, assuming recruitment and equipment are not repeated. Do not advertise the difference as a guaranteed second-year saving: replacements, pay reviews, software changes, and equipment renewal can change it.",
+          "For a local employee comparison, identify which costs are already inside the salary package. Paid annual leave and any additional leave loading need careful treatment; do not add the same wage payment twice. If you budget for temporary cover, show that as a separate assumption. The ATO and Fair Work resources explain the Australian components; they are not a basis for assuming another country has no employment costs."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": [
+          "ato",
+          "fairwork"
+        ]
+      },
+      {
+        "id": "quote",
+        "title": "Ask each provider these seven questions",
+        "paragraphs": [
+          "Request a quote with the same hours, responsibilities, seniority, and working schedule. A provider that supplies payroll, facilities, backup staffing, or supervision may be selling a different service from a recruiter. Compare inclusions before comparing fees."
+        ],
+        "items": [
+          "Who contracts with the worker and who pays them?",
+          "Which costs are one-off, recurring, or paid by me directly?",
+          "Are quoted amounts AUD, PHP, or USD, and what exchange-rate assumptions apply?",
+          "Are tax, benefits, paid time away, and payment fees included or excluded?",
+          "Who supplies equipment, software licences, and technical support?",
+          "What are the replacement conditions and any additional charges?",
+          "What happens to costs when hours, responsibilities, or pay change?"
+        ],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "capacity",
+        "title": "Budget the handover as well as the hire",
+        "paragraphs": [
+          "Set aside manager time for documentation, feedback, and checking early work. During onboarding, existing staff may still complete the task while the new hire learns. That overlap should be visible in your plan.",
+          "Run a sensitivity check: increase pay by 10%, add another software seat, and double your expected management hours. These are planning scenarios, not forecasts. If the decision only works under the most optimistic assumptions, narrow the initial role or trial a smaller workload. Keep a reserve for interruptions rather than assuming uninterrupted output."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "next",
+        "title": "Make the hiring decision",
+        "paragraphs": [
+          "Approve the recurring budget, one-off spending, and responsibility split before interviewing. Then use the same role brief to assess every candidate. Keep the final quote and the model together so someone reviewing the decision can trace each number.",
+          "Use the downloadable worksheet to record your own assumptions. For live salary expectations, ask for candidates and quotes matched to the exact scope; this guide does not claim a market salary survey."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      }
+    ],
+    "roleSlugs": [
+      "virtual-assistant",
+      "marketing-assistant",
+      "executive-assistant"
+    ],
+    "relatedSlugs": [
+      "direct-hire-vs-outsourcing",
+      "hire-remote-staff-philippines",
+      "virtual-assistant-onboarding"
+    ],
+    "faq": [
+      {
+        "question": "Is the lowest monthly quote the best value?",
+        "answer": "Only if the scope, hours, experience, and included support are comparable. Check first-year costs and who handles the work that is excluded."
+      },
+      {
+        "question": "Should I add paid leave to a full annual salary?",
+        "answer": "Do not automatically add the same salary payment again. Distinguish leave loading, replacement cover, and lost capacity, and check the arrangement with an appropriate adviser."
+      }
+    ],
+    "sourceIds": [
+      "ato",
+      "fairwork"
+    ],
+    "download": {
+      "path": "/resources/hiring-budget-worksheet.txt",
+      "label": "Download the hiring budget worksheet",
+      "format": "TXT"
+    }
+  },
+  {
+    "slug": "hire-remote-staff-philippines",
+    "title": "How to hire your first remote team member in the Philippines",
+    "description": "A practical Australian employer guide to scoping, screening, interviewing, and onboarding a Philippines-based remote team member.",
+    "category": "Hiring & assessment",
+    "primaryKeyword": "how to hire staff in the Philippines",
+    "reviewedOn": "2026-10-02",
+    "answer": "Start with a written role brief, choose an engagement arrangement, and assess candidates against actual work. Agree on responsibilities, payment, access, and the first month before the person starts. This guide covers people working remotely in the Philippines, not relocation to Australia.",
+    "sections": [
+      {
+        "id": "brief",
+        "title": "Write a brief that can be assessed",
+        "paragraphs": [
+          "Describe the problem the hire will solve in one sentence. Follow it with three weekly outputs and a realistic volume for each. “Help with marketing” leaves too much open; “prepare four approved social posts, maintain the campaign calendar, and compile a weekly report” gives you something to assess.",
+          "Include required software, who approves the work, collaboration hours, and tasks outside the role. Separate essential skills from skills you can teach. A long list of unrelated specialties often conceals the need for more than one person."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "arrangement",
+        "title": "Choose the arrangement before making an offer",
+        "paragraphs": [
+          "Decide whether you need recruitment assistance, ongoing managed support, or an employment arrangement supported by an appropriate provider. Ask who signs the agreement, pays the worker, manages leave and equipment, and responds when something goes wrong.",
+          "Do not infer employee or contractor status from the label on a website. Obtain advice for the actual arrangement in the relevant jurisdictions. If the hire will access personal information, map that access before sharing records and consult the OAIC guidance where it applies."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": [
+          "oaic"
+        ]
+      },
+      {
+        "id": "screen",
+        "title": "Use the same evidence for every shortlist",
+        "paragraphs": [
+          "Create a simple scorecard before reviewing applications. Assess relevant work, communication, judgement, and reliability of the evidence. Ask candidates to explain their own contribution to a project rather than treating a polished portfolio as proof they owned the work."
+        ],
+        "items": [],
+        "table": {
+          "caption": "Example shortlist scorecard",
+          "columns": [
+            "Criterion",
+            "Evidence to request"
+          ],
+          "rows": [
+            [
+              "Relevant execution",
+              "A redacted sample and a walkthrough of the candidate’s contribution"
+            ],
+            [
+              "Communication",
+              "A short update explaining a delay and proposed next step"
+            ],
+            [
+              "Judgement",
+              "A scenario involving conflicting priorities or an unclear brief"
+            ],
+            [
+              "Working arrangement",
+              "Agreed schedule, equipment needs, and availability"
+            ],
+            [
+              "Learning needs",
+              "Tasks they can own now versus tasks requiring supervision"
+            ]
+          ]
+        },
+        "sourceIds": []
+      },
+      {
+        "id": "assessment",
+        "title": "Test a small representative task",
+        "paragraphs": [
+          "Use a fictional or sanitised brief with a defined time limit and clear evaluation criteria. A content assistant might turn a supplied brief into a draft post and explain how they would check it. A CRM assistant might organise a small synthetic dataset and describe how duplicates should be handled.",
+          "Avoid unpaid production work disguised as an assessment. Agree compensation for substantial exercises, disclose whether AI tools are allowed, and evaluate the candidate’s checking process. Never require production credentials or customer exports just to test basic skills."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "interview",
+        "title": "Interview for decisions, not memorised answers",
+        "paragraphs": [
+          "Ask the candidate what they would do when a deadline is unrealistic, a report looks wrong, or a task falls outside their permissions. Follow up with “what would you check?” and “when would you involve your manager?”",
+          "Discuss working-hour overlap explicitly using both locations’ local times. Australian daylight saving can change that overlap. Agree response expectations, planned absences, and an escalation route without assuming one schedule fits every Australian state."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "offer",
+        "title": "Turn the decision into a workable first month",
+        "paragraphs": [
+          "Put the scope, pay, hours, confidentiality expectations, and agreed support in writing through the appropriate process. Check references with consent and clarify any uncertainty before committing. Treat provider promises as contract questions rather than implied inclusions.",
+          "Set up individual accounts with the minimum access required. Assign a manager, a first-week plan, and a review date. Start with a small task that produces a checkable result, then increase responsibility as the person demonstrates accuracy. A successful hire needs usable instructions and timely feedback, not just a strong interview."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      }
+    ],
+    "roleSlugs": [
+      "virtual-assistant",
+      "marketing-assistant",
+      "operations-manager"
+    ],
+    "relatedSlugs": [
+      "virtual-assistant-cost-australia",
+      "direct-hire-vs-outsourcing",
+      "virtual-assistant-onboarding"
+    ],
+    "faq": [
+      {
+        "question": "Do I need a full-time hire?",
+        "answer": "Document the recurring workload first. Part-time support or a defined project may fit better when volume is limited or inconsistent."
+      },
+      {
+        "question": "Can I use a real customer task as an interview test?",
+        "answer": "Prefer fictional or sanitised material. If the exercise creates usable work, agree scope and compensation; do not share production access just to assess basic ability."
+      }
+    ],
+    "sourceIds": [
+      "oaic"
+    ],
+    "download": null
+  },
+  {
+    "slug": "direct-hire-vs-outsourcing",
+    "title": "Direct recruitment vs managed outsourcing: what are you buying?",
+    "description": "Compare recruitment, managed outsourcing, and employer-of-record support by responsibilities, fees, control, and ongoing management.",
+    "category": "Costs & decisions",
+    "primaryKeyword": "direct hire vs outsourcing agency",
+    "reviewedOn": "2026-10-02",
+    "answer": "Recruitment helps you find a person; managed outsourcing adds an ongoing service; an employer of record addresses an employment arrangement. Compare the responsibilities in each proposal. The cheapest headline fee may exclude work another provider includes.",
+    "sections": [
+      {
+        "id": "models",
+        "title": "Distinguish three different jobs",
+        "paragraphs": [
+          "In this guide, “direct recruitment” means paying a provider to find and assess candidates while you arrange the ongoing working relationship. It does not establish the legal status of that relationship. Some recruiters offer optional support, so read the scope.",
+          "Managed outsourcing generally bundles ongoing services, but inclusions vary. An employer-of-record proposal concerns employment administration and may or may not include recruitment. Treat the comparison below as questions to resolve, not universal definitions of every supplier."
+        ],
+        "items": [],
+        "table": {
+          "caption": "What to establish in the proposal",
+          "columns": [
+            "Question",
+            "Recruitment proposal",
+            "Managed-service proposal",
+            "Employment-support proposal"
+          ],
+          "rows": [
+            [
+              "What am I purchasing?",
+              "Candidate search and selection",
+              "Defined ongoing staffing or delivery support",
+              "Specified employment administration"
+            ],
+            [
+              "Who directs daily work?",
+              "Usually your team; confirm",
+              "You, the provider, or a shared arrangement",
+              "Confirm separately from employment administration"
+            ],
+            [
+              "What continues after placement?",
+              "Only explicitly included support",
+              "Services listed in the recurring scope",
+              "Services listed in the employment arrangement"
+            ],
+            [
+              "How are fees structured?",
+              "Often placement-based; confirm",
+              "Often recurring; confirm",
+              "Often recurring alongside pay and other costs"
+            ]
+          ]
+        },
+        "sourceIds": []
+      },
+      {
+        "id": "fit",
+        "title": "Choose around the constraint you actually have",
+        "paragraphs": [
+          "If you already have a capable manager, documented tasks, and suitable engagement arrangements, recruitment-only support may meet the need. You must still budget for supervision, access management, performance discussions, and continuity.",
+          "If your constraint is management capacity, ask a managed provider exactly what it will own: quality checks, workload allocation, backup cover, or reporting. “Dedicated support” is too vague to evaluate. Ask for an example of the escalation process and the limits of its authority."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "cost",
+        "title": "Compare the same twelve-month scope",
+        "paragraphs": [
+          "Build a one-year view that includes worker pay, recruitment, provider fees, software, equipment, and costs the proposal excludes. Show any refundable deposit separately from a fee. Ask what changes when a worker leaves or a role changes.",
+          "Then build an ongoing-year view. A placement fee and recurring support fee cannot be compared sensibly without a time horizon. Do not assume a more expensive provider is merely adding a markup; equally, do not assume a recurring fee guarantees better supervision."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "control",
+        "title": "Ask what you keep when the arrangement ends",
+        "paragraphs": [
+          "Clarify ownership and access to accounts, documentation, work product, and business records. Use company-controlled systems where appropriate and ensure the handover process is documented. Ask about notice periods, transition assistance, and restrictions on continuing a working relationship.",
+          "For access to personal information, identify the actual people and organisations involved and assess the arrangement under applicable privacy requirements. Outsourcing a task does not by itself answer every responsibility question."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": [
+          "oaic"
+        ]
+      },
+      {
+        "id": "questions",
+        "title": "Use a supplier comparison worksheet",
+        "paragraphs": [
+          "Send the same questions to each shortlisted provider. A written answer is more useful than an informal assurance on a discovery call."
+        ],
+        "items": [
+          "Who is responsible for recruitment, contracting, payment, and day-to-day supervision?",
+          "What exactly is included in the setup or placement fee?",
+          "Which recurring services have named deliverables?",
+          "What is excluded from payroll, equipment, benefits, or compliance support?",
+          "What triggers replacement support and what conditions apply?",
+          "Who handles absence, poor performance, and urgent escalation?",
+          "What are the termination, handover, and relationship-transition terms?"
+        ],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "decision",
+        "title": "Make the decision explicit",
+        "paragraphs": [
+          "Write a short decision note: the work required, what your team will own, what the provider will own, total expected cost, and unresolved questions. Choose only after each material question has a documented answer.",
+          "Rapid Tal’s specific scope, current fees, and replacement terms should be confirmed in your proposal. This guide explains how to compare arrangements; it does not promise every service described here is included in a Rapid Tal placement."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      }
+    ],
+    "roleSlugs": [
+      "virtual-assistant",
+      "project-manager",
+      "operations-manager"
+    ],
+    "relatedSlugs": [
+      "virtual-assistant-cost-australia",
+      "hire-remote-staff-philippines",
+      "marketing-assistant-specialist-or-agency"
+    ],
+    "faq": [
+      {
+        "question": "Is direct recruitment always cheaper?",
+        "answer": "No. Compare the complete scope and the management work you retain over the same period. A lower provider fee can coexist with higher internal costs."
+      },
+      {
+        "question": "Does a provider’s label determine the worker’s employment status?",
+        "answer": "No. Establish the actual arrangement and obtain appropriate advice. Recruitment, supervision, and employment administration are separate questions."
+      }
+    ],
+    "sourceIds": [
+      "oaic"
+    ],
+    "download": null
+  },
+  {
+    "slug": "marketing-assistant-specialist-or-agency",
+    "title": "Marketing assistant, specialist or agency: which do you need?",
+    "description": "Choose marketing support by workload, strategy, channel complexity, and management capacity using a practical decision framework.",
+    "category": "Costs & decisions",
+    "primaryKeyword": "marketing assistant vs marketing agency",
+    "reviewedOn": "2026-10-02",
+    "answer": "Hire an assistant for repeatable execution under a clear plan, a specialist for deeper ownership of a channel, and an agency when you need a defined mix of capabilities or external delivery management. Start with the missing work, not the job title.",
+    "sections": [
+      {
+        "id": "bottleneck",
+        "title": "Identify the work that is not getting done",
+        "paragraphs": [
+          "Look at the previous month. Which activities slipped, and why? A backlog of approved content is an execution problem. Campaigns spending money without reliable measurement are a specialist problem. No agreed positioning, offer, or channel plan is a strategy problem.",
+          "List five recurring tasks and mark each as “needs a decision”, “needs skilled execution”, or “needs coordination”. This helps avoid hiring an assistant and then expecting them to invent a growth strategy without experience, budget, or authority."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "compare",
+        "title": "Compare responsibilities, not prestige",
+        "paragraphs": [
+          "Job titles vary. Assess the candidate or supplier against the deliverables you need rather than assuming “manager” means senior or “assistant” means incapable."
+        ],
+        "items": [],
+        "table": {
+          "caption": "A practical starting point",
+          "columns": [
+            "Need",
+            "Likely fit",
+            "What you still need to supply"
+          ],
+          "rows": [
+            [
+              "Publish approved content and maintain a calendar",
+              "Marketing assistant",
+              "Briefs, brand guidance, and timely approval"
+            ],
+            [
+              "Diagnose acquisition performance and run experiments",
+              "Channel specialist",
+              "Business goals, access, budget limits, and commercial context"
+            ],
+            [
+              "Coordinate design, copy, media, and reporting",
+              "Agency or a small team",
+              "A clear scope, decision-maker, and accountability"
+            ],
+            [
+              "Choose positioning and a go-to-market approach",
+              "Experienced strategic support",
+              "Customer evidence and leadership participation"
+            ]
+          ]
+        },
+        "sourceIds": []
+      },
+      {
+        "id": "example",
+        "title": "Example: a small service business with inconsistent publishing",
+        "paragraphs": [
+          "Imagine the owner has a clear offer and a bank of useful customer stories, but posts are irregular and enquiries are poorly tracked. Start with a content and reporting brief: prepare approved posts, maintain a calendar, record enquiry sources, and report on completed work.",
+          "If the same business instead has unprofitable paid campaigns and unreliable conversion tracking, publishing more posts will not resolve the immediate problem. Commission a focused diagnostic or assess a paid-media specialist. The right hire changes with the bottleneck."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "capacity",
+        "title": "Avoid bundling an entire department into one role",
+        "paragraphs": [
+          "Writing, design, analytics, media buying, CRM administration, and video production can each require depth. A person may cover several areas, but the workload and expected quality still need to fit the time available.",
+          "Estimate task frequency and effort, then leave space for meetings, revisions, and learning. Ask candidates to challenge the workload. A thoughtful explanation of what will not fit is more useful than an unconditional promise to do everything."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "evaluate",
+        "title": "Ask questions matched to the arrangement",
+        "paragraphs": [
+          "For an assistant, evaluate organisation, writing accuracy, and response to a brief. For a specialist, ask for a diagnosis and the trade-offs behind a decision. For an agency, request the delivery team, review process, reporting example, and a precise list of exclusions."
+        ],
+        "items": [
+          "What will be delivered each week or month?",
+          "Who decides the strategy and who approves changes?",
+          "What inputs and access will you need from us?",
+          "Which tasks would you refer to another specialist?",
+          "How will we distinguish activity from a useful business result?",
+          "What does an unsuccessful first month look like, and how would we respond?"
+        ],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "start",
+        "title": "Define a small first engagement",
+        "paragraphs": [
+          "Choose one measurable operating improvement: a reliable publishing process, a clean campaign report, or a tested enquiry handover. Set a review date and agree what evidence you will use.",
+          "Avoid comparing a full-service agency retainer with one person’s salary unless the responsibilities are genuinely equivalent. Use the cost guide for the budget and the interview guide for evaluation. Expand the role after observing delivery and manager workload, rather than selling yourself an ambitious job description."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      }
+    ],
+    "roleSlugs": [
+      "marketing-assistant",
+      "content-strategist",
+      "ppc-manager"
+    ],
+    "relatedSlugs": [
+      "virtual-assistant-cost-australia",
+      "marketing-assistant-interview-questions",
+      "paid-ads-specialist-skills-test"
+    ],
+    "faq": [
+      {
+        "question": "Can a marketing assistant run paid ads?",
+        "answer": "Some can, but assess that skill separately. Set spending limits and approval rules; the title alone does not establish media-buying experience."
+      },
+      {
+        "question": "Should I replace my agency immediately?",
+        "answer": "First map what the agency actually supplies and who will take responsibility for each task. Plan access, reporting, and handover before changing the arrangement."
+      }
+    ],
+    "sourceIds": [],
+    "download": null
+  },
+  {
+    "slug": "marketing-assistant-interview-questions",
+    "title": "25 marketing assistant interview questions with a scoring guide",
+    "description": "Use 25 employer-focused interview questions, strong-answer signals, and a downloadable scorecard to assess a marketing assistant.",
+    "category": "Hiring & assessment",
+    "primaryKeyword": "marketing assistant interview questions",
+    "reviewedOn": "2026-10-02",
+    "answer": "Ask candidates to explain real work, respond to a realistic scenario, and show how they check their output. Use the same core questions and scoring criteria for everyone. The aim is evidence of capability, not a polished performance in an interview.",
+    "sections": [
+      {
+        "id": "prepare",
+        "title": "Choose a consistent interview structure",
+        "paragraphs": [
+          "Select eight to ten questions that match the role rather than rushing through all 25. Ask the same core questions of each candidate, then use follow-ups to clarify their personal contribution and decision-making.",
+          "Explain the interview format in advance and allow reasonable adjustments. Do not equate an accent, interview nerves, or familiarity with your favourite software with job capability. A short work sample can reveal more than confident claims. Score evidence before discussing candidates with the rest of the panel."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "execution",
+        "title": "Execution and organisation",
+        "paragraphs": [
+          "Use the prompts below to open a discussion. The listening notes are examples of useful evidence, not a script the candidate must reproduce."
+        ],
+        "items": [
+          "1. Walk me through a campaign task you personally delivered. Listen for their contribution, inputs, checks, and final output.",
+          "2. How would you organise a week with three competing deadlines? Look for priorities and dependencies, not simply working longer.",
+          "3. What information do you need before drafting a social post? Expect audience, purpose, voice, facts, and approval requirements.",
+          "4. How do you prevent an approved asset from being replaced by an old version? Look for naming, access, and a clear source of truth.",
+          "5. Tell me about an error you caught before publication. Ask how their checking process changed afterward."
+        ],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "judgement",
+        "title": "Judgement and communication",
+        "paragraphs": [
+          "Use the prompts below to open a discussion. The listening notes are examples of useful evidence, not a script the candidate must reproduce."
+        ],
+        "items": [
+          "6. What would you do if the brief contradicted the brand guide? Strong answers identify the conflict and seek a decision.",
+          "7. A manager has not approved tomorrow’s email. What happens next? Look for escalation rather than unauthorised sending.",
+          "8. How would you explain a missed deadline? Listen for early notice, impact, and a realistic recovery plan.",
+          "9. Which tasks would you not attempt without support? Expect specific boundaries rather than claims of universal expertise.",
+          "10. A colleague requests a customer export by personal email. How would you respond? Look for permission checks and approved channels."
+        ],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "measurement",
+        "title": "Reporting and commercial awareness",
+        "paragraphs": [
+          "Use the prompts below to open a discussion. The listening notes are examples of useful evidence, not a script the candidate must reproduce."
+        ],
+        "items": [
+          "11. Which measures would you include in a weekly marketing update? Ask why each measure supports a decision.",
+          "12. Traffic increased but enquiries fell. What would you investigate? Look for source mix, measurement, page experience, and lead quality.",
+          "13. How would you check whether a spreadsheet total is reliable? Expect source reconciliation and date-range checks.",
+          "14. How do you distinguish work completed from results achieved? Listen for separation of outputs and outcomes.",
+          "15. What would you report when there is too little data to draw a conclusion? Look for uncertainty and a next measurement step."
+        ],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "content",
+        "title": "Content and tool use",
+        "paragraphs": [
+          "Use the prompts below to open a discussion. The listening notes are examples of useful evidence, not a script the candidate must reproduce."
+        ],
+        "items": [
+          "16. Show how you adapt one message for email and social. Expect audience and format decisions rather than identical copy.",
+          "17. How do you check an AI-generated claim? Look for a reliable source and removal of unsupported assertions.",
+          "18. What is your process for checking links before publication? Ask about destination, tracking, and mobile behaviour.",
+          "19. Which tool have you learned recently, and how did you practise? Look for a concrete task and feedback.",
+          "20. When would you ask a designer or specialist for help? Expect quality and complexity thresholds."
+        ],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "collaboration",
+        "title": "Working remotely and improving the process",
+        "paragraphs": [
+          "Use the prompts below to open a discussion. The listening notes are examples of useful evidence, not a script the candidate must reproduce."
+        ],
+        "items": [
+          "21. What should a useful end-of-day update contain? Listen for completed work, blockers, and the next priority.",
+          "22. How would you handle a task that regularly takes twice the expected time? Expect evidence and a scope discussion.",
+          "23. Tell me about feedback you initially disagreed with. Ask how the decision was resolved.",
+          "24. What do you need from your manager in the first week? Look for access, examples, priorities, and review time.",
+          "25. Which part of this role would need the most learning? Strong answers name the gap and a practical learning plan."
+        ],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "score",
+        "title": "Use a scorecard, then discuss the evidence",
+        "paragraphs": [
+          "Rate execution, judgement, communication, measurement, and learning separately. A total is a discussion aid, not an automatic hiring decision. Decide which criteria matter most before you see applications. Record a concrete example for each rating."
+        ],
+        "items": [],
+        "table": {
+          "caption": "Suggested scoring anchors",
+          "columns": [
+            "Rating",
+            "Evidence"
+          ],
+          "rows": [
+            [
+              "1 — Not demonstrated",
+              "No relevant example or an unresolved fundamental misunderstanding"
+            ],
+            [
+              "2 — Developing",
+              "Partial answer that would require substantial support"
+            ],
+            [
+              "3 — Capable with guidance",
+              "A workable approach with clear checks and appropriate escalation"
+            ],
+            [
+              "4 — Independent",
+              "Specific evidence, sound trade-offs, and reliable quality control"
+            ],
+            [
+              "5 — Strong depth",
+              "All of the above plus thoughtful improvements and awareness of limits"
+            ]
+          ]
+        },
+        "sourceIds": []
+      },
+      {
+        "id": "follow-up",
+        "title": "Resolve uncertainty with one small work sample",
+        "paragraphs": [
+          "If the interview leaves a question about writing, give every finalist the same fictional brief. If the uncertainty is reporting, provide a synthetic table and ask for an update. Set a time limit, disclose tool rules, and agree payment for substantial work.",
+          "Use references, with consent, to explore relevant working behaviours. Keep notes focused on the role and protect candidate information. The scorecard below has space for evidence, unanswered questions, and a final human decision; it does not rank people by personal characteristics."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      }
+    ],
+    "roleSlugs": [
+      "marketing-assistant",
+      "social-media-manager",
+      "content-strategist"
+    ],
+    "relatedSlugs": [
+      "marketing-assistant-specialist-or-agency",
+      "paid-ads-specialist-skills-test",
+      "virtual-assistant-onboarding"
+    ],
+    "faq": [
+      {
+        "question": "Should I ask all 25 questions?",
+        "answer": "No. Select a consistent subset aligned to the role and allow time for evidence and follow-up questions."
+      },
+      {
+        "question": "What is a passing interview score?",
+        "answer": "There is no universal pass mark. Set role-specific criteria in advance and investigate gaps rather than letting a total replace judgement."
+      }
+    ],
+    "sourceIds": [],
+    "download": {
+      "path": "/resources/marketing-interview-scorecard.txt",
+      "label": "Download the interview scorecard",
+      "format": "TXT"
+    }
+  },
+  {
+    "slug": "paid-ads-specialist-skills-test",
+    "title": "A practical skills test for hiring a paid ads specialist",
+    "description": "Assess paid-media candidates with a fictional account brief, conversion checks, budget decisions, and a clear scoring rubric.",
+    "category": "Hiring & assessment",
+    "primaryKeyword": "paid ads specialist skills assessment",
+    "reviewedOn": "2026-10-02",
+    "answer": "Test whether a candidate can diagnose measurement, prioritise changes, and explain a budget decision. A small fictional account is enough. Do not ask a candidate to spend live budget or access customer data to prove basic competence.",
+    "sections": [
+      {
+        "id": "brief",
+        "title": "Give every candidate the same fictional account",
+        "paragraphs": [
+          "Suggested exercise: an Australian service business has a AU$3,000 monthly advertising budget, one lead form, and a sales team reporting poor lead quality. The campaign report counts 60 conversions, while the CRM shows 18 enquiries and six qualified opportunities. These are invented assessment figures.",
+          "Allow 45–60 minutes and request a two-page recommendation or a short walkthrough. State whether AI tools and external references are allowed. Give candidates enough context to identify missing information, and reward sensible questions rather than pretending the brief contains every answer."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "data",
+        "title": "Supply a small but diagnostic evidence pack",
+        "paragraphs": [
+          "Use synthetic data only. Include channel spend, campaign objectives, reported conversions, the CRM counts, and a simple landing-page description. Deliberately disclose that you do not yet know whether conversions include duplicate events or low-value actions.",
+          "Ask the candidate to calculate the reported cost per conversion and the cost per qualified opportunity. Here those are AU$50 and AU$500 respectively. Neither establishes profitability without sales and margin data. The useful insight is the gap between platform activity and the business outcome."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "measurement",
+        "title": "Ask what they would verify before changing spend",
+        "paragraphs": [
+          "The first deliverable is a measurement checklist. Expect questions about what counts as a conversion, event duplication, date ranges, attribution, CRM matching, and whether the selected bidding goal matches the business objective.",
+          "Google Ads distinguishes primary and secondary conversion actions. Use the current official documentation as a reference for the exercise; a candidate should explain the account configuration rather than recite a rule without checking it."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": [
+          "googleAds"
+        ]
+      },
+      {
+        "id": "recommendation",
+        "title": "Request a prioritised plan with constraints",
+        "paragraphs": [
+          "Ask for three actions ranked by likely impact, effort, and confidence. The plan should name what can be checked immediately, what requires approval, and what evidence would support changing spend. A proposal to rebuild everything without diagnosis is not automatically strategic."
+        ],
+        "items": [
+          "Identify the measurement discrepancy and the next evidence needed.",
+          "Explain which campaign or landing-page checks come first and why.",
+          "Propose one controlled experiment with a clear success measure.",
+          "Set a budget limit, review date, and stopping condition.",
+          "Write a short client update that distinguishes findings from assumptions."
+        ],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "rubric",
+        "title": "Score reasoning and control of risk",
+        "paragraphs": [
+          "Use the same rubric for each candidate and record evidence. The weights below are a suggested assessment design, not a validated prediction of employee performance."
+        ],
+        "items": [],
+        "table": {
+          "caption": "Suggested 100-point rubric",
+          "columns": [
+            "Area",
+            "Weight",
+            "Strong evidence"
+          ],
+          "rows": [
+            [
+              "Measurement diagnosis",
+              "30",
+              "Checks what is being counted and reconciles the CRM gap"
+            ],
+            [
+              "Commercial reasoning",
+              "25",
+              "Connects lead quality and margin to decisions"
+            ],
+            [
+              "Prioritisation",
+              "20",
+              "Chooses a small sequence of justified actions"
+            ],
+            [
+              "Experiment design",
+              "15",
+              "Defines a hypothesis, budget, review date, and decision rule"
+            ],
+            [
+              "Communication",
+              "10",
+              "Explains uncertainty and approvals clearly"
+            ]
+          ]
+        },
+        "sourceIds": []
+      },
+      {
+        "id": "debrief",
+        "title": "Use the debrief to test ownership",
+        "paragraphs": [
+          "Ask what would change if the CRM count was incomplete, the business had a long sales cycle, or the landing page could not be edited. The answer should adapt rather than collapse. Ask the candidate to explain any formula or recommendation they submitted.",
+          "Do not reward a guaranteed return-on-ad-spend promise. Look for a person who can establish reliable measurement and make disciplined decisions under uncertainty. Agree access and spend permissions only after hiring, and retain approval over material budget changes until the working relationship is established."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      }
+    ],
+    "roleSlugs": [
+      "google-ads-specialist",
+      "facebook-ads-specialist",
+      "ppc-manager"
+    ],
+    "relatedSlugs": [
+      "marketing-assistant-interview-questions",
+      "marketing-assistant-specialist-or-agency",
+      "remote-marketing-kpis"
+    ],
+    "faq": [
+      {
+        "question": "Should candidates audit my live account?",
+        "answer": "A sanitised export or fictional account is usually enough for initial assessment. Any deeper access should be limited, agreed, and proportionate."
+      },
+      {
+        "question": "Is a high platform conversion count proof of skill?",
+        "answer": "No. Evaluate how the candidate defines, checks, and connects conversions to qualified opportunities and business outcomes."
+      }
+    ],
+    "sourceIds": [
+      "googleAds"
+    ],
+    "download": {
+      "path": "/resources/paid-ads-assessment.txt",
+      "label": "Download the assessment brief and rubric",
+      "format": "TXT"
+    }
+  },
+  {
+    "slug": "virtual-assistant-onboarding",
+    "title": "Your first 30 days with a virtual assistant",
+    "description": "Use a week-by-week virtual assistant onboarding plan covering access, task handover, feedback, and a practical 30-day review.",
+    "category": "Managing your team",
+    "primaryKeyword": "virtual assistant onboarding checklist",
+    "reviewedOn": "2026-10-02",
+    "answer": "Give your new assistant a manager, a small set of priorities, and examples of acceptable work. Start with supervised tasks, review the output, and expand access and responsibility gradually. The first month should establish a reliable working process.",
+    "sections": [
+      {
+        "id": "before",
+        "title": "Before day one: remove avoidable blockers",
+        "paragraphs": [
+          "Prepare a role brief, working schedule, approved communication channels, and the first three tasks. Assign one person to resolve conflicting instructions. Gather examples of good work and explain why they are good; a folder of old documents is not an onboarding plan.",
+          "Create individual accounts with the access needed for the initial tasks. Decide who approves publishing, spending, customer communications, and data exports. Agree the process for reporting an access problem or suspected mistake. Assess any overseas access to personal information before granting it."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": [
+          "oaic"
+        ]
+      },
+      {
+        "id": "week-one",
+        "title": "Week one: demonstrate, practise, and review",
+        "paragraphs": [
+          "Walk through one real task together using appropriate access or sanitised examples. Ask the assistant to explain the process back in their own words, complete a small version, and record questions. Review the result before assigning a large batch.",
+          "Use short daily check-ins to distinguish a missing instruction from a skills gap. Correct one or two things at a time and update the instructions so the next attempt starts from a better brief. Do not assess someone on a process that only exists in the manager’s head."
+        ],
+        "items": [],
+        "table": {
+          "caption": "A first-week sequence",
+          "columns": [
+            "Day",
+            "Focus",
+            "Evidence"
+          ],
+          "rows": [
+            [
+              "1",
+              "Role, systems, and approval boundaries",
+              "A written understanding of priorities"
+            ],
+            [
+              "2",
+              "Demonstration and a small practice task",
+              "One reviewed output"
+            ],
+            [
+              "3",
+              "Repeat the task with fewer prompts",
+              "A list of remaining questions"
+            ],
+            [
+              "4",
+              "Handle one variation or exception",
+              "Appropriate escalation"
+            ],
+            [
+              "5",
+              "Review and update the instructions",
+              "An agreed plan for week two"
+            ]
+          ]
+        },
+        "sourceIds": []
+      },
+      {
+        "id": "week-two",
+        "title": "Week two: establish a dependable routine",
+        "paragraphs": [
+          "Agree a small recurring workload and a simple update format: completed, awaiting approval, blocked, and next. Clarify the expected turnaround time for both the assistant and the manager. If approvals take three days, do not blame the assistant for a one-day publishing delay.",
+          "Track first-pass accuracy and rework in plain language. “Two of five drafts needed factual corrections” gives better coaching direction than “be more proactive”. Keep a record of the decision so improvement can be observed over the next week."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "week-three",
+        "title": "Week three: test exceptions and handovers",
+        "paragraphs": [
+          "Introduce a realistic exception: missing input, conflicting records, or an urgent request. Check whether the assistant can recognise the limit of their authority and involve the right person. This is especially important before customer-facing or financial tasks become routine.",
+          "Ask them to improve one instruction based on what they have learned. A useful handover should explain the input, steps, quality check, owner, and what happens when something goes wrong. Documentation should help another person repeat the task, not merely prove a document was written."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "week-four",
+        "title": "Week four: review the role against the actual workload",
+        "paragraphs": [
+          "Compare the original scope with the work completed. Which tasks are reliable? Which require more training? Which take longer than expected? Review manager time as well as the assistant’s output.",
+          "Agree the next month’s priorities and any additional permissions. Do not expand the role simply because the first tasks became faster; check capacity, complexity, and compensation expectations. Confirm that both people understand the next review date and how to raise concerns."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "review",
+        "title": "Use a balanced 30-day review",
+        "paragraphs": [
+          "Separate setup problems from performance problems. Missing access, late approvals, and conflicting briefs are management issues to resolve. Repeated inaccuracies despite clear instruction may require a different response."
+        ],
+        "items": [
+          "What can the assistant complete reliably without prompting?",
+          "What still needs review before release?",
+          "Which instructions or access arrangements are incomplete?",
+          "How much manager time is required each week?",
+          "What will be added, removed, or simplified next month?",
+          "Which two improvements will we review at the next check-in?"
+        ],
+        "table": null,
+        "sourceIds": []
+      }
+    ],
+    "roleSlugs": [
+      "virtual-assistant",
+      "executive-assistant",
+      "marketing-assistant"
+    ],
+    "relatedSlugs": [
+      "hire-remote-staff-philippines",
+      "marketing-assistant-interview-questions",
+      "remote-marketing-kpis"
+    ],
+    "faq": [
+      {
+        "question": "How often should I check in during onboarding?",
+        "answer": "Start with short, frequent check-ins and reduce them as the work becomes reliable. Choose a cadence that fits task risk and experience."
+      },
+      {
+        "question": "Should a new VA have access to all our systems?",
+        "answer": "No. Grant access needed for the agreed tasks and review it as responsibility changes. Set clear approval and offboarding procedures."
+      }
+    ],
+    "sourceIds": [
+      "oaic"
+    ],
+    "download": {
+      "path": "/resources/va-onboarding-checklist.txt",
+      "label": "Download the 30-day onboarding checklist",
+      "format": "TXT"
+    }
+  },
+  {
+    "slug": "real-estate-virtual-assistant-tasks",
+    "title": "Real estate virtual assistant tasks for Australian agencies",
+    "description": "Plan a real estate VA role around listing preparation, enquiry triage, CRM upkeep, vendor reports, and clear approval boundaries.",
+    "category": "Industry workflows",
+    "primaryKeyword": "real estate virtual assistant tasks",
+    "reviewedOn": "2026-10-02",
+    "answer": "A real estate assistant can help prepare listings, maintain records, coordinate follow-up, and assemble reports under an agreed process. Define which communications they can send and which decisions stay with an authorised team member. Start with one workflow rather than the whole office.",
+    "sections": [
+      {
+        "id": "workflow",
+        "title": "Start where work repeatedly gets stuck",
+        "paragraphs": [
+          "Review the last fortnight of your agency’s work. Are listing assets waiting for upload, enquiries missing a next action, or vendor reports assembled late? Choose the bottleneck with a clear input, output, and owner.",
+          "Sales support and property-management support are different briefs. A person maintaining a buyer database is not automatically ready to coordinate rental maintenance or reconcile records. Describe the actual systems and handovers instead of relying on a broad “real estate experience” requirement."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "tasks",
+        "title": "Map delegation to an approval boundary",
+        "paragraphs": [
+          "The examples below describe support work, not permission to carry out regulated activities. Your agency must establish the authorisations and supervision appropriate to its jurisdiction and operating model."
+        ],
+        "items": [],
+        "table": {
+          "caption": "Example delegation map",
+          "columns": [
+            "Workflow",
+            "Assistant prepares or coordinates",
+            "Agency retains"
+          ],
+          "rows": [
+            [
+              "Listing preparation",
+              "Asset checklist, draft copy, upload-ready information",
+              "Accuracy checks and publication approval"
+            ],
+            [
+              "Enquiry triage",
+              "Record details, assign owner, flag urgent requests",
+              "Advice, negotiation, and substantive decisions"
+            ],
+            [
+              "CRM upkeep",
+              "Identify missing fields and proposed duplicate merges",
+              "Merge rules, export permissions, and data policy"
+            ],
+            [
+              "Vendor reporting",
+              "Assemble approved campaign and enquiry figures",
+              "Interpretation and client advice"
+            ],
+            [
+              "Social publishing",
+              "Prepare scheduled posts from approved material",
+              "Approval of claims, images, and timing"
+            ],
+            [
+              "Property-management support",
+              "Track requests and prepare status updates",
+              "Authority over commitments and case-specific decisions"
+            ]
+          ]
+        },
+        "sourceIds": []
+      },
+      {
+        "id": "week",
+        "title": "Build a working week around agency volume",
+        "paragraphs": [
+          "Use workload inputs rather than an arbitrary promise of dozens of tasks per day. Record new listings, inbound enquiries, open-home events, and reporting deadlines. Estimate the work required for each and allow time for exceptions.",
+          "An illustrative weekly rhythm might include a Monday records review, daily enquiry triage, midweek listing preparation, and Friday reporting. That is a planning example, not a capacity guarantee. During busy campaigns, the manager should explicitly reprioritise rather than letting everything become urgent."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "screen",
+        "title": "Assess the work inside your actual process",
+        "paragraphs": [
+          "Give candidates a synthetic set of enquiries with missing fields and duplicate names. Ask them to explain how they would organise it, what they would not merge, and which questions they would raise. Use a fictional listing brief to test accuracy and clarity.",
+          "Ask for experience with the CRM you use, but distinguish familiarity from judgement. A candidate who asks before deleting a record may be more valuable than someone who performs a fast demonstration without checking consequences. Assess writing using the tone and audience your agency needs."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "data",
+        "title": "Set clear controls for customer information",
+        "paragraphs": [
+          "Decide which records the assistant needs, whether exports are permitted, and how access ends. Use individual accounts and approved communication channels. Do not send a live customer database as an interview exercise.",
+          "Where Australian privacy requirements apply, overseas access or disclosure needs to be assessed in the context of the arrangement. The OAIC resource is a starting point for your responsible adviser; this guide does not determine compliance for your agency."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": [
+          "oaic"
+        ]
+      },
+      {
+        "id": "success",
+        "title": "Measure reliable handover before promising revenue",
+        "paragraphs": [
+          "Start with operational measures: the percentage of enquiries assigned within the agreed window, records requiring correction, and reports delivered with complete inputs. Pair speed with accuracy so an assistant is not rewarded for closing tasks carelessly.",
+          "At the first-month review, ask whether agents have fewer unresolved handovers and whether manager review time is decreasing. Do not attribute every new listing to the assistant without evidence. Use what you learn to decide whether to deepen the role or add a different specialist."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      }
+    ],
+    "roleSlugs": [
+      "virtual-assistant",
+      "crm-manager",
+      "customer-support-specialist"
+    ],
+    "relatedSlugs": [
+      "virtual-assistant-onboarding",
+      "virtual-assistant-cost-australia",
+      "hire-remote-staff-philippines"
+    ],
+    "faq": [
+      {
+        "question": "Can one assistant support sales and property management?",
+        "answer": "Possibly, if the volume, skills, and supervision fit. Write separate workflows and check capacity before combining them."
+      },
+      {
+        "question": "Which task should I delegate first?",
+        "answer": "Choose a recurring task with clear inputs and a checkable result, such as preparing a report or organising enquiries for review."
+      }
+    ],
+    "sourceIds": [
+      "oaic"
+    ],
+    "download": null
+  },
+  {
+    "slug": "hire-klaviyo-specialist",
+    "title": "Hiring a Klaviyo specialist: skills, scope, and interview checks",
+    "description": "Define a Klaviyo hiring brief and assess flow logic, segmentation, quality checks, reporting, and collaboration with your e-commerce team.",
+    "category": "Software specialists",
+    "primaryKeyword": "hire Klaviyo specialist",
+    "reviewedOn": "2026-10-02",
+    "answer": "Look for a specialist who can explain flow logic, audience selection, quality checks, and commercial measurement. Separate copywriting, design, technical setup, and strategic ownership in the brief. Do not assume every Klaviyo candidate covers all four.",
+    "sections": [
+      {
+        "id": "scope",
+        "title": "Decide what the specialist will own",
+        "paragraphs": [
+          "List the current work: regular campaigns, lifecycle flows, segmentation, reporting, or an account clean-up. Specify your store platform, existing integrations, approval process, and who supplies copy and design. Identify whether the role is execution under a plan or ownership of the plan itself.",
+          "A focused flow audit is different from managing the entire email channel. If the business has no usable brand assets or campaign calendar, include the work required to create them instead of expecting it to happen invisibly within production time."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "concepts",
+        "title": "Check the distinction between campaigns and flows",
+        "paragraphs": [
+          "Klaviyo’s documentation distinguishes scheduled campaigns from automated flows. Its flow guidance describes triggers and filters; use that as a reference when asking a candidate to explain who enters a flow and when someone should stop receiving a message.",
+          "Ask them to draw a welcome or post-purchase sequence in plain language. The important evidence is whether they understand the audience, exclusions, timing, and checking process. A screenshot of an attractive email does not establish that the underlying logic is sound."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": [
+          "klaviyoFlows",
+          "klaviyoCampaigns"
+        ]
+      },
+      {
+        "id": "exercise",
+        "title": "Use a fictional flow review",
+        "paragraphs": [
+          "Provide a fictional store selling replenishable products. A customer joins the newsletter, makes a purchase, and later becomes eligible for a replenishment message. Ask the candidate what information they need before proposing the flow.",
+          "Request a simple map, three risks, and a test plan. Strong answers distinguish sample assumptions from verified account behaviour and ask about product usage, permissions, fulfilment, and existing messages. Do not require access to a live customer list or an unpaid production-ready campaign."
+        ],
+        "items": [],
+        "table": {
+          "caption": "Suggested assessment checks",
+          "columns": [
+            "Area",
+            "What to look for"
+          ],
+          "rows": [
+            [
+              "Audience logic",
+              "Clear entry, exclusion, and exit conditions"
+            ],
+            [
+              "Message sequence",
+              "A reason for each message and its timing"
+            ],
+            [
+              "Quality assurance",
+              "Links, dynamic content, mobile review, and test recipients"
+            ],
+            [
+              "Commercial judgement",
+              "Margin and customer experience considered alongside revenue"
+            ],
+            [
+              "Handover",
+              "Documentation another team member can understand"
+            ]
+          ]
+        },
+        "sourceIds": []
+      },
+      {
+        "id": "portfolio",
+        "title": "Ask the candidate to explain their contribution",
+        "paragraphs": [
+          "For each example, ask what they personally owned: copy, design, implementation, testing, analysis, or strategy. Ask what changed and how they measured it. Respect confidentiality; redacted work and a clear explanation can be enough.",
+          "If a candidate reports attributed revenue, ask about the measurement window, channel overlap, promotions, and the baseline. Do not treat one attribution figure as proof that all of that revenue was incremental. A specialist should be able to explain the limits of the report."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "first-month",
+        "title": "Set a first-month scope you can review",
+        "paragraphs": [
+          "A useful first month can produce an account map, a prioritised backlog, one approved improvement, and a reporting definition. The exact workload depends on account size and existing issues. Agree changes requiring approval before anything sends.",
+          "Give the specialist an escalation path for unexpected sends, data problems, or integration issues. Preserve a record of changes and test results. The aim is a channel the business can understand and maintain, not a complicated flow library that only one person can interpret."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "budget",
+        "title": "Price the scope and required support",
+        "paragraphs": [
+          "Ask for a quote based on channel ownership, workload, experience, and whether creative production is included. Software charges and additional tools should be separated from the person’s pay or service fee. This guide provides no claimed market salary benchmark.",
+          "Use the email marketing role page to explore broader responsibilities, and discuss Klaviyo-specific experience when requesting candidates. Match the assessment to the tasks you will actually delegate rather than making platform certification the only selection criterion."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      }
+    ],
+    "roleSlugs": [
+      "email-marketing-specialist",
+      "content-strategist",
+      "marketing-assistant"
+    ],
+    "relatedSlugs": [
+      "marketing-assistant-specialist-or-agency",
+      "paid-ads-specialist-skills-test",
+      "remote-marketing-kpis"
+    ],
+    "faq": [
+      {
+        "question": "Does the specialist need to write and design every email?",
+        "answer": "Only if that is part of the brief and they demonstrate those skills. Separate strategy, copy, design, implementation, and testing responsibilities."
+      },
+      {
+        "question": "Is attributed email revenue enough to judge performance?",
+        "answer": "No. Review the baseline, attribution settings, promotions, customer experience, and commercial context alongside revenue."
+      }
+    ],
+    "sourceIds": [
+      "klaviyoFlows",
+      "klaviyoCampaigns"
+    ],
+    "download": null
+  },
+  {
+    "slug": "gohighlevel-virtual-assistant",
+    "title": "Hiring a GoHighLevel virtual assistant: tasks and practical tests",
+    "description": "Scope a GoHighLevel assistant role and assess contact organisation, workflow logic, testing, permissions, and documentation.",
+    "category": "Software specialists",
+    "primaryKeyword": "GoHighLevel virtual assistant",
+    "reviewedOn": "2026-10-02",
+    "answer": "Hire for the workflows you need maintained, not a claim to know every feature. Assess whether the candidate can explain triggers, actions, exceptions, and safe testing. Give publishing and customer-message permissions only within an agreed approval process.",
+    "sections": [
+      {
+        "id": "scope",
+        "title": "Separate administration from automation design",
+        "paragraphs": [
+          "A GoHighLevel role might involve organising contacts, maintaining pipelines, preparing pages, or managing workflow changes. These tasks differ in complexity and consequences. Identify the work you need completed each week and which changes require a more experienced specialist.",
+          "For an agency, clarify whether the assistant works in one account or across several client accounts. Define naming conventions, ownership, approvals, and how client-specific differences are recorded. A template that works for one client can create incorrect messages for another."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "logic",
+        "title": "Ask for a plain-language explanation of a workflow",
+        "paragraphs": [
+          "HighLevel’s workflow documentation describes triggers and actions as building blocks. Ask a candidate to explain a simple enquiry-to-follow-up process: what begins it, what happens next, and what stops or changes the sequence.",
+          "The assessment should focus on reasoning, not remembering where a button sits. Ask what happens when a contact replies, books, appears twice, or has missing information. Those exceptions reveal whether someone understands the business process behind the automation."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": [
+          "highlevel"
+        ]
+      },
+      {
+        "id": "test",
+        "title": "Use synthetic contacts and a contained test",
+        "paragraphs": [
+          "Suggested exercise: map a fictional enquiry workflow that creates an internal task, assigns an owner, and stops follow-up when an appointment is booked. Ask the candidate to list the data needed and show a test plan using fake contacts.",
+          "Do not ask them to connect live messaging, billing, or customer lists for an interview. An explanation or a contained demonstration is sufficient. For substantial implementation work, agree compensation and scope."
+        ],
+        "items": [],
+        "table": {
+          "caption": "Workflow review checklist",
+          "columns": [
+            "Check",
+            "Question"
+          ],
+          "rows": [
+            [
+              "Entry",
+              "Which event should start the process?"
+            ],
+            [
+              "Duplicate handling",
+              "What happens if the same enquiry arrives twice?"
+            ],
+            [
+              "Ownership",
+              "Who receives the internal task and by when?"
+            ],
+            [
+              "Exit",
+              "What stops follow-up after a reply or booking?"
+            ],
+            [
+              "Failure",
+              "How would an incomplete record be identified?"
+            ],
+            [
+              "Release",
+              "Who approves the change and how can it be reversed?"
+            ]
+          ]
+        },
+        "sourceIds": []
+      },
+      {
+        "id": "permissions",
+        "title": "Define the difference between preparing and releasing",
+        "paragraphs": [
+          "A junior assistant might prepare changes for review while a manager approves publication. A specialist may own a broader scope once tested. Write down the authority to change workflows, export contacts, edit domains, or send messages.",
+          "Use individual accounts and the access appropriate to the job. Record material changes so another person can understand the previous state. If personal information is accessed across borders, assess the arrangement under the applicable requirements rather than assuming software access alone resolves responsibility."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": [
+          "oaic"
+        ]
+      },
+      {
+        "id": "handover",
+        "title": "Require documentation that survives the hire",
+        "paragraphs": [
+          "For each workflow, record its purpose, trigger, actions, exceptions, owner, test cases, and last approved change. Avoid vague names such as “new workflow final”. A useful handover explains what the process does and how to recognise failure.",
+          "Ask the assistant to maintain an issues list rather than silently fixing every symptom. Repeated problems can indicate an unclear sales process or inconsistent source data. Automation should expose those gaps, not hide them behind more steps."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "outcomes",
+        "title": "Measure process reliability before expanding",
+        "paragraphs": [
+          "Choose a small initial scope: clean up one pipeline, document one workflow, or improve an internal handover. Measure errors, unresolved exceptions, and whether staff can follow the process. A large number of automations is not a useful outcome by itself.",
+          "Quote the role based on account count, workflow complexity, expected change volume, and required supervision. Use the CRM or operations hiring pages to discuss the underlying responsibilities and specify GoHighLevel experience in the brief."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      }
+    ],
+    "roleSlugs": [
+      "crm-manager",
+      "operations-manager",
+      "marketing-assistant"
+    ],
+    "relatedSlugs": [
+      "virtual-assistant-onboarding",
+      "marketing-assistant-interview-questions",
+      "remote-marketing-kpis"
+    ],
+    "faq": [
+      {
+        "question": "Can a general VA build all our automations?",
+        "answer": "Do not assume so. Assess workflow design and testing separately from administration, and limit release permissions until competence is demonstrated."
+      },
+      {
+        "question": "What should a workflow handover include?",
+        "answer": "Purpose, entry conditions, actions, exceptions, ownership, test cases, and a record of approved changes."
+      }
+    ],
+    "sourceIds": [
+      "highlevel",
+      "oaic"
+    ],
+    "download": null
+  },
+  {
+    "slug": "sdr-vs-appointment-setter",
+    "title": "SDR vs appointment setter: which should you hire first?",
+    "description": "Compare sales development and appointment setting by prospecting, qualification, handover, metrics, and the maturity of your sales process.",
+    "category": "Costs & decisions",
+    "primaryKeyword": "SDR vs appointment setter",
+    "reviewedOn": "2026-10-02",
+    "answer": "An appointment-setting brief centres on arranging suitable meetings; an SDR brief often includes more prospect research, outreach, and qualification. Titles vary between businesses. Define the work and the handover standard before choosing the title.",
+    "sections": [
+      {
+        "id": "process",
+        "title": "Map your sales process before hiring",
+        "paragraphs": [
+          "Write down where prospects come from, who contacts them, how qualification works, and who runs the sales conversation. If leads already arrive but wait too long for a response, scheduling and follow-up may be the immediate need.",
+          "If the business needs someone to identify accounts, research contacts, test outreach, and develop conversations, the role is broader. Hiring a meeting setter will not by itself supply a validated market, a compelling offer, or reliable contact data."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "difference",
+        "title": "Use responsibilities to distinguish the roles",
+        "paragraphs": [
+          "The comparison below is a briefing aid, not a rule that every company follows. Some employers use the titles interchangeably; explain the responsibilities in the job description."
+        ],
+        "items": [],
+        "table": {
+          "caption": "Example role distinction",
+          "columns": [
+            "Responsibility",
+            "Appointment-setting emphasis",
+            "SDR emphasis"
+          ],
+          "rows": [
+            [
+              "Lead source",
+              "Often works an existing enquiry or prospect list",
+              "May research accounts and develop lists"
+            ],
+            [
+              "Conversation",
+              "Confirm interest and arrange the next meeting",
+              "Explore fit and establish a qualified reason to meet"
+            ],
+            [
+              "Experimentation",
+              "Improve response and scheduling process",
+              "May test messaging and prospect segments"
+            ],
+            [
+              "Handover",
+              "Accurate booking and essential notes",
+              "Context, fit, questions, and agreed next action"
+            ],
+            [
+              "Management need",
+              "Clear scheduling and escalation rules",
+              "Coaching, targeting, and feedback from sales"
+            ]
+          ]
+        },
+        "sourceIds": []
+      },
+      {
+        "id": "quality",
+        "title": "Define what makes a meeting worthwhile",
+        "paragraphs": [
+          "Agree a qualification standard with the person who takes the meeting. Include the target customer profile, relevant problem, appropriate participant, and the reason for the conversation. Record uncertainty rather than forcing every lead into a positive category.",
+          "A raw meeting count can reward poor-fit bookings. Pair volume with attendance, sales acceptance, and the reason meetings are rejected. A low acceptance rate may indicate a targeting or definition problem rather than insufficient effort."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "assessment",
+        "title": "Use a research-and-handover exercise",
+        "paragraphs": [
+          "Provide a fictional business, a short offer description, and three sample prospects. Ask the candidate which prospect they would prioritise, what they would ask, and what would make them stop pursuing it.",
+          "Then ask for a concise handover note. Strong work distinguishes known facts from assumptions and gives the salesperson useful context. A role-play can test listening and objection handling, but should not reward pressure or invented product claims. Set expectations for approved outreach practices and data sources."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "scorecard",
+        "title": "Agree reporting before the first campaign",
+        "paragraphs": [
+          "Use a short scorecard that separates activity, quality, and outcomes. Review it with the salesperson so feedback reaches the person doing outreach."
+        ],
+        "items": [
+          "Activity: relevant prospects researched and completed follow-up tasks.",
+          "Quality: complete records and messages that match the approved offer.",
+          "Handover: meetings accepted by sales with enough context.",
+          "Attendance: attended meetings divided by scheduled meetings for the same cohort.",
+          "Outcome: opportunities created from accepted meetings, allowing for sales-cycle delay.",
+          "Learning: recurring objections and reasons for disqualification."
+        ],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "choose",
+        "title": "Choose the smallest role that resolves the gap",
+        "paragraphs": [
+          "Start with an appointment-setting scope if the primary problem is responding to and coordinating existing demand. Consider a broader SDR scope if targeting, research, and qualification need an owner and you can provide coaching.",
+          "If the offer and target customer are still unclear, resolve those decisions first or hire someone with explicit experience developing them. Do not promise a candidate a quota based on an untested process. Review the first month’s evidence before setting a larger target or adding headcount."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      }
+    ],
+    "roleSlugs": [
+      "sales-development-rep",
+      "appointment-setter",
+      "lead-generation-specialist"
+    ],
+    "relatedSlugs": [
+      "hire-remote-staff-philippines",
+      "virtual-assistant-cost-australia",
+      "remote-marketing-kpis"
+    ],
+    "faq": [
+      {
+        "question": "Should I pay only for booked meetings?",
+        "answer": "Evaluate the behaviour that incentive could create. Agree quality, attendance, and handover criteria, and obtain advice on the appropriate payment arrangement."
+      },
+      {
+        "question": "Can an SDR close sales too?",
+        "answer": "Some can, but closing is an additional responsibility. Define the sales cycle, authority, and skills required rather than assuming the SDR title includes them."
+      }
+    ],
+    "sourceIds": [],
+    "download": null
+  },
+  {
+    "slug": "seo-specialist-interview-questions",
+    "title": "How to assess an SEO specialist before hiring",
+    "description": "Use practical SEO interview questions, a sample audit, and evidence checks to assess technical judgement, content priorities, and reporting.",
+    "category": "Hiring & assessment",
+    "primaryKeyword": "SEO specialist interview questions",
+    "reviewedOn": "2026-10-02",
+    "answer": "Ask candidates to prioritise a small set of problems, explain their evidence, and connect the proposed work to business goals. Look for measured reasoning and clear limits. A ranking promise or a long tool list is not a substitute for a sound process.",
+    "sections": [
+      {
+        "id": "scope",
+        "title": "Choose the SEO work you actually need",
+        "paragraphs": [
+          "Separate technical diagnosis, content planning, on-page execution, local visibility, and outreach. A WordPress site with indexing problems needs a different first brief from an established shop with thin product content. List the platform, available development support, and the business outcome you want to improve.",
+          "Ask who will implement recommendations. An audit that requires development capacity you do not have can sit untouched. A strong candidate should help identify dependencies and distinguish what they can do directly from what needs another specialist."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "questions",
+        "title": "Ask questions that reveal judgement",
+        "paragraphs": [
+          "Select the questions relevant to your role and ask for examples. The aim is to understand how the candidate reaches a decision, not whether they can recite terminology."
+        ],
+        "items": [
+          "How would you investigate a page that is not appearing in search?",
+          "Which evidence would make you prioritise a technical fix over new content?",
+          "How do you distinguish a useful keyword target from one that attracts the wrong audience?",
+          "What would you check before recommending a URL change?",
+          "How would you evaluate a content brief without promising a ranking?",
+          "How do you separate branded from non-branded search performance?",
+          "What would you report if clicks rose but qualified enquiries fell?",
+          "Which tasks need a developer, and how would you write that handover?",
+          "How do you document a change so its effect can be reviewed later?",
+          "What result would you refuse to guarantee?"
+        ],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "exercise",
+        "title": "Give a small fictional audit brief",
+        "paragraphs": [
+          "Provide five fictional pages: two targeting the same buyer question, one with weak supporting detail, one with no internal links, and one that has been moved without a clear destination. Ask for the first three actions and the evidence needed to confirm each diagnosis.",
+          "Do not expect a complete production audit in an unpaid assessment. A short prioritisation exercise is enough to reveal whether the candidate confuses a possible issue with a confirmed cause. Ask them to include implementation effort and a check after release."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "standards",
+        "title": "Use official guidance as a reference point",
+        "paragraphs": [
+          "Google’s SEO Starter Guide explains core search practices, and its helpful-content guidance emphasises usefulness to people. Use those resources to check whether a proposal is grounded in fundamentals rather than a claim about a secret ranking shortcut.",
+          "Ask the candidate how they would help an employer choose a role, compare costs, or assess a hire. That answer should connect search intent to useful page content, not merely repeat a phrase more often."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": [
+          "googleSeo",
+          "googleHelpful"
+        ]
+      },
+      {
+        "id": "evidence",
+        "title": "Verify portfolio claims with context",
+        "paragraphs": [
+          "Ask for the baseline period, work completed, date range, and relevant business context. A redacted Search Console example can support a discussion, but traffic growth alone does not establish that the candidate caused every improvement. Seasonality, brand activity, and other teams’ work may matter.",
+          "Look for a clear explanation of uncertainty. A useful report distinguishes observations, hypotheses, actions, and results. Respect client confidentiality and do not require another company’s raw private data as proof."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "first-month",
+        "title": "Define deliverables you can review",
+        "paragraphs": [
+          "A practical initial scope might include an evidence-backed prioritised backlog, a keyword-to-page map, several implemented improvements, and a measurement baseline. Agree who approves changes and how they will be checked.",
+          "Avoid judging the first month only by rankings. Evaluate whether important pages are accessible, intent is clear, changes are implemented correctly, and measurement is reliable. Use the relevant specialist role page to match the work to the platform and technical depth you need."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      }
+    ],
+    "roleSlugs": [
+      "technical-seo-specialist",
+      "wordpress-seo-specialist",
+      "seo-content-writer"
+    ],
+    "relatedSlugs": [
+      "marketing-assistant-interview-questions",
+      "marketing-assistant-specialist-or-agency",
+      "remote-marketing-kpis"
+    ],
+    "faq": [
+      {
+        "question": "Should an SEO candidate guarantee first-page rankings?",
+        "answer": "No. Evaluate the quality of their diagnosis, implementation plan, and reporting rather than a promise about outcomes they do not fully control."
+      },
+      {
+        "question": "Is certification enough to hire an SEO specialist?",
+        "answer": "It can be one signal, but a relevant work sample, explanation of decisions, and evidence of implementation are more useful together."
+      }
+    ],
+    "sourceIds": [
+      "googleSeo",
+      "googleHelpful"
+    ],
+    "download": null
+  },
+  {
+    "slug": "remote-marketing-kpis",
+    "title": "Remote marketing team KPIs: measure work, quality, and outcomes",
+    "description": "Build a practical marketing scorecard that separates completed work, quality, business results, and the decisions a manager needs to make.",
+    "category": "Managing your team",
+    "primaryKeyword": "remote marketing team KPIs",
+    "reviewedOn": "2026-10-02",
+    "answer": "Use a small set of measures that show whether work is delivered reliably, whether it meets the brief, and whether it contributes to the business. Give each measure an owner, definition, source, and review cadence. More dashboard tiles do not create more accountability.",
+    "sections": [
+      {
+        "id": "layers",
+        "title": "Separate three layers of performance",
+        "paragraphs": [
+          "Outputs are the things completed: approved campaigns, published pages, or processed enquiries. Quality tells you whether that work was accurate and useful. Outcomes describe what happened in the business, such as qualified enquiries or sales-accepted meetings.",
+          "Do not hold an assistant solely responsible for outcomes they cannot control. A person publishing approved posts may not own the offer, media spend, sales response, or website. Equally, completing a large task count does not prove the work helped. Review the layers together."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "scorecard",
+        "title": "Choose a small role-specific scorecard",
+        "paragraphs": [
+          "Start with three to five measures and add more only when they support a decision. The examples below are suggestions, not industry benchmarks or performance guarantees."
+        ],
+        "items": [],
+        "table": {
+          "caption": "Example scorecard by role",
+          "columns": [
+            "Role",
+            "Output",
+            "Quality check",
+            "Outcome to review with context"
+          ],
+          "rows": [
+            [
+              "Content assistant",
+              "Approved assets delivered",
+              "Factual accuracy and rework",
+              "Relevant enquiries from the supported content"
+            ],
+            [
+              "Paid-media specialist",
+              "Experiments completed",
+              "Tracking reliability and budget control",
+              "Qualified opportunities and acquisition economics"
+            ],
+            [
+              "CRM assistant",
+              "Records processed",
+              "Duplicate and missing-field rate",
+              "Fewer incomplete sales handovers"
+            ],
+            [
+              "SDR",
+              "Relevant conversations and follow-up",
+              "Sales-accepted meeting rate",
+              "Opportunities from the same meeting cohort"
+            ],
+            [
+              "SEO specialist",
+              "Prioritised changes implemented",
+              "Implementation and measurement checks",
+              "Non-branded clicks and qualified organic enquiries"
+            ]
+          ]
+        },
+        "sourceIds": []
+      },
+      {
+        "id": "definitions",
+        "title": "Write the calculation before setting a target",
+        "paragraphs": [
+          "For each measure, define the numerator, denominator, date range, exclusions, and source. “Conversion rate” is ambiguous until you specify what converted and from which starting population. Agree how duplicates, cancellations, and late outcomes will be handled.",
+          "For example, meeting attendance can mean attended meetings divided by meetings scheduled to occur in the same period. Do not mix this month’s booked meetings with this month’s attended meetings if some bookings are for next month. A consistent cohort makes the report easier to interpret."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "baseline",
+        "title": "Observe a baseline before treating a target as fair",
+        "paragraphs": [
+          "Collect enough context to understand the workload and any obvious seasonality or interruptions. For a new process, begin with delivery and quality expectations you can directly observe. Record missing access, approval delays, and changes in scope.",
+          "If a target is provisional, label it that way and set a review date. A target copied from another business may reflect a different offer, audience, budget, or sales cycle. Use the first reporting cycles to refine definitions, not to create artificial precision."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "review",
+        "title": "Make the weekly update decision-focused",
+        "paragraphs": [
+          "Use four short sections: what changed, why it may have changed, what was checked, and what decision is needed. Distinguish facts from explanations that remain hypotheses. Link the relevant source rather than pasting an unexplained number.",
+          "A useful update might say: “Twelve enquiries arrived; four were outside our service area. We checked the form settings and propose tightening the location question.” That is an invented example showing the reporting format, not a client result. It connects a measure to an action."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      },
+      {
+        "id": "improve",
+        "title": "Review the measures themselves",
+        "paragraphs": [
+          "A scorecard can create unintended incentives. Publishing volume can encourage weak content; response-speed targets can encourage rushed answers; meeting targets can encourage unsuitable bookings. Pair speed or volume with a quality check.",
+          "At the monthly review, remove measures nobody uses, investigate persistent data gaps, and update the role brief if responsibility has changed. Keep a record of definition changes so historical comparisons remain understandable. Use the downloadable template to begin with a few measures and an explicit decision owner."
+        ],
+        "items": [],
+        "table": null,
+        "sourceIds": []
+      }
+    ],
+    "roleSlugs": [
+      "marketing-assistant",
+      "sales-development-rep",
+      "project-manager"
+    ],
+    "relatedSlugs": [
+      "virtual-assistant-onboarding",
+      "sdr-vs-appointment-setter",
+      "paid-ads-specialist-skills-test"
+    ],
+    "faq": [
+      {
+        "question": "How many KPIs should I start with?",
+        "answer": "Three to five can be enough for an initial scorecard. Choose measures that support decisions and balance output, quality, and outcomes."
+      },
+      {
+        "question": "Should I use the same KPIs for every remote worker?",
+        "answer": "No. Match measures to the responsibilities and decisions each role controls, and review shared business outcomes with the relevant team."
+      }
+    ],
+    "sourceIds": [],
+    "download": {
+      "path": "/resources/marketing-kpi-scorecard.txt",
+      "label": "Download the KPI scorecard template",
+      "format": "TXT"
+    }
+  }
+]

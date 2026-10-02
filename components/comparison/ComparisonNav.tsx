@@ -8,7 +8,7 @@ export default function ComparisonNav() {
       <div className={styles.navRight}>
         <a href="/roles" className={styles.navLink}>Roles</a>
         <a href="/how-we-hire" className={styles.navLink}>How It Works</a>
-        <a href="/#pricing" className={styles.navLink}>Pricing</a>
+        <a href="/guides" className={styles.navLink}>Hiring Guides</a>
         <a href="/calculator" className={styles.navCta}>Find Your Hire</a>
         <a href="https://rapidtal.online" className={styles.navPortal} target="_blank" rel="noopener noreferrer">Login to Portal</a>
         <ThemeToggle />

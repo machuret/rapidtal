@@ -1,0 +1,124 @@
+{
+  "objective": "5x non-branded organic clicks while increasing qualified employer enquiries",
+  "status": "Target, not a forecast or achieved result",
+  "baseline": {
+    "searchConsoleProperty": null,
+    "baselinePeriod": null,
+    "nonBrandedClicks": null,
+    "qualifiedOrganicEnquiries": null
+  },
+  "comparison": "Compare equivalent 28-day periods, segment brand queries, inspect seasonality and employer versus candidate intent. Establish baseline before launch.",
+  "reviews": [
+    "After indexing: confirm submitted URLs and chosen canonicals",
+    "After 28 days: review query relevance, impressions, clicks, and landing pages",
+    "After 56 days: improve pages with relevant impressions but weak engagement or conversion",
+    "After 84 days: expand only clusters showing employer intent and useful enquiry outcomes"
+  ],
+  "attribution": "Use existing approved analytics and CRM configuration. A booking-screen visit is not a completed booking. This release does not add a tracking provider.",
+  "keywordMap": [
+    {
+      "url": "/guides/virtual-assistant-cost-australia",
+      "primaryQueryCandidate": "virtual assistant cost Australia",
+      "cluster": "Costs & decisions",
+      "searchVolume": null,
+      "keywordDifficulty": null,
+      "validation": "Intent hypothesis informed by search results; validate demand using Search Console and a keyword dataset"
+    },
+    {
+      "url": "/guides/hire-remote-staff-philippines",
+      "primaryQueryCandidate": "how to hire staff in the Philippines",
+      "cluster": "Hiring & assessment",
+      "searchVolume": null,
+      "keywordDifficulty": null,
+      "validation": "Intent hypothesis informed by search results; validate demand using Search Console and a keyword dataset"
+    },
+    {
+      "url": "/guides/direct-hire-vs-outsourcing",
+      "primaryQueryCandidate": "direct hire vs outsourcing agency",
+      "cluster": "Costs & decisions",
+      "searchVolume": null,
+      "keywordDifficulty": null,
+      "validation": "Intent hypothesis informed by search results; validate demand using Search Console and a keyword dataset"
+    },
+    {
+      "url": "/guides/marketing-assistant-specialist-or-agency",
+      "primaryQueryCandidate": "marketing assistant vs marketing agency",
+      "cluster": "Costs & decisions",
+      "searchVolume": null,
+      "keywordDifficulty": null,
+      "validation": "Intent hypothesis informed by search results; validate demand using Search Console and a keyword dataset"
+    },
+    {
+      "url": "/guides/marketing-assistant-interview-questions",
+      "primaryQueryCandidate": "marketing assistant interview questions",
+      "cluster": "Hiring & assessment",
+      "searchVolume": null,
+      "keywordDifficulty": null,
+      "validation": "Intent hypothesis informed by search results; validate demand using Search Console and a keyword dataset"
+    },
+    {
+      "url": "/guides/paid-ads-specialist-skills-test",
+      "primaryQueryCandidate": "paid ads specialist skills assessment",
+      "cluster": "Hiring & assessment",
+      "searchVolume": null,
+      "keywordDifficulty": null,
+      "validation": "Intent hypothesis informed by search results; validate demand using Search Console and a keyword dataset"
+    },
+    {
+      "url": "/guides/virtual-assistant-onboarding",
+      "primaryQueryCandidate": "virtual assistant onboarding checklist",
+      "cluster": "Managing your team",
+      "searchVolume": null,
+      "keywordDifficulty": null,
+      "validation": "Intent hypothesis informed by search results; validate demand using Search Console and a keyword dataset"
+    },
+    {
+      "url": "/guides/real-estate-virtual-assistant-tasks",
+      "primaryQueryCandidate": "real estate virtual assistant tasks",
+      "cluster": "Industry workflows",
+      "searchVolume": null,
+      "keywordDifficulty": null,
+      "validation": "Intent hypothesis informed by search results; validate demand using Search Console and a keyword dataset"
+    },
+    {
+      "url": "/guides/hire-klaviyo-specialist",
+      "primaryQueryCandidate": "hire Klaviyo specialist",
+      "cluster": "Software specialists",
+      "searchVolume": null,
+      "keywordDifficulty": null,
+      "validation": "Intent hypothesis informed by search results; validate demand using Search Console and a keyword dataset"
+    },
+    {
+      "url": "/guides/gohighlevel-virtual-assistant",
+      "primaryQueryCandidate": "GoHighLevel virtual assistant",
+      "cluster": "Software specialists",
+      "searchVolume": null,
+      "keywordDifficulty": null,
+      "validation": "Intent hypothesis informed by search results; validate demand using Search Console and a keyword dataset"
+    },
+    {
+      "url": "/guides/sdr-vs-appointment-setter",
+      "primaryQueryCandidate": "SDR vs appointment setter",
+      "cluster": "Costs & decisions",
+      "searchVolume": null,
+      "keywordDifficulty": null,
+      "validation": "Intent hypothesis informed by search results; validate demand using Search Console and a keyword dataset"
+    },
+    {
+      "url": "/guides/seo-specialist-interview-questions",
+      "primaryQueryCandidate": "SEO specialist interview questions",
+      "cluster": "Hiring & assessment",
+      "searchVolume": null,
+      "keywordDifficulty": null,
+      "validation": "Intent hypothesis informed by search results; validate demand using Search Console and a keyword dataset"
+    },
+    {
+      "url": "/guides/remote-marketing-kpis",
+      "primaryQueryCandidate": "remote marketing team KPIs",
+      "cluster": "Managing your team",
+      "searchVolume": null,
+      "keywordDifficulty": null,
+      "validation": "Intent hypothesis informed by search results; validate demand using Search Console and a keyword dataset"
+    }
+  ]
+}

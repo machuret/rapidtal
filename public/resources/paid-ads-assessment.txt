@@ -1,0 +1,31 @@
+A PRACTICAL SKILLS TEST FOR HIRING A PAID ADS SPECIALIST
+Rapid Tal | Editable worksheet | Reviewed 2 October 2026
+Companion guide: https://rapidtal.com/guides/paid-ads-specialist-skills-test
+These are planning examples, not a quote, employment agreement, or validated selection test.
+Business / role: ____________________
+Owner: ____________________    Review date: ____________________
+
+REQUEST A PRIORITISED PLAN WITH CONSTRAINTS
+Identify the measurement discrepancy and the next evidence needed.
+Explain which campaign or landing-page checks come first and why.
+Propose one controlled experiment with a clear success measure.
+Set a budget limit, review date, and stopping condition.
+Write a short client update that distinguishes findings from assumptions.
+Your evidence / assumptions:
+____________________________________________________________
+Decision / owner / due date:
+____________________________________________________________
+
+SCORE REASONING AND CONTROL OF RISK
+Suggested 100-point rubric
+Area | Weight | Strong evidence
+Measurement diagnosis | 30 | Checks what is being counted and reconciles the CRM gap
+Commercial reasoning | 25 | Connects lead quality and margin to decisions
+Prioritisation | 20 | Chooses a small sequence of justified actions
+Experiment design | 15 | Defines a hypothesis, budget, review date, and decision rule
+Communication | 10 | Explains uncertainty and approvals clearly
+Your evidence / assumptions:
+____________________________________________________________
+Decision / owner / due date:
+____________________________________________________________
+
